@@ -1,11 +1,12 @@
 Shader "Custom/VoronoiShader"
 {
     Properties{
-        _Scale("Scale", Float) = 1.0
+        _XScale("X Scale", Float) = 1.0
+        _YScale("Y Scale", Float) = 1.0
         _TimeScale("Time Scale", Float) = 1.0
         _Threshold("Color Threshold", Float) = 1.0
-        _K("K",Float) = 1.0
         _Randomness("Randomness", Float) = 1.0
+        _Smoothness("Smoothness", Float) = 1.0
         _Color1("Color 1", Color) = (0,0,0,1)
         _Color2("Color 2", Color) = (1,1,1,1)
     }
@@ -17,14 +18,14 @@ Shader "Custom/VoronoiShader"
             #pragma fragment frag
             #include "UnityCG.cginc"
 
-            float _Scale;
+            float _XScale;
+    float _YScale;
             float _TimeScale;
             float _Threshold;
             float _Randomness;
+            float _Smoothness;
             float4 _Color1;
             float4 _Color2;
-
-            float _K;
 
             float3 hash3(float3 p) {
                 const float3 scale1 = float3(127.1, 311.7, 74.7);    // Prime constants
@@ -37,61 +38,51 @@ Shader "Custom/VoronoiShader"
                 return frac(sin(dot(p, scale2)) * 43758.5453);
             }
 
-            float voronoiF1_3D(float3 pos) {
-                float3 ipos = floor(pos);
-                float3 fpos = frac(pos);
+            float smoothstep(float edge0, float edge1, float x) {
+                // Clamp the value of x to the range [edge0, edge1]
+                x = clamp((x - edge0) / (edge1 - edge0), 0, 1);
 
-                float minDist = 8.0;
+                // Apply the smoothstep interpolation
+                return x * x * (3.0f - 2.0f * x);
+            }
 
-                float2 b = float2(-2, 2);
-                for (int z = b.x; z <= b.y; z++) {
-                    for (int y = b.x; y <= b.y; y++) {
-                        for (int x = b.x; x <= b.y; x++) {
-                            float3 neighbor = float3(x, y, z);
-                            float3 pointPos = (hash3(ipos + neighbor)-0.5)*_Randomness;
-                            float3 diff = neighbor + pointPos - fpos;
-                            float dist = dot(diff, diff);
-                            minDist = min(minDist, dist);
+            float mix(float a, float b, float t) {
+                return a * (1 - t) + b * t;
+            }
+
+            float4 mix(float4 a, float4 b, float t) {
+                return a * (1 - t) + b * t;
+            }
+
+            float voronoi_distance(float3 a, float3 b)
+            {
+                return length(a - b);
+            }
+
+            float voronoi_smooth_f1(float3 coord, float smoothness)
+            {
+                float3 cellPosition = floor(coord);
+                float3 localPosition = coord - cellPosition;
+
+                float smoothDistance = 0.0;
+                float h = -1.0;
+                for (int k = -2; k <= 2; k++) {
+                    for (int j = -2; j <= 2; j++) {
+                        for (int i = -2; i <= 2; i++) {
+                            float3 cellOffset = float3(i, j, k);
+                            float3 pointPosition = cellOffset + hash3(cellPosition + cellOffset) * _Randomness;
+                            float distanceToPoint = voronoi_distance(pointPosition, localPosition);
+                            h = h == -1.0 ?
+                                1.0 :
+                                smoothstep(
+                                    0.0, 1.0, 0.5 + 0.5 * (smoothDistance - distanceToPoint) / smoothness);
+                            float correctionFactor = smoothness * h * (1.0 - h);
+                            smoothDistance = mix(smoothDistance, distanceToPoint, h) - correctionFactor;
                         }
                     }
                 }
-                return sqrt(minDist);
-            }
 
-            float smoothmin_quad(float a, float b, float k) {
-                float h = max(k - abs(a - b), 0.0) / k;
-                return min(a, b) - h * h * k * (1.0 / 6.0);
-            }
-            float smoothmin_exp(float a, float b, float k) {
-                k *= 1.0;
-                float r = exp2(-a / k) + exp2(-b / k);
-                return -k * log2(r);
-            }
-
-
-            float smoothVoronoiF1_3D(float3 pos, float k) {
-                float3 ipos = floor(pos);
-                float3 fpos = frac(pos);
-
-                float weightSum = 0.0;
-                bool firstSet = false;
-
-                float2 b = float2(-2, 2);
-                for (int z = b.x; z <= b.y; z++) {
-                    for (int y = b.x; y <= b.y; y++) {
-                        for (int x = b.x; x <= b.y; x++) {
-                            float3 neighbor = float3(x, y, z);
-                            float3 pointPos = (hash3(ipos + neighbor)-0.5)*_Randomness;
-                            float3 diff = neighbor + pointPos - fpos;
-                            float dist = dot(diff, diff);
-
-                            // Smoothing factor (you can tweak this value)
-                            weightSum = firstSet ? smoothmin_quad(dist, weightSum, k) : dist;
-                            firstSet = true;
-                        }
-                    }
-                }
-                return weightSum;
+                return smoothDistance;
             }
 
             struct appdata {
@@ -115,14 +106,14 @@ Shader "Custom/VoronoiShader"
             }
 
             fixed4 frag(v2f i) : SV_Target{
-                float3 pos = float3(i.uv * _Scale, _Time.y * _TimeScale);
-                float F1 = voronoiF1_3D(pos);
-                float SF1 = smoothVoronoiF1_3D(pos, _K);
-                
-                //return F1 - SF1 < _Threshold ? _Color1 : _Color2;
-                //return _Threshold < 0 ? F1 : SF1;
+                float3 pos = float3(i.uv * float2(_XScale,_YScale), _Time.y * _TimeScale);
 
-                return F1 - SF1;
+                float f1 = voronoi_smooth_f1(pos, 0);
+                float smooth_f1 = voronoi_smooth_f1(pos, _Smoothness);
+
+                float t = clamp(f1 - smooth_f1, 0, 1);
+                
+                return t>_Threshold ? _Color1 : mix(_Color2,_Color1,t/_Threshold);
             }
             ENDCG
         }
