@@ -59,30 +59,32 @@ Shader "Custom/VoronoiShader"
                 return length(a - b);
             }
 
-            float voronoi_smooth_f1(float3 coord, float smoothness)
+            float2 voronoi_smooth_f1(float3 coord, float smoothness)
             {
                 float3 cellPosition = floor(coord);
                 float3 localPosition = coord - cellPosition;
 
+                float minDist = 0.0;
                 float smoothDistance = 0.0;
                 float h = -1.0;
-                for (int k = -2; k <= 2; k++) {
-                    for (int j = -2; j <= 2; j++) {
-                        for (int i = -2; i <= 2; i++) {
+                for (int k = -1; k <= 1; k++) {
+                    for (int j = -1; j <= 1; j++) {
+                        for (int i = -1; i <= 1; i++) {
                             float3 cellOffset = float3(i, j, k);
                             float3 pointPosition = cellOffset + hash3(cellPosition + cellOffset) * _Randomness;
                             float distanceToPoint = voronoi_distance(pointPosition, localPosition);
-                            h = h == -1.0 ?
-                                1.0 :
-                                smoothstep(
-                                    0.0, 1.0, 0.5 + 0.5 * (smoothDistance - distanceToPoint) / smoothness);
+                            minDist = h==-1 ? distanceToPoint : min(minDist, distanceToPoint);
+                            h = h==-1.0 ? 1.0 : smoothstep(0.0, 1.0, 
+                                    0.5 + 0.5 * (smoothDistance - distanceToPoint) / smoothness
+                            );
                             float correctionFactor = smoothness * h * (1.0 - h);
                             smoothDistance = mix(smoothDistance, distanceToPoint, h) - correctionFactor;
+                            
                         }
                     }
                 }
 
-                return smoothDistance;
+                return float2(minDist,smoothDistance);
             }
 
             struct appdata {
@@ -108,10 +110,9 @@ Shader "Custom/VoronoiShader"
             fixed4 frag(v2f i) : SV_Target{
                 float3 pos = float3(i.uv * float2(_XScale,_YScale), _Time.y * _TimeScale);
 
-                float f1 = voronoi_smooth_f1(pos, 0);
-                float smooth_f1 = voronoi_smooth_f1(pos, _Smoothness);
+                float2 f1 = voronoi_smooth_f1(pos, _Smoothness);
 
-                float t = clamp(f1 - smooth_f1, 0, 1);
+                float t = clamp(f1.x - f1.y, 0, 1);
                 
                 return t>_Threshold ? _Color1 : mix(_Color2,_Color1,t/_Threshold);
             }
