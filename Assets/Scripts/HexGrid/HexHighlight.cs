@@ -38,5 +38,7 @@ public class HexHighlight : MonoBehaviour
 
             lastTilePosition = cellPosition;
         }
+
+        print(HexUtils.OffsetToCubic(cellPosition));
     }
 }
