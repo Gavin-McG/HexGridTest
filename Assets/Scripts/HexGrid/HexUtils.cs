@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class HexUtils
 {
+    //translate offset coordinate to cubic coordinate
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3Int OffsetToCubic(in Vector2Int coords)
     {
@@ -13,6 +14,7 @@ public class HexUtils
         return new Vector3Int(x,coords.y,z);
     }
 
+    //translate offset coordinate to cubic coordinate
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3Int OffsetToCubic(in Vector3Int coords)
     {
@@ -21,6 +23,7 @@ public class HexUtils
         return new Vector3Int(x,coords.y,z);
     }
 
+    //translate cubic coordinate to offset coordinate
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3Int CubicToOffset(in Vector3Int coords)
     {
