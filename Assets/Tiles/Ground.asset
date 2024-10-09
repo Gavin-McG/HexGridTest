@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: HexTiles_1
+  m_Script: {fileID: 11500000, guid: ad3b796ffab6c8d4b8ae8ec4fc4056f1, type: 3}
+  m_Name: Ground
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 1069111885, guid: a89f777d4384db04e9c1d984352a0adb, type: 3}
+  m_Sprite: {fileID: 265957334, guid: a89f777d4384db04e9c1d984352a0adb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
@@ -34,3 +34,4 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
   m_ColliderType: 1
+  type: 1

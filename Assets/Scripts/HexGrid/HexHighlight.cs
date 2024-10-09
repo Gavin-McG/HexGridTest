@@ -18,6 +18,8 @@ public class HexHighlight : MonoBehaviour
 
     void HighlightTileUnderMouse()
     {
+        if (!Application.isFocused) return;
+
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         worldPosition.z = 0;
 
@@ -38,7 +40,5 @@ public class HexHighlight : MonoBehaviour
 
             lastTilePosition = cellPosition;
         }
-
-        print(HexUtils.OffsetToCubic(cellPosition));
     }
 }
