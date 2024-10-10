@@ -2,7 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
+
+public enum EditMode
+{
+    None,
+    Build,
+    Delete
+} 
+
 
 public class BuildingManager : MonoBehaviour
 {
@@ -20,8 +29,11 @@ public class BuildingManager : MonoBehaviour
     [Space(10)]
 
     //current build mode state
-    [SerializeField] bool buildMode = true;
+    [SerializeField] EditMode _editMode = EditMode.None;
     [SerializeField] Structure activeStructure;
+
+    //readonly parameter for _editMode
+    [HideInInspector] public EditMode editMode {get {return _editMode;}}
 
     //dictionaries to track buildings
     //all Vector3Int of dictionaries are stored in Offset coordinates
@@ -36,7 +48,17 @@ public class BuildingManager : MonoBehaviour
     Dictionary<BuildingType, List<Building>> typeDictionary;
 
 
-    private void Start()
+    //UI events to change edit mode (might move to UI scripts later)
+    public static UnityEvent<Structure> EnableBuilding = new UnityEvent<Structure>();
+    public static UnityEvent EnableDeleting = new UnityEvent();
+    public static UnityEvent DisableEditing = new UnityEvent();
+
+    //events to mark building changes
+    public static UnityEvent<Building> BuildingPlaced = new UnityEvent<Building>();
+    public static UnityEvent<Building> BuildingDeleted = new UnityEvent<Building>();
+
+
+    void Awake()
     {
         //initialize dictionaries
         tileDictionary = new Dictionary<Vector3Int, Building>();
@@ -44,37 +66,71 @@ public class BuildingManager : MonoBehaviour
         typeDictionary = new Dictionary<BuildingType, List<Building>>();
     }
 
+    private void OnEnable()
+    {
+        EnableBuilding.AddListener(SetBuildMode);
+        EnableDeleting.AddListener(SetDeleteMode);
+        DisableEditing.AddListener(SetNoneMode);
+    }
+
+    private void OnDisable()
+    {
+        EnableBuilding.RemoveListener(SetBuildMode);
+        EnableDeleting.RemoveListener(SetDeleteMode);
+        DisableEditing.RemoveListener(SetNoneMode);
+    }
+
     void Update()
     {
-        if (buildMode)
+        if (_editMode == EditMode.Build)
         {
-            CreatePreview();
+            Vector3Int offsetCoord = GetSelectedOffset();
+
+            CreatePreview(offsetCoord, activeStructure);
 
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                worldPosition.z = 0;
-                Vector3Int offsetCoord = groundMap.WorldToCell(worldPosition);
-
                 PlaceBuilding(offsetCoord, activeStructure);
+            }
+        }
+        else if (_editMode == EditMode.Delete)
+        {
+            Vector3Int offsetCoord = GetSelectedOffset();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                DeleteBuilding(offsetCoord);
             }
         }
     }
 
-    void CreatePreview()
-    {
-        if (!Application.isFocused) return;
 
-        //get highlighted coordinate
+
+
+    //Get offset position of mouse position
+    public Vector3Int GetSelectedOffset()
+    {
+        //set world position of mouse
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         worldPosition.z = 0;
+
+        //convert world position to offset position
         Vector3Int offsetCoord = groundMap.WorldToCell(worldPosition);
-        Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
+        
+        return offsetCoord;
+    }
+
+
+    //Dsiplay preview of structure to be placed, changes color based on placement validity
+    void CreatePreview(Vector3Int offsetCoord, Structure structure)
+    {
+        if (!Application.isFocused) return;
 
         //clear preview map
         previewMap.ClearAllTiles();
 
-        foreach (StructurePeice peice in activeStructure.peices)
+        Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
+        foreach (StructurePeice peice in structure.peices)
         {
             //calculate coordinate
             Vector3Int newCubicCoord = cubicCoord + peice.cubicCoord;
@@ -88,19 +144,32 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    public void EnableBuildMode(Structure structure)
+
+
+
+    //Turn on Build mode, required provided structure
+    public void SetBuildMode(Structure structure)
     {
-        buildMode = true;
+        _editMode = EditMode.Build;
         activeStructure = structure;
     }
 
-    public void DisableBuildMode()
+    //Turn on Delete mode
+    public void SetDeleteMode()
     {
-        buildMode = false;
+        _editMode = EditMode.Delete;
         previewMap.ClearAllTiles();
     }
 
-    public bool IsBuildMode() { return buildMode; }
+    //disable editing modes
+    public void SetNoneMode()
+    {
+        _editMode = EditMode.Build;
+        previewMap.ClearAllTiles();
+    }
+
+
+
 
     //check whether a given offset position is a valid place for a tile to be set
     public bool IsValidPlacement(Vector3Int offsetCoord)
@@ -127,6 +196,9 @@ public class BuildingManager : MonoBehaviour
         return groundType==TileType.Full && objectType==TileType.Empty;
     } 
 
+
+
+
     //check whether a given offset position is a valid place for a structure to be set
     public bool IsValidStructure(Vector3Int offsetCoord, Structure structure)
     {
@@ -147,22 +219,26 @@ public class BuildingManager : MonoBehaviour
     }
 
 
-    public bool PlaceBuilding(Vector3Int offsetCoord, Structure structure)
+
+
+    //place a structure at given offsetCoords
+    //return true is placement is successful
+    public bool PlaceBuilding(Vector3Int offsetCoord, Structure structure, bool placeEvent = true)
     {
-        //skip if structure is null
+        //skip if structure placement isn't valid
         if (!IsValidStructure(offsetCoord, structure)) return false;
 
         //create new building
         Building newBuilding = Building.GetBuilding(structure.buildingType);
-
-        //add new building to building dictionary
-        buildingDictionary.Add(newBuilding, new List<Vector3Int>());
 
         //add new building to type dictionary
         if (!typeDictionary.ContainsKey(structure.buildingType))
             //add new key if necessary of buildingType
             typeDictionary.Add(structure.buildingType, new List<Building>());
         typeDictionary[structure.buildingType].Add(newBuilding);
+
+        //add new building to building dictionary
+        buildingDictionary.Add(newBuilding, new List<Vector3Int>());
 
         //place all tiles of structure
         Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
@@ -185,6 +261,48 @@ public class BuildingManager : MonoBehaviour
 
             //put tile in buildingDictionary
             buildingDictionary[newBuilding].Add(newOffsetCoord);
+        }
+
+        //run building place event
+        if (placeEvent)
+        {
+            BuildingPlaced.Invoke(newBuilding);
+        }
+
+        return true;
+    }
+
+
+
+
+    //delete a structure at given offsetCoords
+    //return true is deletion is successful
+    public bool DeleteBuilding(Vector3Int offsetCoords, bool deleteEvent = true)
+    {
+        //get building from tile
+        if (!tileDictionary.ContainsKey(offsetCoords)) return false;
+        Building building = tileDictionary[offsetCoords];
+
+        //remove building from typeDictionary
+        typeDictionary[building.type].Remove(building);
+
+        //loop through tiles in building
+        foreach (Vector3Int tileOffset in buildingDictionary[building])
+        {
+            //delete tile from objectMap
+            objectMap.SetTile(tileOffset, null);
+
+            //remove tile from tileDictionary
+            tileDictionary.Remove(tileOffset);
+        }
+
+        //remove from buildingDictionary
+        buildingDictionary.Remove(building);
+
+        //run building delete event
+        if (deleteEvent)
+        {
+            BuildingDeleted.Invoke(building);
         }
 
         return true;
