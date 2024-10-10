@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d93bb690d6ac9498668695e161929b, type: 3}
   m_Name: Building0
   m_EditorClassIdentifier: 
+  buildingType: 1
   peices:
   - tile: {fileID: 11400000, guid: 4427cf8beb9101c4fa986ded6c5e17db, type: 2}
     cubicCoord: {x: 0, y: 0, z: 0}
-  - tile: {fileID: 11400000, guid: adbf388c2b7a7ca46b8f6dae5fc67b90, type: 2}
-    cubicCoord: {x: 1, y: 0, z: -1}

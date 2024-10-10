@@ -25,6 +25,10 @@ public class BuildingManager : MonoBehaviour
     //colors to reresent valid/invalid placement
     [SerializeField] Color validColor = Color.green;
     [SerializeField] Color invalidColor = Color.red;
+    //color for deletion highlight
+    [SerializeField] Color deleteColor = Color.red;
+    //color for non-editing highlight
+    [SerializeField] Color highlightColor = Color.blue;
 
     [Space(10)]
 
@@ -47,6 +51,9 @@ public class BuildingManager : MonoBehaviour
     //typeDictionary manages a list of all buildings of each type
     Dictionary<BuildingType, List<Building>> typeDictionary;
 
+    //list to track colored tiles in edit mode
+    List<Vector3Int> coloredOffsets;
+
 
     //UI events to change edit mode (might move to UI scripts later)
     public static UnityEvent<Structure> EnableBuilding = new UnityEvent<Structure>();
@@ -64,10 +71,13 @@ public class BuildingManager : MonoBehaviour
         tileDictionary = new Dictionary<Vector3Int, Building>();
         buildingDictionary = new Dictionary<Building, List<Vector3Int>>();
         typeDictionary = new Dictionary<BuildingType, List<Building>>();
+
+        coloredOffsets = new List<Vector3Int>();
     }
 
     private void OnEnable()
     {
+        //listen for editMode updates
         EnableBuilding.AddListener(SetBuildMode);
         EnableDeleting.AddListener(SetDeleteMode);
         DisableEditing.AddListener(SetNoneMode);
@@ -75,6 +85,7 @@ public class BuildingManager : MonoBehaviour
 
     private void OnDisable()
     {
+        //remove event listeners
         EnableBuilding.RemoveListener(SetBuildMode);
         EnableDeleting.RemoveListener(SetDeleteMode);
         DisableEditing.RemoveListener(SetNoneMode);
@@ -82,11 +93,10 @@ public class BuildingManager : MonoBehaviour
 
     void Update()
     {
+        Vector3Int offsetCoord = GetSelectedOffset();
         if (_editMode == EditMode.Build)
         {
-            Vector3Int offsetCoord = GetSelectedOffset();
-
-            CreatePreview(offsetCoord, activeStructure);
+            BuildPreview(offsetCoord, activeStructure);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -95,12 +105,16 @@ public class BuildingManager : MonoBehaviour
         }
         else if (_editMode == EditMode.Delete)
         {
-            Vector3Int offsetCoord = GetSelectedOffset();
+            DeletePreview(offsetCoord);
 
             if (Input.GetMouseButtonDown(0))
             {
                 DeleteBuilding(offsetCoord);
             }
+        }
+        else
+        {
+            NonePreview(offsetCoord);
         }
     }
 
@@ -122,12 +136,16 @@ public class BuildingManager : MonoBehaviour
 
 
     //Dsiplay preview of structure to be placed, changes color based on placement validity
-    void CreatePreview(Vector3Int offsetCoord, Structure structure)
+    void BuildPreview(Vector3Int offsetCoord, Structure structure)
     {
         if (!Application.isFocused) return;
 
-        //clear preview map
+        //clear previous preview
+        ResetColors();
         previewMap.ClearAllTiles();
+
+        //determine color for structure highlight
+        bool isSructureValid = IsValidStructure(offsetCoord, structure);
 
         Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
         foreach (StructurePeice peice in structure.peices)
@@ -138,10 +156,90 @@ public class BuildingManager : MonoBehaviour
 
             //set tile
             previewMap.SetTile(newOffsetCoord, peice.tile);
-            bool isValid = IsValidPlacement(newOffsetCoord);
+
+            //determine color for tile highlight
+            bool isTileValid = IsValidPlacement(newOffsetCoord);
+
+            //color tiles
             previewMap.SetTileFlags(newOffsetCoord, TileFlags.None);
-            previewMap.SetColor(newOffsetCoord, isValid ? validColor : invalidColor);
+            previewMap.SetColor(newOffsetCoord, isSructureValid ? validColor : invalidColor);
+
+            groundMap.SetTileFlags(newOffsetCoord, TileFlags.None);
+            groundMap.SetColor(newOffsetCoord, isTileValid ? validColor : invalidColor);
+        
+            //add to list of colored tiles
+            coloredOffsets.Add(newOffsetCoord);
         }
+    }
+
+    //Display preview of building to be deleated
+    private void DeletePreview(Vector3Int offsetCoord)
+    {
+        if (!Application.isFocused) return;
+
+        //clear previous preview
+        ResetColors();
+
+        if (tileDictionary.ContainsKey(offsetCoord))
+        {
+            //get building
+            Building building = tileDictionary[offsetCoord];
+
+            //highlight each tile of building
+            foreach (Vector3Int tileOffset in buildingDictionary[building])
+            {
+                //color tiles
+                objectMap.SetTileFlags(tileOffset, TileFlags.None);
+                objectMap.SetColor(tileOffset, deleteColor);
+
+                groundMap.SetTileFlags(tileOffset, TileFlags.None);
+                groundMap.SetColor(tileOffset, deleteColor);
+
+                //add to list of colored tiles
+                coloredOffsets.Add(tileOffset);
+            }
+        }
+        else
+        {
+            //color tile
+            groundMap.SetTileFlags(offsetCoord, TileFlags.None);
+            groundMap.SetColor(offsetCoord, deleteColor);
+
+            //add to list of colored tiles
+            coloredOffsets.Add(offsetCoord);
+        }
+    }
+
+    //Display highlight when not in editing mode
+    public void NonePreview(Vector3Int offsetCoord)
+    {
+        if (!Application.isFocused) return;
+
+        //clear previous preview
+        ResetColors();
+
+        //color tile
+        groundMap.SetTileFlags(offsetCoord, TileFlags.None);
+        groundMap.SetColor(offsetCoord, highlightColor);
+
+        //add to list of colored tiles
+        coloredOffsets.Add(offsetCoord);
+    }
+
+
+    //reset all colored tiles
+    public void ResetColors()
+    {
+        foreach (Vector3Int offset in coloredOffsets)
+        {
+            //clear color of offset
+            groundMap.SetColor(offset, Color.white);
+            objectMap.SetColor(offset, Color.white);
+            previewMap.SetColor(offset, Color.white);
+        }
+
+        //reset color list
+        coloredOffsets.Clear();
     }
 
 
@@ -152,6 +250,7 @@ public class BuildingManager : MonoBehaviour
     {
         _editMode = EditMode.Build;
         activeStructure = structure;
+        ResetColors();
     }
 
     //Turn on Delete mode
@@ -159,6 +258,7 @@ public class BuildingManager : MonoBehaviour
     {
         _editMode = EditMode.Delete;
         previewMap.ClearAllTiles();
+        ResetColors();
     }
 
     //disable editing modes
@@ -166,6 +266,7 @@ public class BuildingManager : MonoBehaviour
     {
         _editMode = EditMode.Build;
         previewMap.ClearAllTiles();
+        ResetColors();
     }
 
 

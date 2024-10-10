@@ -1964,7 +1964,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1735817979}
-  - component: {fileID: 1735817978}
   - component: {fileID: 1735817980}
   m_Layer: 0
   m_Name: GameManager
@@ -1973,20 +1972,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1735817978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1735817977}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0523ed97c0408534ab02f08356eca092, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grid: {fileID: 282970143}
-  tilemap: {fileID: 899441700}
 --- !u!4 &1735817979
 Transform:
   m_ObjectHideFlags: 0
@@ -2019,8 +2004,10 @@ MonoBehaviour:
   previewMap: {fileID: 1116791437}
   validColor: {r: 0.30053896, g: 1, b: 0.30053896, a: 1}
   invalidColor: {r: 1, g: 0.69946086, b: 0.69946086, a: 1}
-  buildMode: 1
-  activeStructure: {fileID: 11400000, guid: 5cc84e05b33cde949856a0652a0bd224, type: 2}
+  deleteColor: {r: 1, g: 0.69803923, b: 0.69803923, a: 1}
+  highlightColor: {r: 0.3019608, g: 1, b: 0.3019608, a: 1}
+  _editMode: 1
+  activeStructure: {fileID: 11400000, guid: 8e46cb7cb0ece8e4984ed5d80bdb1b7d, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
