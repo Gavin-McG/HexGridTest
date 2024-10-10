@@ -15,5 +15,6 @@ public struct StructurePeice
 [CreateAssetMenu(fileName = "Structure", menuName = "ScriptableObjects/Structure", order = 1)]
 public class Structure : ScriptableObject
 {
+    public BuildingType buildingType;
     public StructurePeice[] peices;
 }

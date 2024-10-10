@@ -82,8 +82,8 @@ Material:
     - _Threshold: 0.89
     - _TimeScale: 0.29
     - _UVSec: 0
-    - _XScale: 40
-    - _YScale: 60
+    - _XScale: 800
+    - _YScale: 1200
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
