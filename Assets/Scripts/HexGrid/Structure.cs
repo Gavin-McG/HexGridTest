@@ -6,7 +6,7 @@ using UnityEngine;
 //defines the structure of tiles for a type of building
 
 [System.Serializable]
-public struct StructurePeice
+public struct StructurePiece
 {
     public CustomTile tile;
     public Vector3Int cubicCoord;
@@ -16,5 +16,5 @@ public struct StructurePeice
 public class Structure : ScriptableObject
 {
     public BuildingType buildingType;
-    public StructurePeice[] peices;
+    public StructurePiece[] pieces;
 }

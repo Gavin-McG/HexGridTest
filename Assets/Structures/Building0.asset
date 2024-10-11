@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Building0
   m_EditorClassIdentifier: 
   buildingType: 1
-  peices:
+  pieces:
   - tile: {fileID: 11400000, guid: 4427cf8beb9101c4fa986ded6c5e17db, type: 2}
     cubicCoord: {x: 0, y: 0, z: 0}

@@ -5,13 +5,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
+//editing modes
 public enum EditMode
 {
     None,
     Build,
     Delete
-} 
+}
 
+//The BuildingManager class handles the placement and deletion of buildings on a
+//tilemap, using different editing modes.It interacts with tilemaps to show previews
+//of valid/invalid placements, and manages multiple dictionaries to track tile and
+//building data. The script also provides an event-driven system to handle UI
+//interactions for switching between building and deleting modes.
 
 public class BuildingManager : MonoBehaviour
 {
@@ -148,14 +154,14 @@ public class BuildingManager : MonoBehaviour
         bool isSructureValid = IsValidStructure(offsetCoord, structure);
 
         Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
-        foreach (StructurePeice peice in structure.peices)
+        foreach (StructurePiece piece in structure.pieces)
         {
             //calculate coordinate
-            Vector3Int newCubicCoord = cubicCoord + peice.cubicCoord;
+            Vector3Int newCubicCoord = cubicCoord + piece.cubicCoord;
             Vector3Int newOffsetCoord = HexUtils.CubicToOffset(newCubicCoord);
 
             //set tile
-            previewMap.SetTile(newOffsetCoord, peice.tile);
+            previewMap.SetTile(newOffsetCoord, piece.tile);
 
             //determine color for tile highlight
             bool isTileValid = IsValidPlacement(newOffsetCoord);
@@ -306,13 +312,13 @@ public class BuildingManager : MonoBehaviour
         if (structure == null) return false;
 
         Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
-        foreach (StructurePeice peice in structure.peices)
+        foreach (StructurePiece piece in structure.pieces)
         {
             //calculate coordinate
-            Vector3Int newCubicCoord = cubicCoord + peice.cubicCoord;
+            Vector3Int newCubicCoord = cubicCoord + piece.cubicCoord;
             Vector3Int newOffsetCoord = HexUtils.CubicToOffset(newCubicCoord);
 
-            //check peice's valid placement
+            //check piece's valid placement
             if (!IsValidPlacement(newOffsetCoord)) return false;
         }
 
@@ -343,14 +349,14 @@ public class BuildingManager : MonoBehaviour
 
         //place all tiles of structure
         Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
-        foreach (StructurePeice peice in structure.peices)
+        foreach (StructurePiece piece in structure.pieces)
         {
             //calculate coordinate
-            Vector3Int newCubicCoord = cubicCoord + peice.cubicCoord;
+            Vector3Int newCubicCoord = cubicCoord + piece.cubicCoord;
             Vector3Int newOffsetCoord = HexUtils.CubicToOffset(newCubicCoord);
 
             //set tile
-            objectMap.SetTile(newOffsetCoord, peice.tile);
+            objectMap.SetTile(newOffsetCoord, piece.tile);
 
             //put tile in tileDictionary
             if (!tileDictionary.ContainsKey(newOffsetCoord))
