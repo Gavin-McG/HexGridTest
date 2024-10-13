@@ -40,6 +40,7 @@ public class BuildingManager : MonoBehaviour
 
     //current build mode state
     [SerializeField] EditMode _editMode = EditMode.None;
+
     [SerializeField] Structure activeStructure;
 
     //readonly parameter for _editMode
