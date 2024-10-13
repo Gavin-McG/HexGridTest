@@ -79,6 +79,8 @@ public class BuildingManager : MonoBehaviour
         typeDictionary = new Dictionary<BuildingType, List<Building>>();
 
         coloredOffsets = new List<Vector3Int>();
+
+        SetEditKeyword(_editMode);
     }
 
     private void OnEnable()
@@ -95,6 +97,11 @@ public class BuildingManager : MonoBehaviour
         EnableBuilding.RemoveListener(SetBuildMode);
         EnableDeleting.RemoveListener(SetDeleteMode);
         DisableEditing.RemoveListener(SetNoneMode);
+    }
+
+    private void OnValidate()
+    {
+        SetEditKeyword(_editMode);
     }
 
     void Update()
@@ -251,12 +258,26 @@ public class BuildingManager : MonoBehaviour
 
 
 
+    //set the sprite shader alpha mode
+    public void SetEditKeyword(EditMode mode)
+    {
+        Shader.DisableKeyword("BUILD");
+        Shader.DisableKeyword("DELETE");
+        Shader.DisableKeyword("NONE");
+
+        Shader.EnableKeyword(mode.ToString().ToUpper());
+    }
+
+
+
+
     //Turn on Build mode, required provided structure
     public void SetBuildMode(Structure structure)
     {
         _editMode = EditMode.Build;
         activeStructure = structure;
         ResetColors();
+        SetEditKeyword(_editMode);
     }
 
     //Turn on Delete mode
@@ -265,6 +286,7 @@ public class BuildingManager : MonoBehaviour
         _editMode = EditMode.Delete;
         previewMap.ClearAllTiles();
         ResetColors();
+        SetEditKeyword(_editMode);
     }
 
     //disable editing modes
@@ -273,6 +295,7 @@ public class BuildingManager : MonoBehaviour
         _editMode = EditMode.Build;
         previewMap.ClearAllTiles();
         ResetColors();
+        SetEditKeyword(_editMode);
     }
 
 
