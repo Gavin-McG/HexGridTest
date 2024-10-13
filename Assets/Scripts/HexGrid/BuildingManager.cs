@@ -72,6 +72,9 @@ public class BuildingManager : MonoBehaviour
     public static UnityEvent<Building> BuildingPlaced = new UnityEvent<Building>();
     public static UnityEvent<Building> BuildingDeleted = new UnityEvent<Building>();
 
+    public static UnityEvent FailedPlacement = new UnityEvent();
+    public static UnityEvent FailedDestroy = new UnityEvent();
+
 
     void Awake()
     {
@@ -357,8 +360,13 @@ public class BuildingManager : MonoBehaviour
     //return true is placement is successful
     public bool PlaceBuilding(Vector3Int offsetCoord, Structure structure, bool placeEvent = true)
     {
-        //skip if structure placement isn't valid
-        if (!IsValidStructure(offsetCoord, structure)) return false;
+        //check if structure placement isn't valid
+        if (!IsValidStructure(offsetCoord, structure))
+        {
+            //could not place building
+            FailedPlacement.Invoke();
+            return false;
+        }
 
         //create new building
         Building newBuilding = Building.GetBuilding(structure.buildingType);
@@ -412,7 +420,12 @@ public class BuildingManager : MonoBehaviour
     public bool DeleteBuilding(Vector3Int offsetCoords, bool deleteEvent = true)
     {
         //get building from tile
-        if (!tileDictionary.ContainsKey(offsetCoords)) return false;
+        if (!tileDictionary.ContainsKey(offsetCoords))
+        {
+            //no building to destroy
+            FailedDestroy.Invoke();
+            return false;
+        }
         Building building = tileDictionary[offsetCoords];
 
         //remove building from typeDictionary
