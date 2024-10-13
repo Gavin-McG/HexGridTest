@@ -45,6 +45,7 @@ public class BuildingManager : MonoBehaviour
     //readonly parameter for _editMode
     [HideInInspector] public EditMode editMode {get {return _editMode;}}
 
+
     //dictionaries to track buildings
     //all Vector3Int of dictionaries are stored in Offset coordinates
 
@@ -56,6 +57,7 @@ public class BuildingManager : MonoBehaviour
     Dictionary<Building, List<Vector3Int>> buildingDictionary;
     //typeDictionary manages a list of all buildings of each type
     Dictionary<BuildingType, List<Building>> typeDictionary;
+
 
     //list to track colored tiles in edit mode
     List<Vector3Int> coloredOffsets;
@@ -186,7 +188,7 @@ public class BuildingManager : MonoBehaviour
     }
 
     //Display preview of building to be deleated
-    private void DeletePreview(Vector3Int offsetCoord)
+    void DeletePreview(Vector3Int offsetCoord)
     {
         if (!Application.isFocused) return;
 
@@ -224,7 +226,7 @@ public class BuildingManager : MonoBehaviour
     }
 
     //Display highlight when not in editing mode
-    public void NonePreview(Vector3Int offsetCoord)
+    void NonePreview(Vector3Int offsetCoord)
     {
         if (!Application.isFocused) return;
 
@@ -241,7 +243,7 @@ public class BuildingManager : MonoBehaviour
 
 
     //reset all colored tiles
-    public void ResetColors()
+    void ResetColors()
     {
         foreach (Vector3Int offset in coloredOffsets)
         {
@@ -259,7 +261,7 @@ public class BuildingManager : MonoBehaviour
 
 
     //set the sprite shader alpha mode
-    public void SetEditKeyword(EditMode mode)
+    void SetEditKeyword(EditMode mode)
     {
         Shader.DisableKeyword("BUILD");
         Shader.DisableKeyword("DELETE");
@@ -302,7 +304,7 @@ public class BuildingManager : MonoBehaviour
 
 
     //check whether a given offset position is a valid place for a tile to be set
-    public bool IsValidPlacement(Vector3Int offsetCoord)
+    bool IsValidPlacement(Vector3Int offsetCoord)
     {
         //get tiles in the offset position
         TileBase groundTile = groundMap.GetTile(offsetCoord);
@@ -330,7 +332,7 @@ public class BuildingManager : MonoBehaviour
 
 
     //check whether a given offset position is a valid place for a structure to be set
-    public bool IsValidStructure(Vector3Int offsetCoord, Structure structure)
+    bool IsValidStructure(Vector3Int offsetCoord, Structure structure)
     {
         if (structure == null) return false;
 
@@ -436,5 +438,67 @@ public class BuildingManager : MonoBehaviour
         }
 
         return true;
+    }
+
+
+
+
+    //return the coordinates of all tiles owned by a building
+    public List<Vector3Int> GetBuildingOffsets(Building building)
+    {
+        if (building == null) return null;
+
+        //fetch building tiles from building dictionary
+        if (buildingDictionary.ContainsKey(building))
+        {
+            return buildingDictionary[building];
+        }
+
+        //building doesn't exist in map
+        return null;
+    }
+
+    //return all the tiles owned by a building
+    public List<CustomTile> GetBuildingTiles(Building building)
+    {
+        //get coords of all tiles in building
+        List<Vector3Int> offsetCoords = GetBuildingOffsets(building);
+
+        if (offsetCoords == null) return null;
+
+        List<CustomTile> tiles = new List<CustomTile>();
+        foreach (Vector3Int offsetCoord in offsetCoords)
+        {
+            //fetch custom tile from groundMap
+            tiles.Add(objectMap.GetTile<CustomTile>(offsetCoord));
+        }
+
+        return tiles;
+    }
+
+    //get building from tile offset coordinate
+    public Building GetBuilding(Vector3Int offsetCoord)
+    {
+        if (tileDictionary.ContainsKey(offsetCoord))
+        {
+            //fetch building from tile dictionary
+            return tileDictionary[offsetCoord];
+        }
+
+        //tile doesn't exist in any building
+        return null;
+    }
+
+    //get all buildings of a certain building type
+    public List<Building> GetBuildingOfType(BuildingType type)
+    {
+        if (!typeDictionary.ContainsKey(type))
+        {
+            //add new type to dictionary
+            typeDictionary.Add(type, new List<Building>());
+        }
+
+        //no buildings exist of that type
+        return typeDictionary[type];
     }
 }
