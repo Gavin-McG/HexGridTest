@@ -2005,7 +2005,7 @@ MonoBehaviour:
   validColor: {r: 0.30053896, g: 1, b: 0.30053896, a: 1}
   invalidColor: {r: 1, g: 0.69946086, b: 0.69946086, a: 1}
   deleteColor: {r: 1, g: 0.69803923, b: 0.69803923, a: 1}
-  highlightColor: {r: 1, g: 1, b: 1, a: 0.7254902}
+  highlightColor: {r: 1, g: 1, b: 1, a: 0.84705883}
   _editMode: 1
   activeStructure: {fileID: 11400000, guid: 8e46cb7cb0ece8e4984ed5d80bdb1b7d, type: 2}
 --- !u!1660057539 &9223372036854775807
