@@ -95,6 +95,9 @@ public class BuildingManager : MonoBehaviour
         EnableBuilding.AddListener(SetBuildMode);
         EnableDeleting.AddListener(SetDeleteMode);
         DisableEditing.AddListener(SetNoneMode);
+
+        //listen for interactions with the tilemap
+        CameraManager.mouseClick.AddListener(Interract);
     }
 
     private void OnDisable()
@@ -103,6 +106,9 @@ public class BuildingManager : MonoBehaviour
         EnableBuilding.RemoveListener(SetBuildMode);
         EnableDeleting.RemoveListener(SetDeleteMode);
         DisableEditing.RemoveListener(SetNoneMode);
+
+        //listen for interactions with the tilemap
+        CameraManager.mouseClick.RemoveListener(Interract);
 
         ClearPreviews();
     }
@@ -116,24 +122,6 @@ public class BuildingManager : MonoBehaviour
     {
         ClearPreviews();
         DisplayPreviews();
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3Int offsetCoord = GetSelectedOffset();
-
-            switch(_editMode)
-            {
-                case EditMode.None:
-
-                    break;
-                case EditMode.Build:
-                    PlaceBuilding(offsetCoord, activeStructure);
-                    break;
-                case EditMode.Delete:
-                    DeleteBuilding(offsetCoord);
-                    break;
-            }
-        }
     }
 
 
@@ -143,7 +131,7 @@ public class BuildingManager : MonoBehaviour
     {
         ResetColors();
 
-        //null check for OnDisable call
+        //null check for Destroy call
         if (previewMap != null)
         {
             previewMap.ClearAllTiles();
@@ -381,6 +369,25 @@ public class BuildingManager : MonoBehaviour
         return true;
     }
 
+
+
+    void Interract()
+    {
+        Vector3Int offsetCoord = GetSelectedOffset();
+
+        switch (_editMode)
+        {
+            case EditMode.None:
+
+                break;
+            case EditMode.Build:
+                PlaceBuilding(offsetCoord, activeStructure);
+                break;
+            case EditMode.Delete:
+                DeleteBuilding(offsetCoord);
+                break;
+        }
+    }
 
 
 

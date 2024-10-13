@@ -15,23 +15,31 @@ enum MouseState
 public class CameraManager : MonoBehaviour
 {
 
+    [SerializeField] Vector2 camSizeBounds = new Vector2(1, 20);
+
+
+
+
     public static UnityEvent mouseClick = new UnityEvent();
 
-    GameObject camObject;
     Camera cam;
+    GameObject camObject;
+    float camSize;
 
     MouseState state;
     Vector3 clickPos = Vector3.zero;
 
     private void Awake()
     {
-        camObject = Camera.main.gameObject;
         cam = Camera.main;
+        camObject = cam.gameObject;
+        camSize = cam.orthographicSize;
     }
 
     private void Update()
     {
         HandleClickInput();
+        HandleScrollInput();
     }
 
 
@@ -85,12 +93,22 @@ public class CameraManager : MonoBehaviour
         Vector3 change = clickPos - Input.mousePosition;
         change.x /= Screen.width;
         change.y /= Screen.height;
-        change.x *= 2*cam.orthographicSize * cam.aspect;
-        change.y *= 2*cam.orthographicSize;
+        change.x *= 2*camSize * cam.aspect;
+        change.y *= 2*camSize;
 
         //apply movement
         camObject.transform.Translate(change);
 
         clickPos = Input.mousePosition;
+    }
+
+
+
+
+    void HandleScrollInput()
+    {
+        camSize -= Input.mouseScrollDelta.y;
+        camSize = Mathf.Clamp(camSize, camSizeBounds.x, camSizeBounds.y);
+        cam.orthographicSize = camSize;
     }
 }
