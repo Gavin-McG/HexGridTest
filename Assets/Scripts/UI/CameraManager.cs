@@ -16,7 +16,7 @@ public class CameraManager : MonoBehaviour
 {
 
     [SerializeField] Vector2 camSizeBounds = new Vector2(1, 20);
-
+    [SerializeField] float dragThreshold = 5;
 
 
 
@@ -76,7 +76,7 @@ public class CameraManager : MonoBehaviour
             mouseClick.Invoke();
             state = MouseState.None;
         }
-        else if (Input.mousePosition != clickPos)
+        else if ((Input.mousePosition-clickPos).magnitude > dragThreshold)
         {
             state = MouseState.Dragging;
         } 
