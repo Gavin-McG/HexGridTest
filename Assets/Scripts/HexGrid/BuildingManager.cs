@@ -311,7 +311,6 @@ public class BuildingManager : MonoBehaviour
     {
         _editMode = EditMode.Build;
         activeStructure = structure;
-        ResetColors();
         SetEditKeyword(_editMode);
     }
 
@@ -319,17 +318,13 @@ public class BuildingManager : MonoBehaviour
     public void SetDeleteMode()
     {
         _editMode = EditMode.Delete;
-        previewMap.ClearAllTiles();
-        ResetColors();
         SetEditKeyword(_editMode);
     }
 
     //disable editing modes
     public void SetNoneMode()
     {
-        _editMode = EditMode.Build;
-        previewMap.ClearAllTiles();
-        ResetColors();
+        _editMode = EditMode.None;
         SetEditKeyword(_editMode);
     }
 
