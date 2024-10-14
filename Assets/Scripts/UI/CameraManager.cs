@@ -15,6 +15,9 @@ enum MouseState
 public class CameraManager : MonoBehaviour
 {
 
+    [SerializeField] Vector2 camBoundsX = new Vector2(-20, 20);
+    [SerializeField] Vector2 camBoundsY = new Vector2(-20, 20);
+
     [SerializeField] Vector2 camSizeBounds = new Vector2(1, 20);
     [SerializeField] float dragThreshold = 5;
 
@@ -40,6 +43,7 @@ public class CameraManager : MonoBehaviour
     {
         HandleClickInput();
         HandleScrollInput();
+        BoundCamera();
     }
 
 
@@ -104,7 +108,7 @@ public class CameraManager : MonoBehaviour
 
 
 
-
+    //use the scroll input of mouse to zoom in/out
     void HandleScrollInput()
     {
         //calculate new size
@@ -120,5 +124,15 @@ public class CameraManager : MonoBehaviour
         //set new size
         camSize = newCamSize;
         cam.orthographicSize = camSize;
+    }
+
+
+    //restrict camera to rectangular bounds
+    void BoundCamera()
+    {
+        float x = Mathf.Clamp(camObject.transform.position.x, camBoundsX.x, camBoundsX.y);
+        float y = Mathf.Clamp(camObject.transform.position.y, camBoundsY.x, camBoundsY.y);
+        float z = camObject.transform.position.z;
+        camObject.transform.position = new Vector3(x, y, z);
     }
 }

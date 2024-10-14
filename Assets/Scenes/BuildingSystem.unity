@@ -3681,6 +3681,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40e2537f84b184345bf0ec158f3937e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camBoundsX: {x: -40, y: 40}
+  camBoundsY: {x: -40, y: 40}
+  camSizeBounds: {x: 1, y: 15}
+  dragThreshold: 5
 --- !u!1 &1748904103
 GameObject:
   m_ObjectHideFlags: 0
@@ -3964,7 +3968,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1128116540}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.81333333
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
