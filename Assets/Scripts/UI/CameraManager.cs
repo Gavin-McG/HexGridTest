@@ -21,13 +21,16 @@ public class CameraManager : MonoBehaviour
     [SerializeField] Vector2 camSizeBounds = new Vector2(1, 20);
     [SerializeField] float dragThreshold = 5;
 
+    [SerializeField] float smoothFactor = 0.95f;
 
 
     public static UnityEvent mouseClick = new UnityEvent();
 
     Camera cam;
     GameObject camObject;
+
     float camSize;
+    float goalCamSize;
 
     MouseState state;
     Vector3 clickPos = Vector3.zero;
@@ -37,12 +40,17 @@ public class CameraManager : MonoBehaviour
         cam = Camera.main;
         camObject = cam.gameObject;
         camSize = cam.orthographicSize;
+        goalCamSize = camSize;
+
+        QualitySettings.vSyncCount = 1;
+        Application.targetFrameRate = -1;
     }
 
     private void Update()
     {
         HandleClickInput();
         HandleScrollInput();
+        SmoothZoom();
         BoundCamera();
     }
 
@@ -112,8 +120,16 @@ public class CameraManager : MonoBehaviour
     void HandleScrollInput()
     {
         //calculate new size
-        float newCamSize = camSize - Input.mouseScrollDelta.y;
-        newCamSize = Mathf.Clamp(newCamSize, camSizeBounds.x, camSizeBounds.y);
+        float newCamSize = goalCamSize - Input.mouseScrollDelta.y;
+        goalCamSize = Mathf.Clamp(newCamSize, camSizeBounds.x, camSizeBounds.y);
+    }
+
+
+    void SmoothZoom()
+    {
+        //calculate new size
+        float difference = goalCamSize - camSize;
+        float newCamSize = camSize + difference * (1-Mathf.Pow(smoothFactor, Time.deltaTime));
 
         //move camera to zoom towards pointer
         float factor = newCamSize / camSize;
@@ -121,7 +137,6 @@ public class CameraManager : MonoBehaviour
         Vector3 offset = zoomPoint - camObject.transform.position;
         camObject.transform.position = zoomPoint - factor * offset;
 
-        //set new size
         camSize = newCamSize;
         cam.orthographicSize = camSize;
     }
