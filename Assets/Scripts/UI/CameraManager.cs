@@ -107,8 +107,18 @@ public class CameraManager : MonoBehaviour
 
     void HandleScrollInput()
     {
-        camSize -= Input.mouseScrollDelta.y;
-        camSize = Mathf.Clamp(camSize, camSizeBounds.x, camSizeBounds.y);
+        //calculate new size
+        float newCamSize = camSize - Input.mouseScrollDelta.y;
+        newCamSize = Mathf.Clamp(newCamSize, camSizeBounds.x, camSizeBounds.y);
+
+        //move camera to zoom towards pointer
+        float factor = newCamSize / camSize;
+        Vector3 zoomPoint = cam.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 offset = zoomPoint - camObject.transform.position;
+        camObject.transform.position = zoomPoint - factor * offset;
+
+        //set new size
+        camSize = newCamSize;
         cam.orthographicSize = camSize;
     }
 }
