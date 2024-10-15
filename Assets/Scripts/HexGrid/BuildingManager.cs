@@ -69,9 +69,11 @@ public class BuildingManager : MonoBehaviour
     public static UnityEvent EnableDeleting = new UnityEvent();
     public static UnityEvent DisableEditing = new UnityEvent();
 
-    //events to mark building changes
-    public static UnityEvent<Building> BuildingPlaced = new UnityEvent<Building>();
-    public static UnityEvent<Building> BuildingDeleted = new UnityEvent<Building>();
+    //events to mark building interactions
+    public static UnityEvent<Building, Vector3Int> BuildingClicked = new UnityEvent<Building, Vector3Int>();
+    public static UnityEvent<EnvironmentTile, Vector3Int> EnvironmentClicked = new UnityEvent<EnvironmentTile, Vector3Int>();
+    public static UnityEvent<Building, Vector3Int> BuildingPlaced = new UnityEvent<Building, Vector3Int>();
+    public static UnityEvent<Building, Vector3Int> BuildingDeleted = new UnityEvent<Building, Vector3Int>();
 
     public static UnityEvent FailedPlacement = new UnityEvent();
     public static UnityEvent FailedDestroy = new UnityEvent();
@@ -389,7 +391,29 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
+    //Try to click an object at given offsetCoords
+    //return true if there's an object to click.
+    public bool ClickTile(Vector3Int offsetCoord)
+    {
+        //try to click building
+        Building building = GetBuilding(offsetCoord);
+        if (building != null)
+        {
+            BuildingClicked.Invoke(building, offsetCoord);
+            return true;
+        }
 
+        //try to click environmental tile
+        TileBase tile = objectMap.GetTile(offsetCoord);
+        if (tile is EnvironmentTile envTile)
+        {
+            EnvironmentClicked.Invoke(envTile, offsetCoord); 
+            return true;
+        }
+
+        //nothing to click
+        return false;
+    }
 
     //place a structure at given offsetCoords
     //return true is placement is successful
@@ -438,7 +462,7 @@ public class BuildingManager : MonoBehaviour
         //run building place event
         if (placeEvent)
         {
-            BuildingPlaced.Invoke(newBuilding);
+            BuildingPlaced.Invoke(newBuilding, offsetCoord);
         }
 
         return true;
@@ -483,7 +507,7 @@ public class BuildingManager : MonoBehaviour
         //run building delete event
         if (deleteEvent)
         {
-            BuildingDeleted.Invoke(building);
+            BuildingDeleted.Invoke(building, offsetCoord);
         }
 
         return true;
