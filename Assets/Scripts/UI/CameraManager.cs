@@ -48,10 +48,13 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        HandleClickInput();
-        HandleScrollInput();
-        SmoothZoom();
-        BoundCamera();
+        if (Application.isFocused)
+        {
+            HandleClickInput();
+            HandleScrollInput();
+            SmoothZoom();
+            BoundCamera();
+        }
     }
 
 
