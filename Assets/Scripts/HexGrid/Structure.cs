@@ -8,7 +8,7 @@ using UnityEngine;
 [System.Serializable]
 public struct StructurePiece
 {
-    public CustomTile tile;
+    public BasicTile tile;
     public Vector3Int cubicCoord;
 }
 

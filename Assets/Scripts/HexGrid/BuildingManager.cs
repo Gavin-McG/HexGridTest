@@ -323,7 +323,7 @@ public class BuildingManager : MonoBehaviour
     bool IsGroundTile(Vector3Int offsetCoord)
     {
         //get ground tile
-        CustomTile groundTile = groundMap.GetTile<CustomTile>(offsetCoord);
+        BasicTile groundTile = groundMap.GetTile<BasicTile>(offsetCoord);
 
         //check that ground tile is full
         return groundTile != null && groundTile.type == TileType.Full;
@@ -336,8 +336,8 @@ public class BuildingManager : MonoBehaviour
     bool IsValidPlacement(Vector3Int offsetCoord)
     {
         //get tiles in the offset position
-        CustomTile groundTile = groundMap.GetTile<CustomTile>(offsetCoord);
-        CustomTile objectTile = objectMap.GetTile<CustomTile>(offsetCoord);
+        BasicTile groundTile = groundMap.GetTile<BasicTile>(offsetCoord);
+        BasicTile objectTile = objectMap.GetTile<BasicTile>(offsetCoord);
 
         //get tile type, default empty types
         TileType groundType = groundTile != null ? groundTile.type : TileType.Empty;
@@ -508,18 +508,18 @@ public class BuildingManager : MonoBehaviour
     }
 
     //return all the tiles owned by a building
-    public List<CustomTile> GetBuildingTiles(Building building)
+    public List<BasicTile> GetBuildingTiles(Building building)
     {
         //get coords of all tiles in building
         List<Vector3Int> offsetCoords = GetBuildingOffsets(building);
 
         if (offsetCoords == null) return null;
 
-        List<CustomTile> tiles = new List<CustomTile>();
+        List<BasicTile> tiles = new List<BasicTile>();
         foreach (Vector3Int offsetCoord in offsetCoords)
         {
             //fetch custom tile from groundMap
-            tiles.Add(objectMap.GetTile<CustomTile>(offsetCoord));
+            tiles.Add(objectMap.GetTile<BasicTile>(offsetCoord));
         }
 
         return tiles;

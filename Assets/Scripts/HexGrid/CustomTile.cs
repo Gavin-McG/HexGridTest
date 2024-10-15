@@ -16,8 +16,8 @@ public enum TileType
 }
 
 
-[CreateAssetMenu(fileName = "New Custom Tile", menuName = "Tiles/Custom Tile")]
-public class CustomTile : Tile
+[CreateAssetMenu(fileName = "New Basic Tile", menuName = "Tiles/Basic Tile")]
+public class BasicTile : Tile
 {
     [Space(20)] 
     public TileType type;
