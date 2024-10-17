@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
 //editing modes
@@ -387,6 +385,11 @@ public class BuildingManager : MonoBehaviour
 
     void Interract()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         Vector3Int offsetCoord = GetSelectedOffset();
 
         switch (_editMode)
