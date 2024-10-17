@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 enum MouseState
 {
@@ -22,9 +20,11 @@ public class CameraManager : MonoBehaviour
     [SerializeField] float dragThreshold = 5;
 
     [SerializeField] float smoothFactor = 0.95f;
-
+    [SerializeField] private float zoomScale = 0.01f;
 
     public static UnityEvent mouseClick = new UnityEvent();
+
+    private BuildingManager buildingManager;
 
     Camera cam;
     GameObject camObject;
@@ -33,7 +33,13 @@ public class CameraManager : MonoBehaviour
     float goalCamSize;
 
     MouseState state;
-    Vector3 clickPos = Vector3.zero;
+    Vector2 clickPos = Vector2.zero;
+    private Vector2 mousePos;
+
+    private PlayerInput playerInput;
+    
+    private InputAction clickAction;
+    private InputAction zoomAction;
 
     private void Awake()
     {
@@ -41,71 +47,58 @@ public class CameraManager : MonoBehaviour
         camObject = cam.gameObject;
         camSize = cam.orthographicSize;
         goalCamSize = camSize;
+        buildingManager = GetComponent<BuildingManager>();
 
-        QualitySettings.vSyncCount = 1;
-        Application.targetFrameRate = -1;
+        playerInput = GetComponent<PlayerInput>();
+        
+        clickAction = playerInput.actions["Select"];
+        zoomAction = playerInput.actions["Zoom"];
+
+        //Define functions for when each action is taken
+        clickAction.performed += _ => OnClickPerformed();
+        clickAction.canceled += _ => OnClickReleased();
+        zoomAction.performed += ctx => HandleScrollInput(ctx.ReadValue<Vector2>().y * zoomScale);
     }
 
     private void Update()
     {
         if (Application.isFocused)
         {
-            HandleClickInput();
-            HandleScrollInput();
+            //Changed from Input.MousePosition and calculate every frame since it's used a lot
+            mousePos = Mouse.current.position.ReadValue();
+            
+            //If we are already dragging, or the criteria to start dragging is met then drag 
+            if (state == MouseState.Dragging || 
+                (state == MouseState.Waiting && (mousePos - clickPos).magnitude > dragThreshold))
+            {
+                DraggingState();
+            }
             SmoothZoom();
             BoundCamera();
         }
     }
 
-
-    void HandleClickInput()
+    //Sets waiting when user clicks
+    private void OnClickPerformed()
     {
-        switch (state)
-        {
-            case MouseState.None:
-                NoneState();
-                break;
-            case MouseState.Waiting:
-                WaitingState();
-                break;
-            case MouseState.Dragging:
-                DraggingState();
-                break;
-        }
+        clickPos = mousePos;
+        state = MouseState.Waiting;
     }
 
-
-    void NoneState()
+    //Called only when user releases the mouse click
+    private void OnClickReleased()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            clickPos = Input.mousePosition;
-            state = MouseState.Waiting;
-        }
-    }
-
-    void WaitingState()
-    {
-        if (Input.GetMouseButtonUp(0))
-        {
-            mouseClick.Invoke();
-            state = MouseState.None;
-        }
-        else if ((Input.mousePosition-clickPos).magnitude > dragThreshold)
-        {
-            state = MouseState.Dragging;
-        } 
+        mouseClick.Invoke();
+        state = MouseState.None;
     }
 
     void DraggingState()
     {
-        if (Input.GetMouseButtonUp(0))
-        {
-            state = MouseState.None;
-        }
+        if (buildingManager.editMode == EditMode.Build || buildingManager.editMode == EditMode.Delete) return; 
+        state = MouseState.Dragging;
 
         //caluclate movement
-        Vector3 change = clickPos - Input.mousePosition;
+        Vector3 change = clickPos - mousePos;
         change.x /= Screen.width;
         change.y /= Screen.height;
         change.x *= 2*camSize * cam.aspect;
@@ -114,16 +107,17 @@ public class CameraManager : MonoBehaviour
         //apply movement
         camObject.transform.Translate(change);
 
-        clickPos = Input.mousePosition;
+        clickPos = mousePos;
     }
 
 
 
     //use the scroll input of mouse to zoom in/out
-    void HandleScrollInput()
+    //Callback function for the zoom input
+    void HandleScrollInput(float scrollDelta)
     {
         //calculate new size
-        float newCamSize = goalCamSize - Input.mouseScrollDelta.y;
+        float newCamSize = goalCamSize - scrollDelta;
         goalCamSize = Mathf.Clamp(newCamSize, camSizeBounds.x, camSizeBounds.y);
     }
 
@@ -136,7 +130,7 @@ public class CameraManager : MonoBehaviour
 
         //move camera to zoom towards pointer
         float factor = newCamSize / camSize;
-        Vector3 zoomPoint = cam.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 zoomPoint = cam.ScreenToWorldPoint(mousePos);
         Vector3 offset = zoomPoint - camObject.transform.position;
         camObject.transform.position = zoomPoint - factor * offset;
 
