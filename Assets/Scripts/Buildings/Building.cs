@@ -7,21 +7,20 @@ public enum BuildingType
     MainTower,
     Building0
 }
-public abstract class Building
+
+[System.Serializable]
+public struct Upgrade
 {
-    public abstract string name { get; }
+    public Structure newStructure;
+    public Resources upgradeCost;
+}
+
+public abstract class Building : MonoBehaviour
+{
+    public abstract string buildingName { get; }
     public abstract BuildingType type { get; }
 
-    public static Building GetBuilding(BuildingType type)
-    {
-        switch (type)
-        {
-            case BuildingType.MainTower: 
-                return new MainTower();
-            case BuildingType.Building0:
-                return new Building0();
-            default: 
-                return null;
-        }
-    }
+    public Resources buildCost;
+    public int level = 0;
+    public Upgrade[] upgrades = new Upgrade[0];
 }

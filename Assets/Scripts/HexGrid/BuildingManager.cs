@@ -30,6 +30,8 @@ public class BuildingManager : MonoBehaviour
     //colors to reresent valid/invalid placement
     [SerializeField] Color validColor = Color.green;
     [SerializeField] Color invalidColor = Color.red;
+    //color for too expensive buildings
+    [SerializeField] Color expensiveColor = Color.red;
     //color for deletion highlight
     [SerializeField] Color deleteColor = Color.red;
     //color for non-editing highlight
@@ -39,11 +41,16 @@ public class BuildingManager : MonoBehaviour
 
     //current build mode state
     [SerializeField] EditMode _editMode = EditMode.None;
+    [HideInInspector] public EditMode editMode { get { return _editMode; } }
 
     [SerializeField] Structure activeStructure;
 
-    //readonly parameter for _editMode
-    [HideInInspector] public EditMode editMode {get {return _editMode;}}
+    [Space(10)]
+
+    //resource manager to check resources
+    [SerializeField] ResourceManager rm;
+
+
 
 
     //dictionaries to track buildings
@@ -195,6 +202,10 @@ public class BuildingManager : MonoBehaviour
         //determine color for structure highlight
         bool isSructureValid = IsValidStructure(offsetCoord, structure);
 
+        //determine if building is afforded
+        bool isAfforded = rm.CanAfford(structure.buildingObject.GetComponent<Building>().buildCost);
+        Color newColor = isAfforded ? validColor : expensiveColor;
+
         Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
         foreach (StructurePiece piece in structure.pieces)
         {
@@ -209,8 +220,8 @@ public class BuildingManager : MonoBehaviour
             bool isTileValid = IsValidPlacement(newOffsetCoord);
 
             //color tiles
-            ColorTile(previewMap, newOffsetCoord, isSructureValid ? validColor : invalidColor);
-            ColorTile(groundMap, newOffsetCoord, isTileValid ? validColor : invalidColor);
+            ColorTile(previewMap, newOffsetCoord, isSructureValid ? newColor : invalidColor);
+            ColorTile(groundMap, newOffsetCoord, isTileValid ? newColor : invalidColor);
         }
     }
 
@@ -421,7 +432,7 @@ public class BuildingManager : MonoBehaviour
 
     //place a structure at given offsetCoords
     //return true is placement is successful
-    public bool PlaceBuilding(Vector3Int offsetCoord, Structure structure, bool placeEvent = true)
+    public bool PlaceBuilding(Vector3Int offsetCoord, Structure structure, bool placeEvent = true, bool charge = true)
     {
         //check if structure placement isn't valid
         if (!IsValidStructure(offsetCoord, structure))
@@ -431,16 +442,33 @@ public class BuildingManager : MonoBehaviour
             return false;
         }
 
+        //check resources
+        if (!rm.CanAfford(structure.buildingObject.GetComponent<Building>().buildCost) && charge)
+        {
+            //could not afford building
+            FailedPlacement.Invoke();
+            return false;
+        }
+
         //create new building
-        Building newBuilding = Building.GetBuilding(structure.buildingType);
+        Vector3 buildingPos = groundMap.CellToWorld(offsetCoord);
+        GameObject buildingObject = Instantiate(structure.buildingObject, buildingPos, Quaternion.identity);
+        buildingObject.transform.parent = transform;
+        Building newBuilding = buildingObject.GetComponent<Building>();
+
+        //charge for building
+        if (charge)
+        {
+            rm.Charge(newBuilding.buildCost);
+        }
 
         //add new building to type dictionary
-        if (!typeDictionary.ContainsKey(structure.buildingType))
+        if (!typeDictionary.ContainsKey(newBuilding.type))
         {
             //add new key if necessary of buildingType
-            typeDictionary.Add(structure.buildingType, new List<Building>());
+            typeDictionary.Add(newBuilding.type, new List<Building>());
         }
-        typeDictionary[structure.buildingType].Add(newBuilding);
+        typeDictionary[newBuilding.type].Add(newBuilding);
 
         //add new building to building dictionary
         buildingDictionary.Add(newBuilding, new List<Vector3Int>());
@@ -507,6 +535,9 @@ public class BuildingManager : MonoBehaviour
             //remove tile from tileDictionary
             tileDictionary.Remove(tileOffset);
         }
+
+        //destroy building object
+        Destroy(building.gameObject);
 
         //run building delete event
         if (deleteEvent)
