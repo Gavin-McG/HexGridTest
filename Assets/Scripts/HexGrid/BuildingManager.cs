@@ -32,6 +32,8 @@ public class BuildingManager : MonoBehaviour
     //colors to reresent valid/invalid placement
     [SerializeField] Color validColor = Color.green;
     [SerializeField] Color invalidColor = Color.red;
+    //color for too expensive buildings
+    [SerializeField] Color expensiveColor = Color.red;
     //color for deletion highlight
     [SerializeField] Color deleteColor = Color.red;
     //color for non-editing highlight
@@ -202,6 +204,10 @@ public class BuildingManager : MonoBehaviour
         //determine color for structure highlight
         bool isSructureValid = IsValidStructure(offsetCoord, structure);
 
+        //determine if building is afforded
+        bool isAfforded = rm.CanAfford(structure.buildingObject.GetComponent<Building>().buildCost);
+        Color newColor = isAfforded ? validColor : expensiveColor;
+
         Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
         foreach (StructurePiece piece in structure.pieces)
         {
@@ -216,8 +222,8 @@ public class BuildingManager : MonoBehaviour
             bool isTileValid = IsValidPlacement(newOffsetCoord);
 
             //color tiles
-            ColorTile(previewMap, newOffsetCoord, isSructureValid ? validColor : invalidColor);
-            ColorTile(groundMap, newOffsetCoord, isTileValid ? validColor : invalidColor);
+            ColorTile(previewMap, newOffsetCoord, isSructureValid ? newColor : invalidColor);
+            ColorTile(groundMap, newOffsetCoord, isTileValid ? newColor : invalidColor);
         }
     }
 
