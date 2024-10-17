@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
@@ -433,7 +434,7 @@ public class BuildingManager : MonoBehaviour
         }
 
         //check resources
-        if (!rm.CanAfford(structure.cost) && charge)
+        if (!rm.CanAfford(structure.buildingObject.GetComponent<Building>().buildCost) && charge)
         {
             //could not afford building
             FailedPlacement.Invoke();
@@ -441,21 +442,24 @@ public class BuildingManager : MonoBehaviour
         }
 
         //create new building
-        Building newBuilding = Building.GetBuilding(structure.buildingType);
+        Vector3 buildingPos = groundMap.CellToWorld(offsetCoord);
+        GameObject buildingObject = Instantiate(structure.buildingObject, buildingPos, Quaternion.identity);
+        buildingObject.transform.parent = transform;
+        Building newBuilding = buildingObject.GetComponent<Building>();
 
         //charge for building
         if (charge)
         {
-            rm.Charge(structure.cost);
+            rm.Charge(newBuilding.buildCost);
         }
 
         //add new building to type dictionary
-        if (!typeDictionary.ContainsKey(structure.buildingType))
+        if (!typeDictionary.ContainsKey(newBuilding.type))
         {
             //add new key if necessary of buildingType
-            typeDictionary.Add(structure.buildingType, new List<Building>());
+            typeDictionary.Add(newBuilding.type, new List<Building>());
         }
-        typeDictionary[structure.buildingType].Add(newBuilding);
+        typeDictionary[newBuilding.type].Add(newBuilding);
 
         //add new building to building dictionary
         buildingDictionary.Add(newBuilding, new List<Vector3Int>());
@@ -522,6 +526,9 @@ public class BuildingManager : MonoBehaviour
             //remove tile from tileDictionary
             tileDictionary.Remove(tileOffset);
         }
+
+        //destroy building object
+        Destroy(building.gameObject);
 
         //run building delete event
         if (deleteEvent)

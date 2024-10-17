@@ -15,7 +15,6 @@ public struct StructurePiece
 [CreateAssetMenu(fileName = "Structure", menuName = "ScriptableObjects/Structure", order = 1)]
 public class Structure : ScriptableObject
 {
-    public BuildingType buildingType;
-    public Resources cost;
+    public GameObject buildingObject;
     public StructurePiece[] pieces;
 }

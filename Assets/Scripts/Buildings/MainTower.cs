@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MainTower : Building
 {
-    public override string name
+    public override string buildingName
     {
         get
         {
