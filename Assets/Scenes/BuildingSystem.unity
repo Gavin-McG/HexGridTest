@@ -4673,7 +4673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81a9c83eff4d060448d858cc8f57ec43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rm: {fileID: 1735817982}
+  rm: {fileID: 1735817983}
   MagicText: {fileID: 286545776}
   WoodText: {fileID: 1003051623}
   StoneText: {fileID: 520675427}
@@ -12625,6 +12625,7 @@ GameObject:
   - component: {fileID: 1735817979}
   - component: {fileID: 1735817980}
   - component: {fileID: 1735817981}
+  - component: {fileID: 1735817983}
   - component: {fileID: 1735817982}
   m_Layer: 0
   m_Name: GameManager
@@ -12670,7 +12671,7 @@ MonoBehaviour:
   highlightColor: {r: 1, g: 1, b: 1, a: 0.8509804}
   _editMode: 0
   activeStructure: {fileID: 11400000, guid: 8e46cb7cb0ece8e4984ed5d80bdb1b7d, type: 2}
-  rm: {fileID: 1735817982}
+  rm: {fileID: 1735817983}
 --- !u!114 &1735817981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12783,6 +12784,22 @@ MonoBehaviour:
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 556976103}
+--- !u!114 &1735817983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735817977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d186d6319117eb4498d917107d993bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentResource:
+    Magic: 80
+    Wood: 2000
+    Stone: 2000
 --- !u!1 &1748904103
 GameObject:
   m_ObjectHideFlags: 0
