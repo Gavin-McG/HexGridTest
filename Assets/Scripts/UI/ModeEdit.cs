@@ -1,29 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
 using UnityEngine;
-using UnityEngine.Serialization;
-
+using UnityEngine.InputSystem;
+using TMPro;
 public class ModeEdit : MonoBehaviour
 {
-    [SerializeField] private Structure defaultBuilding;
-    [SerializeField] private GameObject TypeList;
+    private TMP_Dropdown dropdown;
     
+    [SerializeField] private Structure defaultBuilding;
+    [SerializeField] private GameObject typeList;
+    [SerializeField] private PlayerInput playerInput;
+
+    private InputAction noneMode;
+    private InputAction buildMode;
+    private InputAction deleteMode;
+
+    private void Awake()
+    {
+        dropdown = GetComponent<TMP_Dropdown>();
+        
+        noneMode = playerInput.actions["NoneMode"];
+        buildMode = playerInput.actions["BuildMode"];
+        deleteMode = playerInput.actions["DeleteMode"];
+
+        noneMode.performed += _ => ChangeMode(0);
+        buildMode.performed += _ => ChangeMode(1);
+        deleteMode.performed += _ => ChangeMode(2);
+    }
+
     public void ChangeMode(int modeIndex)
     {
+        dropdown.value = modeIndex;
         switch (modeIndex)
         {
             case 0:
                 BuildingManager.DisableEditing.Invoke();
-                TypeList.SetActive(false);
+                typeList.SetActive(false);
                 break;
             case 1:
                 BuildingManager.EnableBuilding.Invoke(defaultBuilding);
-                TypeList.SetActive(true);
+                typeList.SetActive(true);
                 break;
             case 2:
                 BuildingManager.EnableDeleting.Invoke();
-                TypeList.SetActive(false);
+                typeList.SetActive(false);
                 break;
             default:
                 Debug.LogError("Mode index at index " + modeIndex + " is out of range!");
