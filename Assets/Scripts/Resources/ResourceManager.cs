@@ -9,5 +9,13 @@ public class ResourceManager : MonoBehaviour
 {
     public Resources currentResource;
 
-    
+    public bool CanAfford(Resources cost)
+    {
+        return cost <= currentResource;
+    }
+
+    public void Charge(Resources cost)
+    {
+        currentResource -= cost;
+    }
 }

@@ -40,11 +40,16 @@ public class BuildingManager : MonoBehaviour
 
     //current build mode state
     [SerializeField] EditMode _editMode = EditMode.None;
+    [HideInInspector] public EditMode editMode { get { return _editMode; } }
 
     [SerializeField] Structure activeStructure;
 
-    //readonly parameter for _editMode
-    [HideInInspector] public EditMode editMode {get {return _editMode;}}
+    [Space(10)]
+
+    //resource manager to check resources
+    [SerializeField] ResourceManager rm;
+
+
 
 
     //dictionaries to track buildings
@@ -417,7 +422,7 @@ public class BuildingManager : MonoBehaviour
 
     //place a structure at given offsetCoords
     //return true is placement is successful
-    public bool PlaceBuilding(Vector3Int offsetCoord, Structure structure, bool placeEvent = true)
+    public bool PlaceBuilding(Vector3Int offsetCoord, Structure structure, bool placeEvent = true, bool charge = true)
     {
         //check if structure placement isn't valid
         if (!IsValidStructure(offsetCoord, structure))
@@ -427,8 +432,22 @@ public class BuildingManager : MonoBehaviour
             return false;
         }
 
+        //check resources
+        if (!rm.CanAfford(structure.cost) && charge)
+        {
+            //could not afford building
+            FailedPlacement.Invoke();
+            return false;
+        }
+
         //create new building
         Building newBuilding = Building.GetBuilding(structure.buildingType);
+
+        //charge for building
+        if (charge)
+        {
+            rm.Charge(structure.cost);
+        }
 
         //add new building to type dictionary
         if (!typeDictionary.ContainsKey(structure.buildingType))

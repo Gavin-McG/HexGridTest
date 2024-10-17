@@ -16,5 +16,6 @@ public struct StructurePiece
 public class Structure : ScriptableObject
 {
     public BuildingType buildingType;
+    public Resources cost;
     public StructurePiece[] pieces;
 }
