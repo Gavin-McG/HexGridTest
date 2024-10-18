@@ -269,12 +269,21 @@ public class BuildingManager : MonoBehaviour
                 //color tiles
                 ColorTile(objectMap, tileOffset, highlightColor);
             }
+
+            return;
         }
-        else
+
+        //get highlighted environmental Tile
+        TileBase tile = objectMap.GetTile(offsetCoord);
+        if (tile is EnvironmentTile envTile)
         {
-            //color tile
-            ColorTile(groundMap, offsetCoord, highlightColor);
+            ColorTile(objectMap, offsetCoord, highlightColor);
+
+            return;
         }
+        
+        //color tile
+        ColorTile(groundMap, offsetCoord, highlightColor);
     }
 
 
