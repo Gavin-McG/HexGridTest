@@ -395,7 +395,7 @@ public class BuildingManager : MonoBehaviour
         switch (_editMode)
         {
             case EditMode.None:
-
+                ClickTile(offsetCoord);
                 break;
             case EditMode.Build:
                 PlaceBuilding(offsetCoord, activeStructure);
