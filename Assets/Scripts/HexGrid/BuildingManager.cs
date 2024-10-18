@@ -51,8 +51,6 @@ public class BuildingManager : MonoBehaviour
     [SerializeField] ResourceManager rm;
 
 
-
-
     //dictionaries to track buildings
     //all Vector3Int of dictionaries are stored in Offset coordinates
 
@@ -69,6 +67,9 @@ public class BuildingManager : MonoBehaviour
     //list to track colored tiles in edit mode
     List<Vector3Int> coloredOffsets;
 
+
+    //store whether the mouse is on a UI element
+    bool isOverUI = false;
 
     //UI events to change edit mode (might move to UI scripts later)
     public static UnityEvent<Structure> EnableBuilding = new UnityEvent<Structure>();
@@ -130,6 +131,8 @@ public class BuildingManager : MonoBehaviour
     {
         ClearPreviews();
         DisplayPreviews();
+
+        isOverUI = EventSystem.current.IsPointerOverGameObject();
     }
 
 
@@ -385,10 +388,7 @@ public class BuildingManager : MonoBehaviour
 
     void Interract()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
+        if (isOverUI) return;
 
         Vector3Int offsetCoord = GetSelectedOffset();
 

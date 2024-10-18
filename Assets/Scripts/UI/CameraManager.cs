@@ -24,8 +24,6 @@ public class CameraManager : MonoBehaviour
 
     public static UnityEvent mouseClick = new UnityEvent();
 
-    private BuildingManager buildingManager;
-
     Camera cam;
     GameObject camObject;
 
@@ -47,17 +45,27 @@ public class CameraManager : MonoBehaviour
         camObject = cam.gameObject;
         camSize = cam.orthographicSize;
         goalCamSize = camSize;
-        buildingManager = GetComponent<BuildingManager>();
+    }
 
+    private void OnEnable()
+    {
         playerInput = GetComponent<PlayerInput>();
-        
+
         clickAction = playerInput.actions["Select"];
         zoomAction = playerInput.actions["Zoom"];
 
         //Define functions for when each action is taken
-        clickAction.performed += _ => OnClickPerformed();
+        clickAction.started += _ => OnClickPerformed();
         clickAction.canceled += _ => OnClickReleased();
         zoomAction.performed += ctx => HandleScrollInput(ctx.ReadValue<Vector2>().y * zoomScale);
+    }
+
+    private void OnDisable()
+    {
+        //remove functions for when each action is taken
+        clickAction.started -= _ => OnClickPerformed();
+        clickAction.canceled -= _ => OnClickReleased();
+        zoomAction.performed -= ctx => HandleScrollInput(ctx.ReadValue<Vector2>().y * zoomScale);
     }
 
     private void Update()
@@ -68,13 +76,17 @@ public class CameraManager : MonoBehaviour
             mousePos = Mouse.current.position.ReadValue();
             
             //If we are already dragging, or the criteria to start dragging is met then drag 
-            if (state == MouseState.Dragging || 
-                (state == MouseState.Waiting && (mousePos - clickPos).magnitude > dragThreshold))
+            if (state == MouseState.Waiting && (mousePos - clickPos).magnitude > dragThreshold)
+            {
+                state = MouseState.Dragging;
+            }
+            if (state == MouseState.Dragging)
             {
                 DraggingState();
             }
             SmoothZoom();
             BoundCamera();
+
         }
     }
 
@@ -88,15 +100,15 @@ public class CameraManager : MonoBehaviour
     //Called only when user releases the mouse click
     private void OnClickReleased()
     {
-        mouseClick.Invoke();
+        if (state==MouseState.Waiting)
+        {
+            mouseClick.Invoke();
+        }
         state = MouseState.None;
     }
 
     void DraggingState()
     {
-        if (buildingManager.editMode == EditMode.Build || buildingManager.editMode == EditMode.Delete) return; 
-        state = MouseState.Dragging;
-
         //caluclate movement
         Vector3 change = clickPos - mousePos;
         change.x /= Screen.width;
