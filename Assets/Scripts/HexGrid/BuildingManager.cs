@@ -519,12 +519,15 @@ public class BuildingManager : MonoBehaviour
         //get building from tile
         Building building = GetBuilding(offsetCoord);
 
-        if (building == null)
+        if (building == null || !building.canDestroy)
         {
             //no building to destroy
             FailedDestroy.Invoke();
             return false;
         }
+
+        //refund building
+        rm.Refund(building.buildCost);
 
         //remove building from typeDictionary
         typeDictionary[building.type].Remove(building);
