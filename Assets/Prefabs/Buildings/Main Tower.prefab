@@ -44,7 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3fdbd50ae150ad48a638e4b265ce0a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canDestroy: 0
   buildCost:
     Magic: 30
     Wood: 800
     Stone: 800
+  level: 0
+  upgrades: []
