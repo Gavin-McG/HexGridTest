@@ -72,6 +72,20 @@ public struct Resources
         return new Resources(lh.Magic + rh.Magic, lh.Wood + rh.Wood, lh.Stone + rh.Stone);
     }
 
+    //override * and / operator
+    public static Resources operator *(Resources lh, float rh)
+    {
+        return new Resources(lh.Magic * rh, lh.Wood * rh, lh.Stone * rh);
+    }
+    public static Resources operator *(float lh, Resources rh)
+    {
+        return new Resources(rh.Magic * lh, rh.Wood * lh, rh.Stone * lh);
+    }
+    public static Resources operator /(Resources lh, float rh)
+    {
+        return new Resources(lh.Magic / rh, lh.Wood / rh, lh.Stone / rh);
+    }
+
     //Override Equals object equality
     public override bool Equals(object obj)
     {

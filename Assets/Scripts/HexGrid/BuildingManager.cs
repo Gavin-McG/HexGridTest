@@ -526,6 +526,9 @@ public class BuildingManager : MonoBehaviour
             return false;
         }
 
+        //refund building
+        rm.Refund(building.buildCost);
+
         //remove building from typeDictionary
         typeDictionary[building.type].Remove(building);
 
