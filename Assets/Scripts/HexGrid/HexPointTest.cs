@@ -12,6 +12,7 @@ public class HexPointTest : MonoBehaviour
     {
         Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
         HexPoint point = new HexPoint(cubicCoord, isTop);
-        Debug.Log(point.getPosition());
+        Debug.Log(cubicCoord);
+        //Debug.Log(point.getPosition());
     }
 }

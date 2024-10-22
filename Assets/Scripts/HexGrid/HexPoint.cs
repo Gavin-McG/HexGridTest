@@ -53,4 +53,14 @@ public class HexPoint
     {
         return new HexPoint(p1.cubicCoord - cubicCoord, p1.isTop);
     }
+
+    public static bool operator ==(HexPoint p1, HexPoint p2)
+    {
+        return p1.cubicCoord == p2.cubicCoord && p1.isTop == p2.isTop;
+    }
+
+    public static bool operator !=(HexPoint p1, HexPoint p2)
+    {
+        return p1.cubicCoord != p2.cubicCoord || p1.isTop != p2.isTop;
+    }
 }
