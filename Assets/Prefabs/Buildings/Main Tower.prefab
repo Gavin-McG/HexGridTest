@@ -51,3 +51,5 @@ MonoBehaviour:
     Stone: 800
   level: 0
   upgrades: []
+  currentStructure: {fileID: 11400000, guid: 8e46cb7cb0ece8e4984ed5d80bdb1b7d, type: 2}
+  descriptionText: This is the Main Tower!

@@ -8,7 +8,7 @@ public class MainTower : Building
     {
         get
         {
-            return "Main Tower";
+            return "Wizard Tower";
         }
     }
 
