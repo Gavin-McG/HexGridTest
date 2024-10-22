@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public enum BuildingType
@@ -24,4 +25,6 @@ public abstract class Building : MonoBehaviour
     public Resources buildCost;
     public int level = 0;
     public Upgrade[] upgrades = new Upgrade[0];
+    public Structure currentStructure;
+    public string descriptionText;
 }
