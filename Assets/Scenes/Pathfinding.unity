@@ -12814,8 +12814,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 636ed2b50d811ac4b88117e1042ca4cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetCoord: {x: 0, y: 0, z: 0}
-  isTop: 0
+  goaloffset: {x: 11, y: -12, z: 0}
+  groundMap: {fileID: 899441700}
+  bm: {fileID: 1735817980}
+  indicator: {fileID: 5301225024256974548, guid: a39e445d568902b49a24c810d4d4afce, type: 3}
 --- !u!1 &1748904103
 GameObject:
   m_ObjectHideFlags: 0

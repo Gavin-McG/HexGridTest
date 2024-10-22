@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class HexAStar : MonoBehaviour
+public class HexAStar 
 {
     private class Node : IComparable<Node>
     {
@@ -117,7 +117,7 @@ public class HexAStar : MonoBehaviour
         new HexPoint(Directions.BottomLeft, false)
     };
 
-    public List<HexPoint> FindPath(HexPoint start, HexPoint goal, Tilemap groundMap, BuildingManager bm)
+    public static List<HexPoint> FindPath(HexPoint start, HexPoint goal, Tilemap groundMap, BuildingManager bm)
     {
         // Initialize open and closed lists (open = nodes to explore, closed = already explored)
         var openList = new SortedSet<Node>();
@@ -145,9 +145,13 @@ public class HexAStar : MonoBehaviour
                 Vector3Int topRightOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.TopRight);
                 Vector3Int topLeftOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.TopLeft);
 
-                TileType bottomType =   groundMap.GetTile<BasicTile>(bottomOffset).type;
-                TileType topRightType = groundMap.GetTile<BasicTile>(topRightOffset).type;
-                TileType topLeftType =  groundMap.GetTile<BasicTile>(topLeftOffset).type;
+                BasicTile bottomTile = groundMap.GetTile<BasicTile>(bottomOffset);
+                BasicTile topRightTile = groundMap.GetTile<BasicTile>(topRightOffset);
+                BasicTile topLeftTile = groundMap.GetTile<BasicTile>(topLeftOffset);
+
+                TileType bottomType = bottomTile != null ? bottomTile.type : TileType.Empty;
+                TileType topRightType = topRightTile != null ? topRightTile.type : TileType.Empty;
+                TileType topLeftType = topLeftTile != null ? topLeftTile.type : TileType.Empty;
 
                 Building bottomBuilding = bm.GetBuilding(bottomOffset);
                 Building topRightBuilding = bm.GetBuilding(topRightOffset);
@@ -207,9 +211,13 @@ public class HexAStar : MonoBehaviour
                 Vector3Int bottomRightOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.BottomRight);
                 Vector3Int bottomLeftOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.BottomLeft);
 
-                TileType topType = groundMap.GetTile<BasicTile>(topOffset).type;
-                TileType bottomRightType = groundMap.GetTile<BasicTile>(bottomRightOffset).type;
-                TileType bottomLeftType = groundMap.GetTile<BasicTile>(bottomLeftOffset).type;
+                BasicTile topTile = groundMap.GetTile<BasicTile>(topOffset);
+                BasicTile bottomRightTile = groundMap.GetTile<BasicTile>(bottomRightOffset);
+                BasicTile bottomLeftTile = groundMap.GetTile<BasicTile>(bottomLeftOffset);
+
+                TileType topType = topTile != null ? topTile.type : TileType.Empty;
+                TileType bottomRightType = bottomRightTile != null ? bottomRightTile.type : TileType.Empty;
+                TileType bottomLeftType = bottomLeftTile != null ? bottomLeftTile.type : TileType.Empty;
 
                 Building topBuilding = bm.GetBuilding(topOffset);
                 Building bottomRightBuilding = bm.GetBuilding(bottomRightOffset);
@@ -269,7 +277,7 @@ public class HexAStar : MonoBehaviour
         return new List<HexPoint>();
     }
 
-    private void TraverseEdge(Node currentNode, HexPoint direction, HexPoint goal, SortedSet<Node> openList, HashSet<Node> closedList)
+    private static void TraverseEdge(Node currentNode, HexPoint direction, HexPoint goal, SortedSet<Node> openList, HashSet<Node> closedList)
     {
         HexPoint neighborPoint = new HexPoint(currentNode.point.cubicCoord + direction.cubicCoord, direction.isTop);
         float GCost = currentNode.GCost + HexPoint.Distance(currentNode.point, neighborPoint);
@@ -283,7 +291,7 @@ public class HexAStar : MonoBehaviour
         }
     }
 
-    private List<HexPoint> ReconstructPath(Node endNode)
+    private static List<HexPoint> ReconstructPath(Node endNode)
     {
         var path = new List<HexPoint>();
         Node currentNode = endNode;

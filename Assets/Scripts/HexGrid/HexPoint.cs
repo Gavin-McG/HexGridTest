@@ -70,4 +70,9 @@ public class HexPoint
         // Generate a hash code based on the coordinates
         return (cubicCoord, isTop).GetHashCode();
     }
+
+    public override string ToString()
+    {
+        return cubicCoord.ToString() + " " + (isTop?"Top":"Bottom");
+    }
 }
