@@ -12,31 +12,42 @@ public class HexPointTest : MonoBehaviour
 
     List<GameObject> list;
 
-    // Update is called once per frame
-    void OnEnable()
+    bool changed = true;
+
+    private void OnValidate()
     {
-        if (list != null)
+        changed = true;
+    }
+
+    private void Update()
+    {
+        if (changed)
         {
-            foreach (GameObject item in list)
+            if (list != null)
             {
-                Destroy(item);
+                foreach (GameObject item in list)
+                {
+                    Destroy(item);
+                }
+                list.Clear();
             }
-            list.Clear();
-        }
-        else
-        {
-            list = new List<GameObject>();
-        }
+            else
+            {
+                list = new List<GameObject>();
+            }
 
-        HexPoint start = new HexPoint(new Vector3Int(0, 0, 0), true);
-        HexPoint goal = new HexPoint(HexUtils.OffsetToCubic(goaloffset), true);
-        List<HexPoint> points = HexAStar.FindPath(start, goal, groundMap, bm);
+            HexPoint start = new HexPoint(new Vector3Int(0, 0, 0), true);
+            HexPoint goal = new HexPoint(HexUtils.OffsetToCubic(goaloffset), true);
+            List<HexPoint> points = HexAStar.FindPath(start, goal, groundMap, bm);
 
-        foreach (HexPoint point in points)
-        {
-            Vector3 pos = groundMap.CellToLocal(HexUtils.CubicToOffset(point.cubicCoord));
-            pos += Vector3.up * ((point.isTop ? +1 : -1) * groundMap.cellSize.y/2 + 0.11f);
-            list.Add(Instantiate(indicator, pos, Quaternion.identity));
+            foreach (HexPoint point in points)
+            {
+                Vector3 pos = groundMap.CellToLocal(HexUtils.CubicToOffset(point.cubicCoord));
+                pos += Vector3.up * ((point.isTop ? +1 : -1) * groundMap.cellSize.y / 2 + 0.11f);
+                list.Add(Instantiate(indicator, pos, Quaternion.identity));
+            }
+
+            changed = false;
         }
     }
 }
