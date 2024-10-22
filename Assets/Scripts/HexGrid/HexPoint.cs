@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class HexPoint
@@ -45,15 +46,6 @@ public class HexPoint
         return this;
     }
 
-    public static HexPoint operator +(HexPoint p1, Vector3Int cubicCoord) {
-        return new HexPoint(p1.cubicCoord + cubicCoord, p1.isTop);
-    }
-
-    public static HexPoint operator -(HexPoint p1, Vector3Int cubicCoord)
-    {
-        return new HexPoint(p1.cubicCoord - cubicCoord, p1.isTop);
-    }
-
     public static bool operator ==(HexPoint p1, HexPoint p2)
     {
         return p1.cubicCoord == p2.cubicCoord && p1.isTop == p2.isTop;
@@ -62,5 +54,20 @@ public class HexPoint
     public static bool operator !=(HexPoint p1, HexPoint p2)
     {
         return p1.cubicCoord != p2.cubicCoord || p1.isTop != p2.isTop;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is HexPoint node)
+        {
+            return this == node;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        // Generate a hash code based on the coordinates
+        return (cubicCoord, isTop).GetHashCode();
     }
 }

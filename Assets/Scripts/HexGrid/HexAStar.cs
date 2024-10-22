@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
-public class HexAStar
+public class HexAStar : MonoBehaviour
 {
     private class Node : IComparable<Node>
     {
@@ -15,77 +16,108 @@ public class HexAStar
         public Node(HexPoint point, float Gcost, float Hcost)
         {
             this.point = point;
+            this.GCost = Gcost;
+            this.HCost = Hcost;
+            this.Parent = null;
+        }
+
+        public Node(HexPoint point, float Gcost, float Hcost, Node parent)
+        {
+            this.point = point;
+            this.GCost = Gcost;
+            this.HCost = Hcost;
+            this.Parent = parent;
         }
 
         public int CompareTo(Node other) => FCost.CompareTo(other.FCost);
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Node node)
+            {
+                return point == node.point;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return point.GetHashCode();
+        }
     }
 
     private struct Directions {
-        public static Vector3 Right =       new Vector3(+1, 0,-1);
-        public static Vector3 TopRight =    new Vector3( 0,+1,-1);
-        public static Vector3 TopLeft =     new Vector3(-1,+1, 0);
-        public static Vector3 Left =        new Vector3(-1, 0,+1);
-        public static Vector3 BottomLeft =  new Vector3( 0,-1,+1);
-        public static Vector3 BottomRight = new Vector3(+1,-1, 0);
+        public static Vector3Int Right =       new Vector3Int(+1, 0,-1);
+        public static Vector3Int TopRight =    new Vector3Int( 0,+1,-1);
+        public static Vector3Int TopLeft =     new Vector3Int(-1,+1, 0);
+        public static Vector3Int Left =        new Vector3Int(-1, 0,+1);
+        public static Vector3Int BottomLeft =  new Vector3Int( 0,-1,+1);
+        public static Vector3Int BottomRight = new Vector3Int(+1,-1, 0);
 
-        public static Vector3 Self = Vector3.zero;
+        public static Vector3Int Self = Vector3Int.zero;
     }
 
-    private static readonly (Vector3, bool) topDirection = 
-        (Directions.TopRight + Directions.TopLeft, false);
-    private static readonly (Vector3, bool)[] TopDirections = new (Vector3, bool)[]
+    private static readonly HexPoint topDirection =
+        new HexPoint(Directions.TopRight + Directions.TopLeft, false);
+
+    private static readonly HexPoint[] TopDirections = new HexPoint[]
     {
-        (Directions.TopLeft,    false),    
-        (Directions.Self,       true),
-        (Directions.TopRight,   false)
+        new HexPoint(Directions.TopLeft, false),
+        new HexPoint(Directions.Self, true),
+        new HexPoint(Directions.TopRight, false)
     };
 
-    private static readonly (Vector3, bool) TopRightDirection =
-        (Directions.BottomRight, true);
-    private static readonly (Vector3, bool)[] TopRightDirections = new (Vector3, bool)[]
+    private static readonly HexPoint TopRightDirection =
+        new HexPoint(Directions.BottomRight, true);
+
+    private static readonly HexPoint[] TopRightDirections = new HexPoint[]
     {
-        (Directions.TopRight,   true),
-        (2*Directions.TopRight, false),
-        (Directions.Right,      true)
+        new HexPoint(Directions.TopRight, true),
+        new HexPoint(2 * Directions.TopRight, false),
+        new HexPoint(Directions.Right, true)
     };
 
-    private static readonly (Vector3, bool) TopLeftDirection =
-        (Directions.BottomLeft, true);
-    private static readonly (Vector3, bool)[] TopLeftDirections = new (Vector3, bool)[]
+    private static readonly HexPoint TopLeftDirection =
+        new HexPoint(Directions.BottomLeft, true);
+
+    private static readonly HexPoint[] TopLeftDirections = new HexPoint[]
     {
-        (Directions.Left,      true),
-        (2*Directions.TopLeft, false),
-        (Directions.TopLeft,   true)
+        new HexPoint(Directions.Left, true),
+        new HexPoint(2 * Directions.TopLeft, false),
+        new HexPoint(Directions.TopLeft, true)
     };
 
-    private static readonly (Vector3, bool) bottomDirection =
-        (Directions.BottomRight + Directions.BottomLeft, true);
-    private static readonly (Vector3, bool)[] BottomDirections = new (Vector3, bool)[]
+    private static readonly HexPoint bottomDirection =
+        new HexPoint(Directions.BottomRight + Directions.BottomLeft, true);
+
+    private static readonly HexPoint[] BottomDirections = new HexPoint[]
     {
-        (Directions.BottomLeft,     true),
-        (2*Directions.Self,         false),
-        (Directions.BottomRight,    true)
+        new HexPoint(Directions.BottomLeft, true),
+        new HexPoint(Directions.Self, false),
+        new HexPoint(Directions.BottomRight, true)
     };
 
-    private static readonly (Vector3, bool) BottomRightDirection =
-        (Directions.TopRight, false);
-    private static readonly (Vector3, bool)[] BottomRightDirections = new (Vector3, bool)[]
+    private static readonly HexPoint BottomRightDirection =
+        new HexPoint(Directions.TopRight, false);
+
+    private static readonly HexPoint[] BottomRightDirections = new HexPoint[]
     {
-        (Directions.BottomRight,    false),
-        (2*Directions.BottomRight,  true),
-        (Directions.Right,          false)
+        new HexPoint(Directions.BottomRight, false),
+        new HexPoint(2 * Directions.BottomRight, true),
+        new HexPoint(Directions.Right, false)
     };
 
-    private static readonly (Vector3, bool) BottomLeftDirection =
-        (Directions.TopLeft, false);
-    private static readonly (Vector3, bool)[] BottomLeftDirections = new (Vector3, bool)[]
+    private static readonly HexPoint BottomLeftDirection =
+        new HexPoint(Directions.TopLeft, false);
+
+    private static readonly HexPoint[] BottomLeftDirections = new HexPoint[]
     {
-        (Directions.Left,           false),
-        (2*Directions.BottomLeft,   true),
-        (Directions.BottomLeft,     false)
+        new HexPoint(Directions.Left, false),
+        new HexPoint(2 * Directions.BottomLeft, true),
+        new HexPoint(Directions.BottomLeft, false)
     };
 
-    public List<HexPoint> FindPath(HexPoint start, HexPoint goal)
+    public List<HexPoint> FindPath(HexPoint start, HexPoint goal, Tilemap groundMap, BuildingManager bm)
     {
         // Initialize open and closed lists (open = nodes to explore, closed = already explored)
         var openList = new SortedSet<Node>();
@@ -107,11 +139,148 @@ public class HexAStar
             closedList.Add(currentNode);
 
             // Explore each neighbor
-            
+            if (currentNode.point.isTop)
+            {
+                Vector3Int bottomOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord);
+                Vector3Int topRightOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.TopRight);
+                Vector3Int topLeftOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.TopLeft);
+
+                TileType bottomType =   groundMap.GetTile<BasicTile>(bottomOffset).type;
+                TileType topRightType = groundMap.GetTile<BasicTile>(topRightOffset).type;
+                TileType topLeftType =  groundMap.GetTile<BasicTile>(topLeftOffset).type;
+
+                Building bottomBuilding = bm.GetBuilding(bottomOffset);
+                Building topRightBuilding = bm.GetBuilding(topRightOffset);
+                Building topLeftBuilding = bm.GetBuilding(topLeftOffset);
+
+                //condition for top path along edge
+                if ((topRightType == TileType.Full || topLeftType == TileType.Full) &&
+                    (topRightBuilding != topLeftBuilding || topRightBuilding == null))
+                {
+                    TraverseEdge(currentNode, topDirection, goal, openList, closedList);
+                }
+
+                //condition for bottom right path along edge
+                if ((topRightType == TileType.Full || bottomType == TileType.Full) && 
+                    (topRightBuilding != bottomBuilding || topRightBuilding == null)) 
+                {
+                    TraverseEdge(currentNode, BottomRightDirection, goal, openList, closedList);
+                }
+
+                //condition for bottom left path along edge
+                if ((bottomType == TileType.Full || topLeftType == TileType.Full) && 
+                    (bottomBuilding != topLeftBuilding || bottomBuilding == null))
+                {
+                    TraverseEdge(currentNode, BottomLeftDirection, goal, openList, closedList);
+                }
+
+                //condition for bottom paths through hexagon
+                if (bottomType == TileType.Full && bottomBuilding == null)
+                {
+                    foreach (HexPoint direction in BottomDirections)
+                    {
+                        TraverseEdge(currentNode, direction, goal, openList, closedList);
+                    }
+                }
+
+                //condition for top right paths through hexagon
+                if (topRightType == TileType.Full && topRightBuilding == null)
+                {
+                    foreach (HexPoint direction in TopRightDirections)
+                    {
+                        TraverseEdge(currentNode, direction, goal, openList, closedList);
+                    }
+                }
+
+                //condition for top left paths through hexagon
+                if (topLeftType == TileType.Full && topLeftBuilding == null)
+                {
+                    foreach (HexPoint direction in TopLeftDirections)
+                    {
+                        TraverseEdge(currentNode, direction, goal, openList, closedList);
+                    }
+                }
+            }
+            else
+            {
+                Vector3Int topOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord);
+                Vector3Int bottomRightOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.BottomRight);
+                Vector3Int bottomLeftOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.BottomLeft);
+
+                TileType topType = groundMap.GetTile<BasicTile>(topOffset).type;
+                TileType bottomRightType = groundMap.GetTile<BasicTile>(bottomRightOffset).type;
+                TileType bottomLeftType = groundMap.GetTile<BasicTile>(bottomLeftOffset).type;
+
+                Building topBuilding = bm.GetBuilding(topOffset);
+                Building bottomRightBuilding = bm.GetBuilding(bottomRightOffset);
+                Building bottomLeftBuilding = bm.GetBuilding(bottomLeftOffset);
+
+                //condition for bottom path along edge
+                if ((bottomRightType == TileType.Full || bottomLeftType == TileType.Full) &&
+                    (bottomRightBuilding != bottomLeftBuilding || bottomRightBuilding == null))
+                {
+                    TraverseEdge(currentNode, bottomDirection, goal, openList, closedList);
+                }
+
+                //condition for top right path along edge
+                if ((bottomRightType == TileType.Full || topType == TileType.Full) &&
+                    (bottomRightBuilding != topBuilding || bottomRightBuilding == null))
+                {
+                    TraverseEdge(currentNode, TopRightDirection, goal, openList, closedList);
+                }
+
+                //condition for top left path along edge
+                if ((topType == TileType.Full || bottomLeftType == TileType.Full) &&
+                    (topBuilding != bottomLeftBuilding || topBuilding == null))
+                {
+                    TraverseEdge(currentNode, TopLeftDirection, goal, openList, closedList);
+                }
+
+                //condition for top paths through hexagon
+                if (topType == TileType.Full && topBuilding == null)
+                {
+                    foreach (HexPoint direction in TopDirections)
+                    {
+                        TraverseEdge(currentNode, direction, goal, openList, closedList);
+                    }
+                }
+
+                //condition for bottom right paths through hexagon
+                if (bottomRightType == TileType.Full && bottomRightBuilding == null)
+                {
+                    foreach (HexPoint direction in BottomRightDirections)
+                    {
+                        TraverseEdge(currentNode, direction, goal, openList, closedList);
+                    }
+                }
+
+                //condition for bottom left paths through hexagon
+                if (bottomLeftType == TileType.Full && bottomLeftBuilding == null)
+                {
+                    foreach (HexPoint direction in BottomLeftDirections)
+                    {
+                        TraverseEdge(currentNode, direction, goal, openList, closedList);
+                    }
+                }
+            }
         }
 
         // Return empty list if no path found
         return new List<HexPoint>();
+    }
+
+    private void TraverseEdge(Node currentNode, HexPoint direction, HexPoint goal, SortedSet<Node> openList, HashSet<Node> closedList)
+    {
+        HexPoint neighborPoint = new HexPoint(currentNode.point.cubicCoord + direction.cubicCoord, direction.isTop);
+        float GCost = currentNode.GCost + HexPoint.Distance(currentNode.point, neighborPoint);
+        float HCost = HexPoint.Distance(neighborPoint, goal);
+        Node neighborNode = new Node(neighborPoint, GCost, HCost, currentNode);
+
+        if (!closedList.Contains(neighborNode) &&
+            (!openList.TryGetValue(neighborNode, out Node existingNode) || GCost < existingNode.GCost))
+        {
+            openList.Add(neighborNode);
+        }
     }
 
     private List<HexPoint> ReconstructPath(Node endNode)
