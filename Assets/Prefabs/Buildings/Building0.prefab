@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6515044598426535074}
-  - component: {fileID: 8577774946143685890}
+  - component: {fileID: -3817137683426658827}
   m_Layer: 0
   m_Name: Building0
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8577774946143685890
+--- !u!114 &-3817137683426658827
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,10 +41,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3162296105702691095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3fdbd50ae150ad48a638e4b265ce0a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 24a8b048ec54aec46a73fb4059492e38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canDestroy: 1
   buildCost:
     Magic: 10
     Wood: 100
     Stone: 100
+  level: 0
+  upgrades: []
+  currentStructure: {fileID: 11400000, guid: 5cc84e05b33cde949856a0652a0bd224, type: 2}
+  descriptionText: This is Building0!
