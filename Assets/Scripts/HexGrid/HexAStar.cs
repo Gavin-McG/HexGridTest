@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -145,41 +146,41 @@ public class HexAStar
                 Vector3Int topRightOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.TopRight);
                 Vector3Int topLeftOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.TopLeft);
 
-                BasicTile bottomTile = groundMap.GetTile<BasicTile>(bottomOffset);
-                BasicTile topRightTile = groundMap.GetTile<BasicTile>(topRightOffset);
-                BasicTile topLeftTile = groundMap.GetTile<BasicTile>(topLeftOffset);
+                bool bottomGround = bm.IsGroundTile(bottomOffset);
+                bool topRightGround = bm.IsGroundTile(topRightOffset);
+                bool topLeftGround = bm.IsGroundTile(topLeftOffset);
 
-                TileType bottomType = bottomTile != null ? bottomTile.type : TileType.Empty;
-                TileType topRightType = topRightTile != null ? topRightTile.type : TileType.Empty;
-                TileType topLeftType = topLeftTile != null ? topLeftTile.type : TileType.Empty;
+                bool bottomClear = bm.IsTileEmpty(bottomOffset);
+                bool topRightClear = bm.IsTileEmpty(topRightOffset);
+                bool topLeftClear = bm.IsTileEmpty(topLeftOffset);
 
                 Building bottomBuilding = bm.GetBuilding(bottomOffset);
                 Building topRightBuilding = bm.GetBuilding(topRightOffset);
                 Building topLeftBuilding = bm.GetBuilding(topLeftOffset);
 
                 //condition for top path along edge
-                if ((topRightType == TileType.Full || topLeftType == TileType.Full) &&
+                if ((topRightGround || topLeftGround) &&
                     (topRightBuilding != topLeftBuilding || topRightBuilding == null))
                 {
                     TraverseEdge(currentNode, topDirection, goal, openList, closedList);
                 }
 
                 //condition for bottom right path along edge
-                if ((topRightType == TileType.Full || bottomType == TileType.Full) && 
+                if ((topRightGround ||  bottomGround) && 
                     (topRightBuilding != bottomBuilding || topRightBuilding == null)) 
                 {
                     TraverseEdge(currentNode, BottomRightDirection, goal, openList, closedList);
                 }
 
                 //condition for bottom left path along edge
-                if ((bottomType == TileType.Full || topLeftType == TileType.Full) && 
+                if ((bottomGround || topLeftGround) && 
                     (bottomBuilding != topLeftBuilding || bottomBuilding == null))
                 {
                     TraverseEdge(currentNode, BottomLeftDirection, goal, openList, closedList);
                 }
 
                 //condition for bottom paths through hexagon
-                if (bottomType == TileType.Full && bottomBuilding == null)
+                if (bottomGround && bottomClear)
                 {
                     foreach (HexPoint direction in BottomDirections)
                     {
@@ -188,7 +189,7 @@ public class HexAStar
                 }
 
                 //condition for top right paths through hexagon
-                if (topRightType == TileType.Full && topRightBuilding == null)
+                if (topRightGround && topRightClear)
                 {
                     foreach (HexPoint direction in TopRightDirections)
                     {
@@ -197,7 +198,7 @@ public class HexAStar
                 }
 
                 //condition for top left paths through hexagon
-                if (topLeftType == TileType.Full && topLeftBuilding == null)
+                if (topLeftGround && topLeftClear)
                 {
                     foreach (HexPoint direction in TopLeftDirections)
                     {
@@ -211,41 +212,41 @@ public class HexAStar
                 Vector3Int bottomRightOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.BottomRight);
                 Vector3Int bottomLeftOffset = HexUtils.CubicToOffset(currentNode.point.cubicCoord + Directions.BottomLeft);
 
-                BasicTile topTile = groundMap.GetTile<BasicTile>(topOffset);
-                BasicTile bottomRightTile = groundMap.GetTile<BasicTile>(bottomRightOffset);
-                BasicTile bottomLeftTile = groundMap.GetTile<BasicTile>(bottomLeftOffset);
+                bool topGround = bm.IsGroundTile(topOffset);
+                bool bottomRightGround = bm.IsGroundTile(bottomRightOffset);
+                bool bottomLeftGround = bm.IsGroundTile(bottomLeftOffset);
 
-                TileType topType = topTile != null ? topTile.type : TileType.Empty;
-                TileType bottomRightType = bottomRightTile != null ? bottomRightTile.type : TileType.Empty;
-                TileType bottomLeftType = bottomLeftTile != null ? bottomLeftTile.type : TileType.Empty;
+                bool topClear = bm.IsTileEmpty(topOffset);
+                bool bottomRightClear = bm.IsTileEmpty(bottomRightOffset);
+                bool bottomLeftClear = bm.IsTileEmpty(bottomLeftOffset);
 
                 Building topBuilding = bm.GetBuilding(topOffset);
                 Building bottomRightBuilding = bm.GetBuilding(bottomRightOffset);
                 Building bottomLeftBuilding = bm.GetBuilding(bottomLeftOffset);
 
                 //condition for bottom path along edge
-                if ((bottomRightType == TileType.Full || bottomLeftType == TileType.Full) &&
+                if ((bottomRightGround || bottomLeftGround) &&
                     (bottomRightBuilding != bottomLeftBuilding || bottomRightBuilding == null))
                 {
                     TraverseEdge(currentNode, bottomDirection, goal, openList, closedList);
                 }
 
                 //condition for top right path along edge
-                if ((bottomRightType == TileType.Full || topType == TileType.Full) &&
+                if ((bottomRightGround || topGround) &&
                     (bottomRightBuilding != topBuilding || bottomRightBuilding == null))
                 {
                     TraverseEdge(currentNode, TopRightDirection, goal, openList, closedList);
                 }
 
                 //condition for top left path along edge
-                if ((topType == TileType.Full || bottomLeftType == TileType.Full) &&
+                if ((topGround || bottomLeftGround) &&
                     (topBuilding != bottomLeftBuilding || topBuilding == null))
                 {
                     TraverseEdge(currentNode, TopLeftDirection, goal, openList, closedList);
                 }
 
                 //condition for top paths through hexagon
-                if (topType == TileType.Full && topBuilding == null)
+                if (topGround && topClear)
                 {
                     foreach (HexPoint direction in TopDirections)
                     {
@@ -254,7 +255,7 @@ public class HexAStar
                 }
 
                 //condition for bottom right paths through hexagon
-                if (bottomRightType == TileType.Full && bottomRightBuilding == null)
+                if (bottomRightGround && bottomRightClear)
                 {
                     foreach (HexPoint direction in BottomRightDirections)
                     {
@@ -263,7 +264,7 @@ public class HexAStar
                 }
 
                 //condition for bottom left paths through hexagon
-                if (bottomLeftType == TileType.Full && bottomLeftBuilding == null)
+                if (bottomLeftGround && bottomLeftClear)
                 {
                     foreach (HexPoint direction in BottomLeftDirections)
                     {

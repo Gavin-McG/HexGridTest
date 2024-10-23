@@ -5,7 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class HexPointTest : MonoBehaviour
 {
-    [SerializeField] Vector3Int goaloffset;
+    [SerializeField] GameObject startObj;
+    [SerializeField] GameObject goalObj;
     [SerializeField] Tilemap groundMap;
     [SerializeField] BuildingManager bm;
     [SerializeField] GameObject indicator;
@@ -14,6 +15,8 @@ public class HexPointTest : MonoBehaviour
 
     bool changed = true;
 
+    float lastTime = 0;
+
     private void OnValidate()
     {
         changed = true;
@@ -21,7 +24,7 @@ public class HexPointTest : MonoBehaviour
 
     private void Update()
     {
-        if (changed)
+        if (changed || Time.time-lastTime>1f)
         {
             if (list != null)
             {
@@ -36,9 +39,14 @@ public class HexPointTest : MonoBehaviour
                 list = new List<GameObject>();
             }
 
-            HexPoint start = new HexPoint(new Vector3Int(0, 0, 0), true);
-            HexPoint goal = new HexPoint(HexUtils.OffsetToCubic(goaloffset), true);
+            HexPoint start = new HexPoint(HexUtils.OffsetToCubic(groundMap.WorldToCell(startObj.transform.position)), true);
+            HexPoint goal = new HexPoint(HexUtils.OffsetToCubic(groundMap.WorldToCell(goalObj.transform.position)), true);
             List<HexPoint> points = HexAStar.FindPath(start, goal, groundMap, bm);
+
+            if (points.Count == 0)
+            {
+                print("No path");
+            }
 
             foreach (HexPoint point in points)
             {
@@ -48,6 +56,7 @@ public class HexPointTest : MonoBehaviour
             }
 
             changed = false;
+            lastTime = Time.time;
         }
     }
 }
