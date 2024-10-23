@@ -2991,6 +2991,16 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
+  - first: {x: 4, y: 8, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
   - first: {x: 10, y: 8, z: 0}
     second:
       serializedVersion: 2
@@ -4693,17 +4703,17 @@ Tilemap:
       m_AllTileFlags: 1073741825
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: be5eb89eba18e2e48aa7b53e463040ca, type: 2}
   - m_RefCount: 288
     m_Data: {fileID: 11400000, guid: 4fee3509673ea2949b6b7c2e64a0c1d5, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 21300000, guid: c6c417dec2abf374cb89b870302d676a, type: 3}
   - m_RefCount: 288
     m_Data: {fileID: 21300000, guid: f10013c259ba3524d9fafd24b16631d4, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 288
+  - m_RefCount: 289
     m_Data:
       e00: 1
       e01: 0
@@ -4722,7 +4732,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 288
+  - m_RefCount: 289
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -14978,6 +14988,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1735817979}
   - component: {fileID: 1735817980}
+  - component: {fileID: 1735817984}
   - component: {fileID: 1735817981}
   - component: {fileID: 1735817983}
   - component: {fileID: 1735817982}
@@ -15017,15 +15028,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundMap: {fileID: 899441700}
   objectMap: {fileID: 507951371}
-  previewMap: {fileID: 1116791437}
-  validColor: {r: 0.30053896, g: 1, b: 0.30053896, a: 1}
-  invalidColor: {r: 1, g: 0.69946086, b: 0.69946086, a: 1}
-  expensiveColor: {r: 1, g: 0.8039216, b: 0.0627451, a: 1}
-  deleteColor: {r: 1, g: 0.69803923, b: 0.69803923, a: 1}
-  highlightColor: {r: 1, g: 1, b: 1, a: 0.8509804}
   _editMode: 0
   activeStructure: {fileID: 11400000, guid: 8e46cb7cb0ece8e4984ed5d80bdb1b7d, type: 2}
-  rm: {fileID: 1735817983}
 --- !u!114 &1735817981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15155,6 +15159,26 @@ MonoBehaviour:
     Wood: 2000
     Stone: 2000
   refundRate: 1
+--- !u!114 &1735817984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735817977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a039229b65bb6754891d37b4b025ec3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundMap: {fileID: 899441700}
+  objectMap: {fileID: 507951371}
+  previewMap: {fileID: 1116791437}
+  validColor: {r: 0.30053896, g: 1, b: 0.30053896, a: 1}
+  invalidColor: {r: 1, g: 0.69407, b: 0.69407, a: 1}
+  expensiveColor: {r: 1, g: 0.7917959, b: 0.44070077, a: 1}
+  deleteColor: {r: 1, g: 0.69411767, b: 0.69411767, a: 1}
+  highlightColor: {r: 1, g: 1, b: 1, a: 0.8392157}
 --- !u!1 &1822897669
 GameObject:
   m_ObjectHideFlags: 0
@@ -15584,7 +15608,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1128116540}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

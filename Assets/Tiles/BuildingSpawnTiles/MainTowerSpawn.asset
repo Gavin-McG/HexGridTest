@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a05cab6489590f04781f21c8704cb9b9, type: 3}
   m_Name: MainTowerSpawn
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: c6c417dec2abf374cb89b870302d676a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
@@ -34,4 +34,4 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
   m_ColliderType: 1
-  building: {fileID: 0}
+  building: {fileID: 8577774946143685890, guid: ce1adafe68808d649b6390cff9bef19f, type: 3}
