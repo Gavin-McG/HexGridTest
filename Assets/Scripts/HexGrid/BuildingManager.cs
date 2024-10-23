@@ -56,16 +56,16 @@ public class BuildingManager : MonoBehaviour
 
     //tileDictionary tracks what Building each tile correlates to.
     //When placing a building all tiles the building fills should have their value set
-    Dictionary<Vector3Int, Building> tileDictionary;
+    Dictionary<Vector3Int, Building> tileDictionary = new Dictionary<Vector3Int, Building>();
     //buildingDictionary tracks the tiles that are possessed by each building.
     //When placing a building all tiles the building fills should be added into its value list
-    Dictionary<Building, List<Vector3Int>> buildingDictionary;
+    Dictionary<Building, List<Vector3Int>> buildingDictionary = new Dictionary<Building, List<Vector3Int>>();
     //typeDictionary manages a list of all buildings of each type
-    Dictionary<BuildingType, List<Building>> typeDictionary;
+    Dictionary<BuildingType, List<Building>> typeDictionary = new Dictionary<BuildingType, List<Building>>();
 
 
     //list to track colored tiles in edit mode
-    List<Vector3Int> coloredOffsets;
+    List<Vector3Int> coloredOffsets = new List<Vector3Int>();
 
 
     //store whether the mouse is on a UI element
@@ -85,19 +85,6 @@ public class BuildingManager : MonoBehaviour
     public static UnityEvent FailedPlacement = new UnityEvent();
     public static UnityEvent FailedDestroy = new UnityEvent();
 
-
-    void Awake()
-    {
-        //initialize dictionaries
-        tileDictionary = new Dictionary<Vector3Int, Building>();
-        buildingDictionary = new Dictionary<Building, List<Vector3Int>>();
-        typeDictionary = new Dictionary<BuildingType, List<Building>>();
-
-        coloredOffsets = new List<Vector3Int>();
-
-        SetEditKeyword(_editMode);
-    }
-
     private void OnEnable()
     {
         //listen for editMode updates
@@ -107,6 +94,8 @@ public class BuildingManager : MonoBehaviour
 
         //listen for interactions with the tilemap
         CameraManager.mouseClick.AddListener(Interract);
+
+        SetEditKeyword(_editMode);
     }
 
     private void OnDisable()
