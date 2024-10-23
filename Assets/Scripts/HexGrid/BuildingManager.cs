@@ -23,19 +23,6 @@ public class BuildingManager : MonoBehaviour
     //tilemaps used for building processes
     [SerializeField] Tilemap groundMap;
     [SerializeField] Tilemap objectMap;
-    [SerializeField] Tilemap previewMap;
-
-    [Space(10)]
-
-    //colors to reresent valid/invalid placement
-    [SerializeField] Color validColor = Color.green;
-    [SerializeField] Color invalidColor = Color.red;
-    //color for too expensive buildings
-    [SerializeField] Color expensiveColor = Color.red;
-    //color for deletion highlight
-    [SerializeField] Color deleteColor = Color.red;
-    //color for non-editing highlight
-    [SerializeField] Color highlightColor = Color.blue;
 
     [Space(10)]
 
@@ -43,12 +30,11 @@ public class BuildingManager : MonoBehaviour
     [SerializeField] EditMode _editMode = EditMode.None;
     [HideInInspector] public EditMode editMode { get { return _editMode; } }
 
-    [SerializeField] Structure activeStructure;
+    [SerializeField] public Structure activeStructure;
 
-    [Space(10)]
-
-    //resource manager to check resources
-    [SerializeField] ResourceManager rm;
+    //other managers
+    ResourceManager rm;
+    PreviewManager pm;
 
 
     //dictionaries to track buildings
@@ -62,10 +48,6 @@ public class BuildingManager : MonoBehaviour
     Dictionary<Building, List<Vector3Int>> buildingDictionary = new Dictionary<Building, List<Vector3Int>>();
     //typeDictionary manages a list of all buildings of each type
     Dictionary<BuildingType, List<Building>> typeDictionary = new Dictionary<BuildingType, List<Building>>();
-
-
-    //list to track colored tiles in edit mode
-    List<Vector3Int> coloredOffsets = new List<Vector3Int>();
 
 
     //store whether the mouse is on a UI element
@@ -84,6 +66,12 @@ public class BuildingManager : MonoBehaviour
 
     public static UnityEvent FailedPlacement = new UnityEvent();
     public static UnityEvent FailedDestroy = new UnityEvent();
+
+    private void Start()
+    {
+        rm = GetComponent<ResourceManager>();
+        pm = GetComponent<PreviewManager>();
+    }
 
     private void OnEnable()
     {
@@ -107,8 +95,6 @@ public class BuildingManager : MonoBehaviour
 
         //listen for interactions with the tilemap
         CameraManager.mouseClick.RemoveListener(Interract);
-
-        ClearPreviews();
     }
 
     private void OnValidate()
@@ -118,48 +104,9 @@ public class BuildingManager : MonoBehaviour
 
     void Update()
     {
-        ClearPreviews();
-        DisplayPreviews();
-
         isOverUI = EventSystem.current.IsPointerOverGameObject();
     }
 
-
-
-    //remove all build mode previews
-    void ClearPreviews()
-    {
-        ResetColors();
-
-        //null check for Destroy call
-        if (previewMap != null)
-        {
-            previewMap.ClearAllTiles();
-        }
-    }
-
-    //display building system highlights
-    void DisplayPreviews()
-    {
-        if (!Application.isFocused) return;
-
-        Vector3Int offsetCoord = GetSelectedOffset();
-
-        if (!IsGroundTile(offsetCoord)) return;
-
-        switch (_editMode)
-        {
-            case EditMode.None:
-                NonePreview(offsetCoord);
-                break;
-            case EditMode.Delete:
-                DeletePreview(offsetCoord);
-                break;
-            case EditMode.Build:
-                BuildPreview(offsetCoord, activeStructure);
-                break;
-        }
-    }
 
 
 
@@ -174,121 +121,6 @@ public class BuildingManager : MonoBehaviour
         Vector3Int offsetCoord = groundMap.WorldToCell(worldPosition);
         
         return offsetCoord;
-    }
-
-
-    void ColorTile(Tilemap map, Vector3Int offsetCoord, Color color)
-    {
-        //color tile
-        map.SetTileFlags(offsetCoord, TileFlags.None);
-        map.SetColor(offsetCoord, color);
-
-        //add to list of colored tiles
-        coloredOffsets.Add(offsetCoord);
-    }
-
-
-    //Dsiplay preview of structure to be placed, changes color based on placement validity
-    void BuildPreview(Vector3Int offsetCoord, Structure structure)
-    {
-        //determine color for structure highlight
-        bool isSructureValid = IsValidStructure(offsetCoord, structure);
-
-        //determine if building is afforded
-        bool isAfforded = rm.CanAfford(structure.buildingObject.GetComponent<Building>().buildCost);
-        Color newColor = isAfforded ? validColor : expensiveColor;
-
-        Vector3Int cubicCoord = HexUtils.OffsetToCubic(offsetCoord);
-        foreach (StructurePiece piece in structure.pieces)
-        {
-            //calculate coordinate
-            Vector3Int newCubicCoord = cubicCoord + piece.cubicCoord;
-            Vector3Int newOffsetCoord = HexUtils.CubicToOffset(newCubicCoord);
-
-            //set tile
-            previewMap.SetTile(newOffsetCoord, piece.tile);
-
-            //determine color for tile highlight
-            bool isTileValid = IsValidPlacement(newOffsetCoord);
-
-            //color tiles
-            ColorTile(previewMap, newOffsetCoord, isSructureValid ? newColor : invalidColor);
-            ColorTile(groundMap, newOffsetCoord, isTileValid ? newColor : invalidColor);
-        }
-    }
-
-    //Display preview of building to be deleated
-    void DeletePreview(Vector3Int offsetCoord)
-    {
-        //get selected building
-        Building building = GetBuilding(offsetCoord);
-
-        if (building != null)
-        {
-            List<Vector3Int> offsetCoords = GetBuildingOffsets(building);
-
-            //highlight each tile of building
-            foreach (Vector3Int tileOffset in offsetCoords)
-            {
-                //color tiles
-                ColorTile(objectMap, tileOffset, deleteColor);
-                ColorTile(groundMap, tileOffset, deleteColor);
-            }
-        }
-        else
-        {
-            //color tile
-            ColorTile(groundMap, offsetCoord, deleteColor);
-        }
-    }
-
-    //Display highlight when not in editing mode
-    void NonePreview(Vector3Int offsetCoord)
-    {
-        //get highlighted building
-        Building building = GetBuilding(offsetCoord);
-
-        if (building != null)
-        {
-            List<Vector3Int> offsetCoords = GetBuildingOffsets(building);
-
-            //highlight each tile of building
-            foreach (Vector3Int tileOffset in offsetCoords)
-            {
-                //color tiles
-                ColorTile(objectMap, tileOffset, highlightColor);
-            }
-
-            return;
-        }
-
-        //get highlighted environmental Tile
-        TileBase tile = objectMap.GetTile(offsetCoord);
-        if (tile is EnvironmentTile envTile)
-        {
-            ColorTile(objectMap, offsetCoord, highlightColor);
-
-            return;
-        }
-        
-        //color tile
-        ColorTile(groundMap, offsetCoord, highlightColor);
-    }
-
-
-    //reset all colored tiles
-    void ResetColors()
-    {
-        foreach (Vector3Int offset in coloredOffsets)
-        {
-            //clear color of offset
-            groundMap.SetColor(offset, Color.white);
-            objectMap.SetColor(offset, Color.white);
-            previewMap.SetColor(offset, Color.white);
-        }
-
-        //reset color list
-        coloredOffsets.Clear();
     }
 
 
@@ -333,7 +165,7 @@ public class BuildingManager : MonoBehaviour
 
 
     //check if a ground tile exists at a given location
-    bool IsGroundTile(Vector3Int offsetCoord)
+    public bool IsGroundTile(Vector3Int offsetCoord)
     {
         //get ground tile
         BasicTile groundTile = groundMap.GetTile<BasicTile>(offsetCoord);
@@ -346,7 +178,7 @@ public class BuildingManager : MonoBehaviour
 
 
     //check whether a given offset position is a valid place for a tile to be set
-    bool IsValidPlacement(Vector3Int offsetCoord)
+    public bool IsValidPlacement(Vector3Int offsetCoord)
     {
         //get tiles in the offset position
         BasicTile groundTile = groundMap.GetTile<BasicTile>(offsetCoord);
@@ -360,11 +192,8 @@ public class BuildingManager : MonoBehaviour
         return groundType==TileType.Full && objectType==TileType.Empty;
     } 
 
-
-
-
     //check whether a given offset position is a valid place for a structure to be set
-    bool IsValidStructure(Vector3Int offsetCoord, Structure structure)
+    public bool IsValidStructure(Vector3Int offsetCoord, Structure structure)
     {
         if (structure == null) return false;
 
@@ -497,9 +326,6 @@ public class BuildingManager : MonoBehaviour
 
         return true;
     }
-
-
-
 
     //delete a structure at given offsetCoords
     //return true is deletion is successful

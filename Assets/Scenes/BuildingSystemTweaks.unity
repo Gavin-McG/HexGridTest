@@ -14978,6 +14978,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1735817979}
   - component: {fileID: 1735817980}
+  - component: {fileID: 1735817984}
   - component: {fileID: 1735817981}
   - component: {fileID: 1735817983}
   - component: {fileID: 1735817982}
@@ -15017,15 +15018,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundMap: {fileID: 899441700}
   objectMap: {fileID: 507951371}
-  previewMap: {fileID: 1116791437}
-  validColor: {r: 0.30053896, g: 1, b: 0.30053896, a: 1}
-  invalidColor: {r: 1, g: 0.69946086, b: 0.69946086, a: 1}
-  expensiveColor: {r: 1, g: 0.8039216, b: 0.0627451, a: 1}
-  deleteColor: {r: 1, g: 0.69803923, b: 0.69803923, a: 1}
-  highlightColor: {r: 1, g: 1, b: 1, a: 0.8509804}
   _editMode: 0
   activeStructure: {fileID: 11400000, guid: 8e46cb7cb0ece8e4984ed5d80bdb1b7d, type: 2}
-  rm: {fileID: 1735817983}
 --- !u!114 &1735817981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15155,6 +15149,26 @@ MonoBehaviour:
     Wood: 2000
     Stone: 2000
   refundRate: 1
+--- !u!114 &1735817984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735817977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a039229b65bb6754891d37b4b025ec3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundMap: {fileID: 899441700}
+  objectMap: {fileID: 507951371}
+  previewMap: {fileID: 1116791437}
+  validColor: {r: 0.30053896, g: 1, b: 0.30053896, a: 1}
+  invalidColor: {r: 1, g: 0.69407, b: 0.69407, a: 1}
+  expensiveColor: {r: 1, g: 0.7917959, b: 0.44070077, a: 1}
+  deleteColor: {r: 1, g: 0.69411767, b: 0.69411767, a: 1}
+  highlightColor: {r: 1, g: 1, b: 1, a: 0.8392157}
 --- !u!1 &1822897669
 GameObject:
   m_ObjectHideFlags: 0
@@ -15584,7 +15598,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1128116540}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
