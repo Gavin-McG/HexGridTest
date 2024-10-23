@@ -71,6 +71,8 @@ public class BuildingManager : MonoBehaviour
     {
         rm = GetComponent<ResourceManager>();
         pm = GetComponent<PreviewManager>();
+
+        RunBuildingSpawning();
     }
 
     private void OnEnable()
@@ -270,7 +272,7 @@ public class BuildingManager : MonoBehaviour
         }
 
         //check resources
-        if (!rm.CanAfford(structure.buildingObject.GetComponent<Building>().buildCost) && charge)
+        if (charge && !rm.CanAfford(structure.buildingObject.GetComponent<Building>().buildCost))
         {
             //could not afford building
             FailedPlacement.Invoke();
@@ -329,7 +331,7 @@ public class BuildingManager : MonoBehaviour
 
     //delete a structure at given offsetCoords
     //return true is deletion is successful
-    public bool DeleteBuilding(Vector3Int offsetCoord, bool deleteEvent = true)
+    public bool DeleteBuilding(Vector3Int offsetCoord, bool deleteEvent = true, bool refund = true)
     {
         //get building from tile
         Building building = GetBuilding(offsetCoord);
@@ -342,7 +344,10 @@ public class BuildingManager : MonoBehaviour
         }
 
         //refund building
-        rm.Refund(building.buildCost);
+        if (refund)
+        {
+            rm.Refund(building.buildCost);
+        }
 
         //remove building from typeDictionary
         typeDictionary[building.type].Remove(building);
@@ -435,5 +440,35 @@ public class BuildingManager : MonoBehaviour
 
         //no buildings exist of that type
         return typeDictionary[type];
+    }
+
+
+
+
+    //look through entire map and place default buildings
+    public void RunBuildingSpawning()
+    {
+        BoundsInt bounds = objectMap.cellBounds;
+
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        {
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            {
+                Vector3Int tileOffset = new Vector3Int(x, y, 0);
+
+                // Get the tile at the current position
+                TileBase tile = objectMap.GetTile(tileOffset);
+
+                // Check if the tile is a BuildingTile
+                if (tile is BuildingSpawnTile spawnTile)
+                {
+                    objectMap.SetTile(tileOffset, null);
+                    if (!PlaceBuilding(tileOffset, spawnTile.building.currentStructure, false, false))
+                    {
+                        Debug.LogError("Could not place " + spawnTile.building.name + " at offset coordinate " + tileOffset);
+                    }
+                }
+            }
+        }
     }
 }
