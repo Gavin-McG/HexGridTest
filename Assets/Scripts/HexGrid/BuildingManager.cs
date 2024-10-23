@@ -176,6 +176,13 @@ public class BuildingManager : MonoBehaviour
         return groundTile != null && groundTile.type == TileType.Full;
     }
 
+    //check if object tile is empty
+    public bool IsTileEmpty(Vector3Int offsetCoord)
+    {
+        if (GetBuilding(offsetCoord) != null) return false;
+        if (objectMap.GetTile(offsetCoord) is EnvironmentTile) return false;
+        return true;
+    }
 
 
 

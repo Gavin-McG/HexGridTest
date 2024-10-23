@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
+[System.Serializable]
 public class HexPoint
 {
     public Vector3Int cubicCoord;
