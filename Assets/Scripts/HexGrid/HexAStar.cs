@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -30,7 +29,13 @@ public class HexAStar
             this.Parent = parent;
         }
 
-        public int CompareTo(Node other) => FCost.CompareTo(other.FCost);
+        public int CompareTo(Node other)
+        {
+            int fCostComparison = FCost.CompareTo(other.FCost);
+            if (fCostComparison == 0)
+                return point.CompareTo(other.point); // Tie-breaker: use HCost
+            return fCostComparison;
+        }
 
         public override bool Equals(object obj)
         {

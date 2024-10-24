@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -50,9 +49,7 @@ public class HexPointTest : MonoBehaviour
 
             foreach (HexPoint point in points)
             {
-                Vector3 pos = groundMap.CellToLocal(HexUtils.CubicToOffset(point.cubicCoord));
-                pos += Vector3.up * ((point.isTop ? +1 : -1) * groundMap.cellSize.y / 2 + 0.11f);
-                list.Add(Instantiate(indicator, pos, Quaternion.identity));
+                list.Add(Instantiate(indicator, point.getPosition(groundMap), Quaternion.identity));
             }
 
             changed = false;
