@@ -17,6 +17,7 @@ public class Skills
 }
 
 
+[System.Serializable]
 public enum ClassType
 {
     Warrior,
@@ -24,18 +25,17 @@ public enum ClassType
     Mage
 }
 
+[System.Serializable]
 public class Adventurer
 {
     public Skills skills;
-    public ClassType classType;
-    public Sprite headSprite;
+    public AdventurerAsset character;
     public string name;
 
-    public Adventurer(Skills skills, ClassType classType, Sprite headSprite, string name)
+    public Adventurer(Skills skills, AdventurerAsset character, string name)
     {
         this.skills = skills;
-        this.classType = classType;
-        this.headSprite = headSprite;
+        this.character = character;
         this.name = name;
     }
 }

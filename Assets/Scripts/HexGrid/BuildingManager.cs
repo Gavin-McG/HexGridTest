@@ -21,8 +21,8 @@ public enum EditMode
 public class BuildingManager : MonoBehaviour
 {
     //tilemaps used for building processes
-    [SerializeField] Tilemap groundMap;
-    [SerializeField] Tilemap objectMap;
+    [SerializeField] public Tilemap groundMap;
+    [SerializeField] public Tilemap objectMap;
 
     [Space(10)]
 
