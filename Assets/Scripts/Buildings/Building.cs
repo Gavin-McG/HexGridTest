@@ -6,6 +6,7 @@ using UnityEngine;
 public enum BuildingType
 {
     MainTower,
+    Tavern,
     Building0
 }
 
