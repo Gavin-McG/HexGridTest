@@ -292,6 +292,9 @@ public class BuildingManager : MonoBehaviour
         buildingObject.transform.parent = transform;
         Building newBuilding = buildingObject.GetComponent<Building>();
 
+        //set newBuilding's position
+        newBuilding.offsetCoord = offsetCoord;
+
         //charge for building
         if (charge)
         {

@@ -7,7 +7,8 @@ public enum BuildingType
 {
     MainTower,
     Tavern,
-    Building0
+    Building0,
+    Dungeon
 }
 
 [System.Serializable]
@@ -28,4 +29,6 @@ public abstract class Building : MonoBehaviour
     public Upgrade[] upgrades = new Upgrade[0];
     public Structure currentStructure;
     public string descriptionText;
+
+    [HideInInspector] public Vector3Int offsetCoord = Vector3Int.zero;
 }

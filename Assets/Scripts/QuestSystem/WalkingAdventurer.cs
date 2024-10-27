@@ -43,7 +43,7 @@ public class WalkingAdventurer : MonoBehaviour
     //move adventerer character from point to point
     private void MoveAlongRoute()
     {
-        Vector3 targetPoint = points[currentPointIndex];
+        Vector3 targetPoint = points[currentPointIndex] - 0.3f*Vector3.up;
         transform.position = Vector3.MoveTowards(transform.position, targetPoint, speed * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, targetPoint) < 0.01f)

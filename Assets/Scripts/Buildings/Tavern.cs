@@ -13,4 +13,14 @@ public class Tavern : Building
     { 
         get { return BuildingType.Tavern; }
     }
+
+    [SerializeField] HexPoint _exit;
+    
+    [HideInInspector] public HexPoint exit 
+    {
+        get
+        {
+            return new HexPoint(_exit.cubicCoord + HexUtils.OffsetToCubic(offsetCoord), _exit.isTop);
+        }
+    }
 }
