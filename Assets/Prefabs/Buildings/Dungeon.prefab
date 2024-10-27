@@ -55,5 +55,5 @@ MonoBehaviour:
   descriptionText: 
   offsetCoord: {x: 0, y: 0, z: 0}
   _entrance:
-    cubicCoord: {x: 3, y: -3, z: 0}
-    isTop: 0
+    cubicCoord: {x: 2, y: -3, z: 1}
+    isTop: 1

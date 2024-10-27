@@ -1,28 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class WalkingAdventurer : MonoBehaviour
 {
+    [SerializeField] float speed = 1f;  // Speed of movement
+    [SerializeField] float bounceRate = 0.5f;
+    [SerializeField] float bounceAmp = 0.1f;
+
     Adventurer adventurer;   //adventerer data 
-    public List<Vector3> points;  // Array of points to follow
-    public float speed = 1f;  // Speed of movement
+    List<Vector3> points;  // Array of points to follow
 
-    private int currentPointIndex = 0;
-    private bool isMoving = false;
+    int currentPointIndex = 0;
+    bool isMoving = false;
 
-    public void StartPath(Adventurer adventurer, List<Vector3> points, float speed)
+    Vector3 position = Vector3.zero;
+
+    public void StartPath(Adventurer adventurer, List<Vector3> points)
     {
         this.adventurer = adventurer;
         this.points = points;
-        this.speed = speed;
 
         SetSprite();
 
         if (points.Count > 0)
         {
             isMoving = true;
-            transform.position = points[0];
+            position = points[0] - 0.3f * Vector3.up;
         }
         else
         {
@@ -35,6 +40,7 @@ public class WalkingAdventurer : MonoBehaviour
         if (isMoving && points.Count > 0)
         {
             MoveAlongRoute();
+            SetPosition();
         }
     }
 
@@ -44,9 +50,9 @@ public class WalkingAdventurer : MonoBehaviour
     private void MoveAlongRoute()
     {
         Vector3 targetPoint = points[currentPointIndex] - 0.3f*Vector3.up;
-        transform.position = Vector3.MoveTowards(transform.position, targetPoint, speed * Time.deltaTime);
+        position = Vector3.MoveTowards(position, targetPoint, speed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, targetPoint) < 0.01f)
+        if (Vector3.Distance(position, targetPoint) < 0.01f)
         {
             currentPointIndex++;
             if (currentPointIndex >= points.Count)
@@ -67,5 +73,10 @@ public class WalkingAdventurer : MonoBehaviour
     {
         SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
         sr.sprite = adventurer.character.bodySprite;
+    }
+
+    void SetPosition()
+    {
+        transform.position = position + Vector3.up*Mathf.Abs(bounceAmp * Mathf.Sin(Time.time*bounceRate));
     }
 }

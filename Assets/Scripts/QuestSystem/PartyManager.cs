@@ -11,7 +11,6 @@ public class PartyManager : MonoBehaviour
     [Space(10)]
 
     [SerializeField] float dispatchDelay = 0.2f;
-    [SerializeField] float walkSpeed = 1f;
 
     public Adventurer[] adventurers = new Adventurer[4];
 
@@ -75,8 +74,7 @@ public class PartyManager : MonoBehaviour
             Debug.Log("Spawn Adventurer");
             GameObject newAdventurer = Instantiate(adventurerPrefab, path[0], Quaternion.identity);
             WalkingAdventurer walker = newAdventurer.GetComponent<WalkingAdventurer>();
-            walker.StartPath(adventurers[i], path, walkSpeed);
-
+            walker.StartPath(adventurers[i], path);
         }
     }
 
