@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum BuildingType
 {
     MainTower,
-    Building0
+    Building0,
+    Contractor,
+    Smithy,
+    Farm,
+    Tavern,
+    WizardTower
 }
 
 [System.Serializable]
@@ -27,4 +33,5 @@ public abstract class Building : MonoBehaviour
     public Upgrade[] upgrades = new Upgrade[0];
     public Structure currentStructure;
     public string descriptionText;
+    public UnityEvent<Upgrade> UpgradeEvent = new UnityEvent<Upgrade>();
 }

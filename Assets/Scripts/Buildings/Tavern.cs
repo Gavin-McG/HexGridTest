@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainTower : Building
+public class Tavern : Building
 {
     public override string buildingName
     {
         get
         {
-            return "Main Tower";
+            return "Tavern";
         }
     }
 
@@ -16,7 +16,7 @@ public class MainTower : Building
     { 
         get
         {
-            return BuildingType.MainTower;
+            return BuildingType.Tavern;
         }
     }
 }
