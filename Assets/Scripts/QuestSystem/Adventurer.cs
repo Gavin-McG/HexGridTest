@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Skills
+public struct Skills
 {
     public float skill;
     public float strength;
@@ -25,17 +25,28 @@ public enum ClassType
     Mage
 }
 
+public enum AdventurerState
+{
+    Waiting,
+    Dispatching,
+    Ready,
+    Fighting,
+    Returning
+}
+
 [System.Serializable]
 public class Adventurer
 {
     public Skills skills;
-    public AdventurerAsset character;
+    public AdventurerInfo info;
+    public AdventurerState state;
     public string name;
 
-    public Adventurer(Skills skills, AdventurerAsset character, string name)
+    public Adventurer(Skills skills, AdventurerInfo info, string name)
     {
         this.skills = skills;
-        this.character = character;
+        this.info = info;
+        this.state = AdventurerState.Waiting;
         this.name = name;
     }
 }

@@ -16986,16 +16986,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bm: {fileID: 1735817980}
   adventurerPrefab: {fileID: 4341695292320211594, guid: bed1124b3bfe4834eae37152bf4f1cdb, type: 3}
+  collection: {fileID: 11400000, guid: b9707348348251f4c94efaf06eb2eb20, type: 2}
   dispatchDelay: 1
-  walkSpeed: 1
   adventurers:
-  - character: {fileID: 11400000, guid: b9707348348251f4c94efaf06eb2eb20, type: 2}
+  - info:
+      headSprite: {fileID: 0}
+      bodySprite: {fileID: 0}
+      classType: 0
+    state: 0
     name: Basic Guy
-  - character: {fileID: 11400000, guid: b9707348348251f4c94efaf06eb2eb20, type: 2}
+  - info:
+      headSprite: {fileID: 0}
+      bodySprite: {fileID: 0}
+      classType: 0
+    state: 0
     name: Basic Guy
-  - character: {fileID: 11400000, guid: b9707348348251f4c94efaf06eb2eb20, type: 2}
+  - info:
+      headSprite: {fileID: 0}
+      bodySprite: {fileID: 0}
+      classType: 0
+    state: 0
     name: Basic Guy
-  - character: {fileID: 11400000, guid: b9707348348251f4c94efaf06eb2eb20, type: 2}
+  - info:
+      headSprite: {fileID: 0}
+      bodySprite: {fileID: 0}
+      classType: 0
+    state: 0
     name: Basic Guy
 --- !u!1 &1822897669
 GameObject:

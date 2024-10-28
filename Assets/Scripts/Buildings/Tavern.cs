@@ -23,4 +23,6 @@ public class Tavern : Building
             return new HexPoint(_exit.cubicCoord + HexUtils.OffsetToCubic(offsetCoord), _exit.isTop);
         }
     }
+
+    public float averageSkill = 0.2f;
 }

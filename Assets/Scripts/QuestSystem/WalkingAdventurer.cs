@@ -72,7 +72,7 @@ public class WalkingAdventurer : MonoBehaviour
     public void SetSprite()
     {
         SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
-        sr.sprite = adventurer.character.bodySprite;
+        sr.sprite = adventurer.info.bodySprite;
     }
 
     void SetPosition()

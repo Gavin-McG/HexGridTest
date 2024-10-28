@@ -49,12 +49,6 @@ public class HexPoint : IComparable<HexPoint>
         return (p1Pos - p2Pos).magnitude;
     }
 
-    public HexPoint SetTop(bool isTop)
-    {
-        this.isTop = isTop;
-        return this;
-    }
-
     public static bool operator ==(HexPoint p1, HexPoint p2)
     {
         if (p1 is null && p2 is null) return true;
