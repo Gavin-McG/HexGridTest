@@ -15,14 +15,20 @@ public class PartyManager : MonoBehaviour
 
     [SerializeField] float dispatchDelay = 0.2f;
 
-    public Adventurer[] adventurers = new Adventurer[4];
+
+
+    Adventurer[] adventurers = {null,null,null,null};
 
 
 
 
-    private void Update()
+    private void Start()
     {
-        
+        adventurers = new Adventurer[4];
+        for (int i=0; i<4; ++i)
+        {
+            adventurers[i] = null;
+        }
     }
 
 
@@ -172,5 +178,10 @@ public class PartyManager : MonoBehaviour
 
         adventurers[index] = adventurer;
         return true;
+    }
+
+    public Adventurer GetAdventurer(int index)
+    {
+        return adventurers[index];
     }
 }

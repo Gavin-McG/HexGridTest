@@ -16,7 +16,7 @@ public class HireUI : MonoBehaviour
     Adventurer[] adventurers;
 
 
-    private void Start()
+    private void Awake()
     {
         UIManager.closeAllUI.AddListener(CloseUI);
         adventurers = new Adventurer[hirePanels.Length];
@@ -32,12 +32,12 @@ public class HireUI : MonoBehaviour
 
     private void UpdateUI()
     {
-        for (int i = 0; i < pm.adventurers.Length; ++i)
+        for (int i = 0; i < adventurers.Length; ++i)
         {
             //update panel data
-            hirePanels[i].SetHead(pm.adventurers[i].info.headSprite);
-            hirePanels[i].SetName(pm.adventurers[i].name);
-            hirePanels[i].SetSkills(pm.adventurers[i].skills);
+            hirePanels[i].SetHead(adventurers[i].info.headSprite);
+            hirePanels[i].SetName(adventurers[i].name);
+            hirePanels[i].SetSkills(adventurers[i].skills);
         }
     }
 
@@ -53,15 +53,8 @@ public class HireUI : MonoBehaviour
 
     public void HireAdventurer(int adventurerNum)
     {
-        //check adventurer slot
-        if (pm.adventurers[currentHireSlot] != null)
-        {
-            Debug.Log("Attempting to hire adventurer in aalready filled slot");
-            return;
-        }
-
         //hire adventurer
-        pm.adventurers[currentHireSlot] = adventurers[adventurerNum];
+        pm.HireAdventurer(currentHireSlot,adventurers[adventurerNum]);
 
         //reset with new selection
         UpdateSelections();

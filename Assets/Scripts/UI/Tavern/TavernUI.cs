@@ -28,11 +28,11 @@ public class TavernUI : MonoBehaviour
     private void OnEnable()
     {
         //check UI sizes
-        Debug.Assert(adventurerPanels.Length == pm.adventurers.Length);
-        Debug.Assert(hirePanels.Length == pm.adventurers.Length);
+        Debug.Assert(adventurerPanels.Length == 4);
+        Debug.Assert(hirePanels.Length == 4);
 
-        panelInfo = new AdventurerPanel[adventurerPanels.Length];
-        for (int i=0; i<pm.adventurers.Length; i++)
+        panelInfo = new AdventurerPanel[4];
+        for (int i=0; i<4; i++)
         {
             //get adventurer panels
             panelInfo[i] = adventurerPanels[i].GetComponent<AdventurerPanel>();
@@ -44,18 +44,19 @@ public class TavernUI : MonoBehaviour
 
     void UpdateUI()
     {
-        for (int i=0; i<pm.adventurers.Length; ++i)
+        for (int i=0; i<4; ++i)
         {
-            if (pm.adventurers[i] != null)
+            Adventurer adventurer = pm.GetAdventurer(i);
+            if (adventurer != null)
             {
                 //enable correct panel
-                adventurerPanels[i].SetActive(false);
-                hirePanels[i].SetActive(true);
+                adventurerPanels[i].SetActive(true);
+                hirePanels[i].SetActive(false);
 
                 //update panel data
-                panelInfo[i].SetHead(pm.adventurers[i].info.headSprite);
-                panelInfo[i].SetName(pm.adventurers[i].name);
-                panelInfo[i].SetSkills(pm.adventurers[i].skills);
+                panelInfo[i].SetHead(adventurer.info.headSprite);
+                panelInfo[i].SetName(adventurer.name);
+                panelInfo[i].SetSkills(adventurer.skills);
             }
             else
             {
