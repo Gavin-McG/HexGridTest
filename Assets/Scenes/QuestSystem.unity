@@ -197,6 +197,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3174000}
   m_CullTransparentMesh: 1
+--- !u!1 &63209655 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4793420331281762556, guid: 8e3f1c94f70ef8a4897977754d1e4cee, type: 3}
+  m_PrefabInstance: {fileID: 226913540}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &139476519
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,6 +912,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 238627034}
   m_CullTransparentMesh: 1
+--- !u!1 &264488354 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5694756014604398155, guid: cd8c87f1028a7244eac1702e57bb9778, type: 3}
+  m_PrefabInstance: {fileID: 2120354032}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &282970142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1334,6 +1344,11 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &341691867 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5694756014604398155, guid: cd8c87f1028a7244eac1702e57bb9778, type: 3}
+  m_PrefabInstance: {fileID: 1316774993}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &367374020
 GameObject:
   m_ObjectHideFlags: 0
@@ -1665,6 +1680,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pm: {fileID: 1735817985}
+  adventurerPanels:
+  - {fileID: 716007422}
+  - {fileID: 341691867}
+  - {fileID: 786119414}
+  - {fileID: 264488354}
+  hirePanels:
+  - {fileID: 1216692989592394117}
+  - {fileID: 1684272665}
+  - {fileID: 2079998342}
+  - {fileID: 63209655}
 --- !u!114 &400553385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6511,6 +6536,11 @@ MonoBehaviour:
   MagicText: {fileID: 286545776}
   WoodText: {fileID: 1003051623}
   StoneText: {fileID: 520675427}
+--- !u!1 &716007422 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5694756014604398155, guid: cd8c87f1028a7244eac1702e57bb9778, type: 3}
+  m_PrefabInstance: {fileID: 8359738482327729201}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &716007423 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4567969615763760328, guid: cd8c87f1028a7244eac1702e57bb9778, type: 3}
@@ -6905,6 +6935,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767094905}
   m_CullTransparentMesh: 1
+--- !u!1 &786119414 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5694756014604398155, guid: cd8c87f1028a7244eac1702e57bb9778, type: 3}
+  m_PrefabInstance: {fileID: 1334074470}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &806181394
 GameObject:
   m_ObjectHideFlags: 0
@@ -16134,7 +16169,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1182543789}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 400553384}
+        m_TargetAssemblyTypeName: TavernUI, Assembly-CSharp
+        m_MethodName: CloseUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1182543789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17735,6 +17782,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1569859126}
   m_CullTransparentMesh: 1
+--- !u!1 &1684272665 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4793420331281762556, guid: 8e3f1c94f70ef8a4897977754d1e4cee, type: 3}
+  m_PrefabInstance: {fileID: 2027511797}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1716371160
 GameObject:
   m_ObjectHideFlags: 0
@@ -17826,6 +17878,7 @@ GameObject:
   - component: {fileID: 1735817981}
   - component: {fileID: 1735817983}
   - component: {fileID: 1735817985}
+  - component: {fileID: 1735817986}
   - component: {fileID: 1735817982}
   m_Layer: 0
   m_Name: GameManager
@@ -18055,6 +18108,19 @@ MonoBehaviour:
       classType: 0
     state: 0
     name: Basic Guy
+--- !u!114 &1735817986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735817977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc4e6a11363db74aa3c80e8b9543589, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tavernUI: {fileID: 400553382}
 --- !u!1 &1796179416
 GameObject:
   m_ObjectHideFlags: 0
@@ -18975,7 +19041,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1128116540}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81333333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -19018,6 +19084,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2056838207}
   m_CullTransparentMesh: 1
+--- !u!1 &2079998342 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4793420331281762556, guid: 8e3f1c94f70ef8a4897977754d1e4cee, type: 3}
+  m_PrefabInstance: {fileID: 337400877}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2120354032
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19197,6 +19268,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2139066648}
   m_CullTransparentMesh: 1
+--- !u!1 &1216692989592394117 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4793420331281762556, guid: 8e3f1c94f70ef8a4897977754d1e4cee, type: 3}
+  m_PrefabInstance: {fileID: 6284311748041779584}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6284311748041779584
 PrefabInstance:
   m_ObjectHideFlags: 0

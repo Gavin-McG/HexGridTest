@@ -1289,6 +1289,7 @@ GameObject:
   - component: {fileID: 4567969615763760328}
   - component: {fileID: 2676682573418921863}
   - component: {fileID: 8639012348464628709}
+  - component: {fileID: 1454539300258308150}
   m_Layer: 5
   m_Name: AdventurerPanel
   m_TagString: Untagged
@@ -1360,6 +1361,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1454539300258308150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5694756014604398155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5f4bbbc65409c642933d7d63ba83bd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headImage: {fileID: 8544189128760243832}
+  nameText: {fileID: 4731179314629204655}
+  SkillBar: {fileID: 2976751144788769876}
+  strengthBar: {fileID: 4339347328019039228}
+  teamworkBar: {fileID: 1820057208113953993}
 --- !u!1 &5747801657291244215
 GameObject:
   m_ObjectHideFlags: 0
