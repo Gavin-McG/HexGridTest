@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class Dungeon : Building
 {
-    public override string buildingName
-    {
-        get { return "Dungeon"; }
-    }
-
     public override BuildingType type 
     { 
         get { return BuildingType.Dungeon; }

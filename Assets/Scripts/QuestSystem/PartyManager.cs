@@ -75,7 +75,11 @@ public class PartyManager : MonoBehaviour
         Tavern tavern = GetTavern();
 
         //check buildings
-        if (tavern == null || dungeon == null) return;
+        if (tavern == null || dungeon == null)
+        {
+            Debug.LogError("Could not retrieve valid buildings");
+            return;
+        };
 
         //get path
         List<Vector3> path = HexAStar.FindPath(tavern.exit, dungeon.entrance, bm);

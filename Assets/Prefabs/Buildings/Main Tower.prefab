@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3fdbd50ae150ad48a638e4b265ce0a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingName: Main Tower
   canDestroy: 0
   buildCost:
     Magic: 30
@@ -53,3 +54,4 @@ MonoBehaviour:
   upgrades: []
   currentStructure: {fileID: 11400000, guid: 8e46cb7cb0ece8e4984ed5d80bdb1b7d, type: 2}
   descriptionText: This is the Main Tower!
+  offsetCoord: {x: 0, y: 0, z: 0}

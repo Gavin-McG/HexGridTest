@@ -20,9 +20,9 @@ public struct Upgrade
 
 public abstract class Building : MonoBehaviour
 {
-    public abstract string buildingName { get; }
     public abstract BuildingType type { get; }
 
+    public string buildingName;
     public bool canDestroy = true; 
     public Resources buildCost;
     public int level = 0;

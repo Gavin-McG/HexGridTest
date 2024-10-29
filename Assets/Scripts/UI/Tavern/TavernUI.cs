@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class TavernUI : MonoBehaviour
 {
     [SerializeField] PartyManager pm;
+    [SerializeField] BuildingManager bm;
     [SerializeField] HireUI hireUI;
 
     [Space(10)]
@@ -65,6 +66,25 @@ public class TavernUI : MonoBehaviour
                 hirePanels[i].SetActive(true);
             }
         }
+    }
+
+
+    public void startDispatch(string dungeonName)
+    {
+        List<Building> buildings = bm.GetBuildingsOfType(BuildingType.Dungeon);
+        foreach (Building building in buildings)
+        {
+            if (building.buildingName == dungeonName && building is Dungeon dungeon)
+            {
+                Debug.Log("dispatching party");
+                //dispatch if correct dungeon found
+                pm.DispatchParty(dungeon);
+                break;
+            }
+        }
+
+        //close UI
+        CloseUI();
     }
 
     public void CloseUI()
