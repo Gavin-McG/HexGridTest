@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class PartyManager : MonoBehaviour
@@ -13,13 +14,16 @@ public class PartyManager : MonoBehaviour
 
     [Space(10)]
 
+    //delay between dispatch of each adventurer
     [SerializeField] float dispatchDelay = 0.2f;
 
 
-
+    //party
     Adventurer[] adventurers = {null,null,null,null};
 
-
+    //events
+    public static UnityEvent adventurerHired = new UnityEvent();
+    public static UnityEvent adventurerFired = new UnityEvent();
 
 
     private void Start()
@@ -165,6 +169,8 @@ public class PartyManager : MonoBehaviour
         }
 
         adventurers[index] = null;
+
+        adventurerFired.Invoke();
         return true;
     }
 
@@ -177,6 +183,8 @@ public class PartyManager : MonoBehaviour
         }
 
         adventurers[index] = adventurer;
+
+        adventurerHired.Invoke();
         return true;
     }
 

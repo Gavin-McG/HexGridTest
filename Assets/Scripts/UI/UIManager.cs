@@ -7,7 +7,11 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] GameObject tavernUI;
 
+    //tell all UI to close
     public static UnityEvent closeAllUI = new UnityEvent();
+
+    //events
+    public static UnityEvent UIOpened = new UnityEvent();
 
     private void OnEnable()
     {
@@ -21,7 +25,11 @@ public class UIManager : MonoBehaviour
 
     void ClickBuilding(Building building, Vector3Int offsetCoords)
     {
+        //event calls
         closeAllUI.Invoke();
+        UIOpened.Invoke();
+
+        //open correct UI
         switch (building.type) 
         {
             case BuildingType.Tavern:
