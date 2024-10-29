@@ -40,16 +40,16 @@ public class HexPointTest : MonoBehaviour
 
             HexPoint start = new HexPoint(HexUtils.OffsetToCubic(groundMap.WorldToCell(startObj.transform.position)), true);
             HexPoint goal = new HexPoint(HexUtils.OffsetToCubic(groundMap.WorldToCell(goalObj.transform.position)), true);
-            List<HexPoint> points = HexAStar.FindPath(start, goal, groundMap, bm);
+            List<Vector3> points = HexAStar.FindPath(start, goal, bm);
 
             if (points.Count == 0)
             {
                 print("No path");
             }
 
-            foreach (HexPoint point in points)
+            foreach (Vector3 point in points)
             {
-                list.Add(Instantiate(indicator, point.getPosition(groundMap), Quaternion.identity));
+                list.Add(Instantiate(indicator, point, Quaternion.identity));
             }
 
             changed = false;

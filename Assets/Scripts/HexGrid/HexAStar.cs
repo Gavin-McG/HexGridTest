@@ -123,7 +123,7 @@ public class HexAStar
         new HexPoint(Directions.BottomLeft, false)
     };
 
-    public static List<HexPoint> FindPath(HexPoint start, HexPoint goal, Tilemap groundMap, BuildingManager bm)
+    public static List<Vector3> FindPath(HexPoint start, HexPoint goal, BuildingManager bm)
     {
         // Initialize open and closed lists (open = nodes to explore, closed = already explored)
         var openList = new SortedSet<Node>();
@@ -140,7 +140,7 @@ public class HexAStar
 
             // Check if we've reached the goal
             if (currentNode.point == goal)
-                return ReconstructPath(currentNode);
+                return ReconstructPath(currentNode, bm.groundMap);
 
             closedList.Add(currentNode);
 
@@ -280,7 +280,7 @@ public class HexAStar
         }
 
         // Return empty list if no path found
-        return new List<HexPoint>();
+        return new List<Vector3>();
     }
 
     private static void TraverseEdge(Node currentNode, HexPoint direction, HexPoint goal, SortedSet<Node> openList, HashSet<Node> closedList)
@@ -297,14 +297,14 @@ public class HexAStar
         }
     }
 
-    private static List<HexPoint> ReconstructPath(Node endNode)
+    private static List<Vector3> ReconstructPath(Node endNode, Tilemap map)
     {
-        var path = new List<HexPoint>();
+        var path = new List<Vector3>();
         Node currentNode = endNode;
 
         while (currentNode != null)
         {
-            path.Add(currentNode.point);
+            path.Add(currentNode.point.getPosition(map));
             currentNode = currentNode.Parent;
         }
 
