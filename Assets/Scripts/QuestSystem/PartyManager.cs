@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class PartyManager : MonoBehaviour
@@ -13,16 +14,25 @@ public class PartyManager : MonoBehaviour
 
     [Space(10)]
 
+    //delay between dispatch of each adventurer
     [SerializeField] float dispatchDelay = 0.2f;
 
-    public Adventurer[] adventurers = new Adventurer[4];
+
+    //party
+    Adventurer[] adventurers = {null,null,null,null};
+
+    //events
+    public static UnityEvent adventurerHired = new UnityEvent();
+    public static UnityEvent adventurerFired = new UnityEvent();
 
 
-
-
-    private void Update()
+    private void Start()
     {
-        Debug.Log(GenerateAdevnturer().skills.teamwork);
+        adventurers = new Adventurer[4];
+        for (int i=0; i<4; ++i)
+        {
+            adventurers[i] = null;
+        }
     }
 
 
@@ -65,7 +75,11 @@ public class PartyManager : MonoBehaviour
         Tavern tavern = GetTavern();
 
         //check buildings
-        if (tavern == null || dungeon == null) return;
+        if (tavern == null || dungeon == null)
+        {
+            Debug.LogError("Could not retrieve valid buildings");
+            return;
+        };
 
         //get path
         List<Vector3> path = HexAStar.FindPath(tavern.exit, dungeon.entrance, bm);
@@ -88,20 +102,23 @@ public class PartyManager : MonoBehaviour
     {
         for (int i=0; i<adventurers.Length; ++i)
         {
-            //wait for next adventurer
-            yield return new WaitForSeconds(dispatchDelay);
+            if (adventurers[i] != null)
+            {
+                //wait for next adventurer
+                yield return new WaitForSeconds(dispatchDelay);
 
-            //create walking adventurer character
-            Debug.Log("Spawn Adventurer");
-            GameObject newAdventurer = Instantiate(adventurerPrefab, path[0], Quaternion.identity);
-            WalkingAdventurer walker = newAdventurer.GetComponent<WalkingAdventurer>();
-            walker.StartPath(adventurers[i], path);
+                //create walking adventurer character
+                Debug.Log("Spawn Adventurer");
+                GameObject newAdventurer = Instantiate(adventurerPrefab, path[0], Quaternion.identity);
+                WalkingAdventurer walker = newAdventurer.GetComponent<WalkingAdventurer>();
+                walker.StartPath(adventurers[i], path);
+            }
         }
     }
 
 
 
-    Adventurer GenerateAdevnturer()
+    public Adventurer GenerateAdevnturer()
     {
         Tavern tavern = GetTavern();
 
@@ -156,6 +173,8 @@ public class PartyManager : MonoBehaviour
         }
 
         adventurers[index] = null;
+
+        adventurerFired.Invoke();
         return true;
     }
 
@@ -168,6 +187,13 @@ public class PartyManager : MonoBehaviour
         }
 
         adventurers[index] = adventurer;
+
+        adventurerHired.Invoke();
         return true;
+    }
+
+    public Adventurer GetAdventurer(int index)
+    {
+        return adventurers[index];
     }
 }

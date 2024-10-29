@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 828832243cc60874abb379f730dfda0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingName: Tavern
   canDestroy: 1
   buildCost:
     Magic: 20
@@ -57,3 +58,4 @@ MonoBehaviour:
   _exit:
     cubicCoord: {x: 1, y: -1, z: 0}
     isTop: 1
+  averageSkill: 0.2
