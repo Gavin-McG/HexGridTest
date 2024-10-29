@@ -22,7 +22,7 @@ public class PartyManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(GenerateAdevnturer().skills.teamwork);
+        
     }
 
 
