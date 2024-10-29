@@ -88,20 +88,23 @@ public class PartyManager : MonoBehaviour
     {
         for (int i=0; i<adventurers.Length; ++i)
         {
-            //wait for next adventurer
-            yield return new WaitForSeconds(dispatchDelay);
+            if (adventurers[i] != null)
+            {
+                //wait for next adventurer
+                yield return new WaitForSeconds(dispatchDelay);
 
-            //create walking adventurer character
-            Debug.Log("Spawn Adventurer");
-            GameObject newAdventurer = Instantiate(adventurerPrefab, path[0], Quaternion.identity);
-            WalkingAdventurer walker = newAdventurer.GetComponent<WalkingAdventurer>();
-            walker.StartPath(adventurers[i], path);
+                //create walking adventurer character
+                Debug.Log("Spawn Adventurer");
+                GameObject newAdventurer = Instantiate(adventurerPrefab, path[0], Quaternion.identity);
+                WalkingAdventurer walker = newAdventurer.GetComponent<WalkingAdventurer>();
+                walker.StartPath(adventurers[i], path);
+            }
         }
     }
 
 
 
-    Adventurer GenerateAdevnturer()
+    public Adventurer GenerateAdevnturer()
     {
         Tavern tavern = GetTavern();
 

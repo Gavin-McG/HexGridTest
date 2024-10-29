@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class TavernUI : MonoBehaviour
 {
     [SerializeField] PartyManager pm;
+    [SerializeField] HireUI hireUI;
 
     [Space(10)]
 
@@ -68,5 +69,12 @@ public class TavernUI : MonoBehaviour
     public void CloseUI()
     {
         gameObject.SetActive(false);
+    }
+
+    public void OpenHireUI(int slotNum)
+    {
+        CloseUI();
+        hireUI.gameObject.SetActive(true);
+        hireUI.currentHireSlot = slotNum;
     }
 }
