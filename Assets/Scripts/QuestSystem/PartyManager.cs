@@ -16,7 +16,7 @@ public class PartyManager : MonoBehaviour
 
     //delay between dispatch of each adventurer
     [SerializeField] float dispatchDelay = 0.2f;
-
+    [SerializeField] float statRounding = 0.1f;
 
     //party
     Adventurer[] adventurers = {null,null,null,null};
@@ -24,6 +24,8 @@ public class PartyManager : MonoBehaviour
     //events
     public static UnityEvent adventurerHired = new UnityEvent();
     public static UnityEvent adventurerFired = new UnityEvent();
+
+    public static UnityEvent<Adventurer> adventurerArrived = new UnityEvent<Adventurer>();
 
 
     private void Start()
@@ -35,6 +37,15 @@ public class PartyManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        adventurerArrived.AddListener(FinishedPath);
+    }
+
+    private void OnDisable()
+    {
+        adventurerArrived.RemoveListener(FinishedPath);
+    }
 
 
     //get the tavern
@@ -80,6 +91,24 @@ public class PartyManager : MonoBehaviour
             Debug.LogError("Could not retrieve valid buildings");
             return;
         };
+
+        //check that alladventurers are waiting
+        for (int i = 0; i < 4; ++i)
+        {
+            if (adventurers[i] != null && adventurers[i].state != AdventurerState.Waiting)
+            {
+                return;
+            }
+        }
+
+        //set all adventurers to travelling
+        for (int i = 0; i < 4; ++i)
+        {
+            if (adventurers[i] != null) 
+            {
+                adventurers[i].state = AdventurerState.Travelling;
+            }
+        }
 
         //get path
         List<Vector3> path = HexAStar.FindPath(tavern.exit, dungeon.entrance, bm);
@@ -128,7 +157,7 @@ public class PartyManager : MonoBehaviour
             return null;
         }
 
-        return new Adventurer(GetRandomSkills(tavern.averageSkill, 0.2f), GetRandomInfo(), "New Adventurer");
+        return new Adventurer(GetRandomSkills(tavern.averageSkill, 0.1f), GetRandomInfo(), "New Adventurer");
     }
 
     float GetRandomValue(float mean, float std)
@@ -144,6 +173,8 @@ public class PartyManager : MonoBehaviour
             // Scale to our desired spread and center around the target
             value = mean + randStdNormal * std;
         }
+
+        value = Mathf.Ceil(value/statRounding) * statRounding;
         return value;
     }
 
@@ -151,8 +182,8 @@ public class PartyManager : MonoBehaviour
     {
         return new Skills(
             GetRandomValue(mean, std),
-            GetRandomValue(std, mean),
-            GetRandomValue(std, mean)
+            GetRandomValue(mean, std),
+            GetRandomValue(mean, std)
         );
     }
 
@@ -160,6 +191,25 @@ public class PartyManager : MonoBehaviour
     {
         int index = Random.Range(0, collection.data.Length);
         return collection.data[index];
+    }
+
+
+    void FinishedPath(Adventurer adventurer)
+    {
+        for (int i=0; i<4; i++)
+        {
+            if (adventurer == adventurers[i])
+            {
+                if (adventurers[i].state == AdventurerState.Travelling)
+                {
+                    adventurers[i].state = AdventurerState.Ready;
+                }
+                else if (adventurers[i].state == AdventurerState.Returning)
+                {
+                    adventurers[i].state = AdventurerState.Waiting;
+                }
+            }
+        }
     }
 
 

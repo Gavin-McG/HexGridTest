@@ -28,10 +28,10 @@ public enum ClassType
 public enum AdventurerState
 {
     Waiting,
-    Dispatching,
+    Travelling,
     Ready,
-    Fighting,
-    Returning
+    Returning,
+    Fighting
 }
 
 [System.Serializable]

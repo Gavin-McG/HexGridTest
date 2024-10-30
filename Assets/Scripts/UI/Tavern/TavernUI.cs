@@ -18,6 +18,19 @@ public class TavernUI : MonoBehaviour
     [SerializeField] GameObject[] adventurerPanels;
     [SerializeField] GameObject[] hirePanels;
 
+    [Space(10)]
+
+    [SerializeField] Color waitingColor = Color.yellow;
+    [SerializeField] Color travellingColor = Color.blue;
+    [SerializeField] Color readyColor = Color.green;
+    [SerializeField] Color returningColor = Color.blue;
+    [SerializeField] Color fightingColor = Color.red;
+
+    [Space(10)]
+
+    [SerializeField] Color warriorColor = Color.red;
+    [SerializeField] Color archerColor = Color.green;
+    [SerializeField] Color mageColor = Color.magenta;
 
     AdventurerPanel[] panelInfo;
 
@@ -58,6 +71,40 @@ public class TavernUI : MonoBehaviour
                 panelInfo[i].SetHead(adventurer.info.headSprite);
                 panelInfo[i].SetName(adventurer.name);
                 panelInfo[i].SetSkills(adventurer.skills);
+
+                //update class image
+                switch (adventurer.info.classType)
+                {
+                    case ClassType.Warrior:
+                        panelInfo[i].SetClass("Warrior", warriorColor);
+                        break;
+                    case ClassType.Archer:
+                        panelInfo[i].SetClass("Archer", archerColor);
+                        break;
+                    case ClassType.Mage:
+                        panelInfo[i].SetClass("Mage", mageColor);
+                        break;
+                }
+
+                //update state image
+                switch (adventurer.state)
+                {
+                    case AdventurerState.Waiting:
+                        panelInfo[i].SetState("Waiting", waitingColor);
+                        break;
+                    case AdventurerState.Travelling:
+                        panelInfo[i].SetState("Travelling", travellingColor);
+                        break;
+                    case AdventurerState.Ready:
+                        panelInfo[i].SetState("Ready", readyColor);
+                        break;
+                    case AdventurerState.Returning:
+                        panelInfo[i].SetState("Returning", returningColor);
+                        break;
+                    case AdventurerState.Fighting:
+                        panelInfo[i].SetState("Fighting", fightingColor);
+                        break;
+                }
             }
             else
             {
@@ -71,6 +118,7 @@ public class TavernUI : MonoBehaviour
 
     public void startDispatch(string dungeonName)
     {
+        //find correcct dungeon
         List<Building> buildings = bm.GetBuildingsOfType(BuildingType.Dungeon);
         foreach (Building building in buildings)
         {
