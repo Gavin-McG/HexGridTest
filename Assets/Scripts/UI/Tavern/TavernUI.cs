@@ -25,6 +25,7 @@ public class TavernUI : MonoBehaviour
     [SerializeField] Color readyColor = Color.green;
     [SerializeField] Color returningColor = Color.blue;
     [SerializeField] Color fightingColor = Color.red;
+    [SerializeField] Color deadColor = Color.black;
 
     [Space(10)]
 
@@ -103,6 +104,9 @@ public class TavernUI : MonoBehaviour
                         break;
                     case AdventurerState.Fighting:
                         panelInfo[i].SetState("Fighting", fightingColor);
+                        break;
+                    case AdventurerState.Dead:
+                        panelInfo[i].SetState("Dead", deadColor);
                         break;
                 }
             }

@@ -31,7 +31,8 @@ public enum AdventurerState
     Travelling,
     Ready,
     Returning,
-    Fighting
+    Fighting,
+    Dead
 }
 
 [System.Serializable]
