@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6515044598426535074}
-  - component: {fileID: 1580218251144589332}
+  - component: {fileID: -5702431817833850494}
   m_Layer: 0
-  m_Name: Tavern
+  m_Name: Dungeon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1580218251144589332
+--- !u!114 &-5702431817833850494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,21 +41,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 3162296105702691095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 828832243cc60874abb379f730dfda0a, type: 3}
+  m_Script: {fileID: 11500000, guid: 5908cd7d3f898dc45915bf5b72bb33bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: Tavern
+  buildingName: Dungeon 1
   canDestroy: 1
   buildCost:
-    Magic: 20
-    Wood: 300
-    Stone: 300
+    Magic: 0
+    Wood: 0
+    Stone: 0
   level: 0
   upgrades: []
-  currentStructure: {fileID: 11400000, guid: de16714221b76b64ba1deac48aff55d9, type: 2}
-  descriptionText: This is the Main Tower!
+  currentStructure: {fileID: 11400000, guid: aaea69352b7dc70418c2b5e025d09ef3, type: 2}
+  descriptionText: 
   offsetCoord: {x: 0, y: 0, z: 0}
-  _exit:
-    cubicCoord: {x: 1, y: -1, z: 0}
+  _entrance:
+    cubicCoord: {x: 2, y: -3, z: 1}
     isTop: 1
-  averageSkill: 0.2

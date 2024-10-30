@@ -7,12 +7,13 @@ using UnityEngine.Events;
 public enum BuildingType
 {
     MainTower,
-    Building0,
     Contractor,
     Smithy,
     Farm,
     Tavern,
-    WizardTower
+    WizardTower,
+    Building0,
+    Dungeon
 }
 
 [System.Serializable]
@@ -24,9 +25,9 @@ public struct Upgrade
 
 public abstract class Building : MonoBehaviour
 {
-    public abstract string buildingName { get; }
     public abstract BuildingType type { get; }
 
+    public string buildingName;
     public bool canDestroy = true; 
     public Resources buildCost;
     public int level = 0;
@@ -34,4 +35,5 @@ public abstract class Building : MonoBehaviour
     public Structure currentStructure;
     public string descriptionText;
     public UnityEvent<Upgrade> UpgradeEvent = new UnityEvent<Upgrade>();
+    [HideInInspector] public Vector3Int offsetCoord = Vector3Int.zero;
 }

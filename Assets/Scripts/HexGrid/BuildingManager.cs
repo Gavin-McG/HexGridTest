@@ -21,8 +21,8 @@ public enum EditMode
 public class BuildingManager : MonoBehaviour
 {
     //tilemaps used for building processes
-    [SerializeField] Tilemap groundMap;
-    [SerializeField] Tilemap objectMap;
+    [SerializeField] public Tilemap groundMap;
+    [SerializeField] public Tilemap objectMap;
 
     [Space(10)]
 
@@ -291,6 +291,9 @@ public class BuildingManager : MonoBehaviour
         GameObject buildingObject = Instantiate(structure.buildingObject, buildingPos, Quaternion.identity);
         buildingObject.transform.parent = transform;
         Building newBuilding = buildingObject.GetComponent<Building>();
+
+        //set newBuilding's position
+        newBuilding.offsetCoord = offsetCoord;
 
         //charge for building
         if (charge)

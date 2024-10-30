@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Tavern : Building
-{
-    public override string buildingName
+{ 
+    public override BuildingType type 
+    { 
+        get { return BuildingType.Tavern; }
+    }
+
+    [SerializeField] HexPoint _exit;
+    
+    [HideInInspector] public HexPoint exit 
     {
         get
         {
-            return "Tavern";
+            return new HexPoint(_exit.cubicCoord + HexUtils.OffsetToCubic(offsetCoord), _exit.isTop);
         }
     }
 
-    public override BuildingType type 
-    { 
-        get
-        {
-            return BuildingType.Tavern;
-        }
-    }
+    public float averageSkill = 0.2f;
 }
