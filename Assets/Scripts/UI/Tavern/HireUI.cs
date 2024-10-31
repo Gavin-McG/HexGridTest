@@ -18,7 +18,6 @@ public class HireUI : MonoBehaviour
 
     private void Awake()
     {
-        UIManager.closeAllUI.AddListener(CloseUI);
         adventurers = new Adventurer[hirePanels.Length];
         UpdateSelections();
     }
@@ -26,9 +25,15 @@ public class HireUI : MonoBehaviour
 
     private void OnEnable()
     {
+        UIManager.closeAllUI.AddListener(CloseUI);
+
         UpdateUI();
     }
 
+    private void OnDisable()
+    {
+        UIManager.closeAllUI.RemoveListener(CloseUI);
+    }
 
     private void UpdateUI()
     {

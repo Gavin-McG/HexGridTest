@@ -25,13 +25,11 @@ public class TavernUI : MonoBehaviour
     AdventurerPanel[] panelInfo;
     float lastUpdate = 0;
 
-    private void Start()
-    {
-        UIManager.closeAllUI.AddListener(CloseUI);
-    }
 
     private void OnEnable()
     {
+        UIManager.closeAllUI.AddListener(CloseUI);
+
         //check UI sizes
         Debug.Assert(adventurerPanels.Length == 4);
         Debug.Assert(hirePanels.Length == 4);
@@ -45,6 +43,11 @@ public class TavernUI : MonoBehaviour
 
         //initial UI state
         UpdateUI();
+    }
+
+    private void OnDisable()
+    {
+        UIManager.closeAllUI.RemoveListener(CloseUI);
     }
 
     private void Update()

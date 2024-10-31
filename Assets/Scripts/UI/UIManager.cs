@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] GameObject tavernUI;
+    [SerializeField] GameObject dungeonUI;
 
     //tell all UI to close
     public static UnityEvent closeAllUI = new UnityEvent();
@@ -34,6 +35,18 @@ public class UIManager : MonoBehaviour
         {
             case BuildingType.Tavern:
                 tavernUI.SetActive(true);
+                break;
+            case BuildingType.Dungeon:
+                dungeonUI.SetActive(true);
+                if (building is Dungeon dungeon)
+                {
+                    dungeonUI.GetComponent<DungeonUI>().dungeon = dungeon;
+                }
+                else
+                {
+                    Debug.LogError("Dungeon BuildingType does not derive from Dungeon Script");
+                }
+                
                 break;
             default:
                 break;
