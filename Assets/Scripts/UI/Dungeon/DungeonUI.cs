@@ -18,14 +18,10 @@ public class DungeonUI : MonoBehaviour
     FighterPanel[] panelInfo;
     float lastUpdate = 0;
 
-
-    private void Start()
-    {
-        UIManager.closeAllUI.AddListener(CloseUI);
-    }
-
     private void OnEnable()
     {
+        UIManager.closeAllUI.AddListener(CloseUI);
+
         //check UI sizes
         Debug.Assert(fighterPanels.Length == 4);
 
@@ -40,6 +36,11 @@ public class DungeonUI : MonoBehaviour
         UpdateUI();
     }
 
+    private void OnDisable()
+    {
+        UIManager.closeAllUI.RemoveListener(CloseUI);
+    }
+
     private void Update()
     {
         if (Time.time >= lastUpdate + updateRate)
@@ -50,7 +51,66 @@ public class DungeonUI : MonoBehaviour
 
     public void UpdateUI()
     {
+        Debug.Assert(panelInfo.Length == 4);
 
+        for (int i=0; i<4; ++i)
+        {
+            Adventurer adventurer = pm.GetAdventurer(i);
+            if (adventurer != null)
+            {
+                fighterPanels[i].SetActive(true);
+
+                panelInfo[i].SetHead(adventurer.info.headSprite);
+                panelInfo[i].SetSkills(adventurer.skills);
+                panelInfo[i].SetName(adventurer.name);
+                panelInfo[i].SetHealth(Mathf.Clamp01(adventurer.health/100f));
+
+                //dungeon state indicators
+                if (adventurer.state == AdventurerState.Dead)
+                {
+                    //adventurer is dead
+                    panelInfo[i].SetDead();
+
+                }
+                else if (pm.dungeonName != dungeon.buildingName)
+                {
+                    //not ready if at another dungeon
+                    panelInfo[i].SetNotReady();
+                }
+                else if (adventurer.state == AdventurerState.Fighting)
+                {
+                    //no ready indicator if fighting
+                    panelInfo[i].clearPanel();
+                }
+                else if (adventurer.state == AdventurerState.Ready)
+                {
+                    panelInfo[i].SetReady();
+                }
+                else
+                {
+                    panelInfo[i].SetNotReady();
+                }
+
+                //update class image
+                switch (adventurer.info.classType)
+                {
+                    case ClassType.Warrior:
+                        panelInfo[i].SetClass("Warrior", pm.warriorColor);
+                        break;
+                    case ClassType.Archer:
+                        panelInfo[i].SetClass("Archer", pm.archerColor);
+                        break;
+                    case ClassType.Mage:
+                        panelInfo[i].SetClass("Mage", pm.mageColor);
+                        break;
+                }
+
+            }
+            else
+            {
+                fighterPanels[i].SetActive(false);
+            }
+        }
     }
 
     public void CloseUI()

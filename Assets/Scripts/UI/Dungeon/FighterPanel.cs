@@ -34,7 +34,7 @@ public class FighterPanel : MonoBehaviour
 
     public void SetHealth(float health)
     {
-        healthBar.sizeDelta = new Vector2(skillBackground.sizeDelta.x, health * skillBackground.sizeDelta.y);
+        healthBar.sizeDelta = new Vector2(healthBackground.sizeDelta.x, health * healthBackground.sizeDelta.y);
     }
 
     public void SetHead(Sprite sprite)
@@ -53,25 +53,30 @@ public class FighterPanel : MonoBehaviour
         classText.text = className;
     }
 
-    public void SetDead(bool active)
+    public void SetDead()
     {
-        deadPanel.SetActive(active);
+        deadPanel.SetActive(true);
+        readyPanel.SetActive(false);
+        notReadyPanel.SetActive(false);
     }
 
     public void SetReady()
     {
+        deadPanel.SetActive(false);
         readyPanel.SetActive(true);
         notReadyPanel.SetActive(false);
     }
 
     public void SetNotReady()
     {
+        deadPanel.SetActive(false);
         readyPanel.SetActive(false);
         notReadyPanel.SetActive(true);
     }
 
     public void clearPanel()
     {
+        deadPanel.SetActive(false);
         readyPanel.SetActive(false);
         notReadyPanel.SetActive(false);
     }

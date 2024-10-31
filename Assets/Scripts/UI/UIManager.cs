@@ -37,14 +37,14 @@ public class UIManager : MonoBehaviour
                 tavernUI.SetActive(true);
                 break;
             case BuildingType.Dungeon:
-                dungeonUI.SetActive(true);
                 if (building is Dungeon dungeon)
                 {
                     dungeonUI.GetComponent<DungeonUI>().dungeon = dungeon;
+                    dungeonUI.SetActive(true);
                 }
                 else
                 {
-                    Debug.LogError("Dungeon BuildingType does not derive from Dungeon Script");
+                    Debug.LogError("Dungeon '" + building.buildingName + "' BuildingType does not derive from Dungeon Script");
                 }
                 
                 break;

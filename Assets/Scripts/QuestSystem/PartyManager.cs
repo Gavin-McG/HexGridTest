@@ -36,6 +36,8 @@ public class PartyManager : MonoBehaviour
     //party
     Adventurer[] adventurers = {null,null,null,null};
 
+    public string dungeonName = "";
+
     //events
     public static UnityEvent adventurerHired = new UnityEvent();
     public static UnityEvent adventurerFired = new UnityEvent();
@@ -124,6 +126,9 @@ public class PartyManager : MonoBehaviour
                 adventurers[i].state = AdventurerState.Travelling;
             }
         }
+
+        //set dungeonName
+        dungeonName = dungeon.buildingName;
 
         //get path
         List<Vector3> path = HexAStar.FindPath(tavern.exit, dungeon.entrance, bm);
