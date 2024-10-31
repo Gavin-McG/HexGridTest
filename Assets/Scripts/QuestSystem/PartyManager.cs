@@ -18,6 +18,21 @@ public class PartyManager : MonoBehaviour
     [SerializeField] float dispatchDelay = 0.2f;
     [SerializeField] float statRounding = 0.1f;
 
+    [Space(10)]
+
+    [SerializeField] public Color waitingColor = Color.yellow;
+    [SerializeField] public Color travellingColor = Color.blue;
+    [SerializeField] public Color readyColor = Color.green;
+    [SerializeField] public Color returningColor = Color.blue;
+    [SerializeField] public Color fightingColor = Color.red;
+    [SerializeField] public Color deadColor = Color.black;
+
+    [Space(10)]
+
+    [SerializeField] public Color warriorColor = Color.red;
+    [SerializeField] public Color archerColor = Color.green;
+    [SerializeField] public Color mageColor = Color.magenta;
+
     //party
     Adventurer[] adventurers = {null,null,null,null};
 

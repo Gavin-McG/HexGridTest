@@ -20,20 +20,10 @@ public class TavernUI : MonoBehaviour
 
     [Space(10)]
 
-    [SerializeField] Color waitingColor = Color.yellow;
-    [SerializeField] Color travellingColor = Color.blue;
-    [SerializeField] Color readyColor = Color.green;
-    [SerializeField] Color returningColor = Color.blue;
-    [SerializeField] Color fightingColor = Color.red;
-    [SerializeField] Color deadColor = Color.black;
-
-    [Space(10)]
-
-    [SerializeField] Color warriorColor = Color.red;
-    [SerializeField] Color archerColor = Color.green;
-    [SerializeField] Color mageColor = Color.magenta;
+    [SerializeField] float updateRate = 0.5f;
 
     AdventurerPanel[] panelInfo;
+    float lastUpdate = 0;
 
     private void Start()
     {
@@ -57,8 +47,20 @@ public class TavernUI : MonoBehaviour
         UpdateUI();
     }
 
+    private void Update()
+    {
+        if (Time.time >= lastUpdate + updateRate) 
+        {
+            UpdateUI();
+        }
+    }
+
     void UpdateUI()
     {
+        //update time
+        lastUpdate = Time.time;
+
+        //update ui elements
         for (int i=0; i<4; ++i)
         {
             Adventurer adventurer = pm.GetAdventurer(i);
@@ -77,13 +79,13 @@ public class TavernUI : MonoBehaviour
                 switch (adventurer.info.classType)
                 {
                     case ClassType.Warrior:
-                        panelInfo[i].SetClass("Warrior", warriorColor);
+                        panelInfo[i].SetClass("Warrior", pm.warriorColor);
                         break;
                     case ClassType.Archer:
-                        panelInfo[i].SetClass("Archer", archerColor);
+                        panelInfo[i].SetClass("Archer", pm.archerColor);
                         break;
                     case ClassType.Mage:
-                        panelInfo[i].SetClass("Mage", mageColor);
+                        panelInfo[i].SetClass("Mage", pm.mageColor);
                         break;
                 }
 
@@ -91,22 +93,22 @@ public class TavernUI : MonoBehaviour
                 switch (adventurer.state)
                 {
                     case AdventurerState.Waiting:
-                        panelInfo[i].SetState("Waiting", waitingColor);
+                        panelInfo[i].SetState("Waiting", pm.waitingColor);
                         break;
                     case AdventurerState.Travelling:
-                        panelInfo[i].SetState("Travelling", travellingColor);
+                        panelInfo[i].SetState("Travelling", pm.travellingColor);
                         break;
                     case AdventurerState.Ready:
-                        panelInfo[i].SetState("Ready", readyColor);
+                        panelInfo[i].SetState("Ready", pm.readyColor);
                         break;
                     case AdventurerState.Returning:
-                        panelInfo[i].SetState("Returning", returningColor);
+                        panelInfo[i].SetState("Returning", pm.returningColor);
                         break;
                     case AdventurerState.Fighting:
-                        panelInfo[i].SetState("Fighting", fightingColor);
+                        panelInfo[i].SetState("Fighting", pm.fightingColor);
                         break;
                     case AdventurerState.Dead:
-                        panelInfo[i].SetState("Dead", deadColor);
+                        panelInfo[i].SetState("Dead", pm.deadColor);
                         break;
                 }
             }

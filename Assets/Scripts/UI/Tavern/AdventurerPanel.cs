@@ -12,13 +12,13 @@ public class AdventurerPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI classText;
     [SerializeField] Image stateImage;
     [SerializeField] TextMeshProUGUI stateText;
-    [SerializeField] RectTransform SkillBar;
+    [SerializeField] RectTransform skillBar;
     [SerializeField] RectTransform strengthBar;
     [SerializeField] RectTransform teamworkBar;
 
     public void SetSkills(Skills skill)
     {
-        SetSkill(SkillBar, skill.skill);
+        SetSkill(skillBar, skill.skill);
         SetSkill(strengthBar, skill.strength);
         SetSkill(teamworkBar, skill.teamwork);
     }

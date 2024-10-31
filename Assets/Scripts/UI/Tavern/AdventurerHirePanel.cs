@@ -8,13 +8,15 @@ public class AdventurerHirePanel : MonoBehaviour
 {
     [SerializeField] Image headImage;
     [SerializeField] TextMeshProUGUI nameText;
-    [SerializeField] RectTransform SkillBar;
+    [SerializeField] Image classImage;
+    [SerializeField] TextMeshProUGUI classText;
+    [SerializeField] RectTransform skillBar;
     [SerializeField] RectTransform strengthBar;
     [SerializeField] RectTransform teamworkBar;
 
     public void SetSkills(Skills skill)
     {
-        SetSkill(SkillBar, skill.skill);
+        SetSkill(skillBar, skill.skill);
         SetSkill(strengthBar, skill.strength);
         SetSkill(teamworkBar, skill.teamwork);
     }
@@ -32,5 +34,11 @@ public class AdventurerHirePanel : MonoBehaviour
     public void SetName(string name)
     {
         nameText.text = name;
+    }
+
+    public void SetClass(string className, Color classColor)
+    {
+        classImage.color = classColor;
+        classText.text = className;
     }
 }

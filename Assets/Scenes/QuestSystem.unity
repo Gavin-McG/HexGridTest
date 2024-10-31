@@ -2241,14 +2241,7 @@ MonoBehaviour:
   - {fileID: 1684272665}
   - {fileID: 2079998342}
   - {fileID: 63209655}
-  waitingColor: {r: 1, g: 0.8171315, b: 0.27897573, a: 1}
-  travellingColor: {r: 0, g: 0.44289705, b: 0.69272226, a: 1}
-  readyColor: {r: 0, g: 0.63342315, b: 0, a: 1}
-  returningColor: {r: 0, g: 0.44313726, b: 0.69411767, a: 1}
-  fightingColor: {r: 0.52156866, g: 0.1566512, b: 0, a: 1}
-  warriorColor: {r: 1, g: 0.31312963, b: 0, a: 1}
-  archerColor: {r: 0, g: 0.74663067, b: 0.33721283, a: 1}
-  mageColor: {r: 0.39032254, g: 0.07056394, b: 0.4716981, a: 1}
+  updateRate: 0.5
 --- !u!114 &400553385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19817,6 +19810,15 @@ MonoBehaviour:
   collection: {fileID: 11400000, guid: b9707348348251f4c94efaf06eb2eb20, type: 2}
   dispatchDelay: 1
   statRounding: 0.1
+  waitingColor: {r: 0.73045814, g: 0.46654728, b: 0, a: 1}
+  travellingColor: {r: 0, g: 0.42331555, b: 0.9299191, a: 1}
+  readyColor: {r: 0, g: 0.6010781, b: 0.06244167, a: 1}
+  returningColor: {r: 0, g: 0.42352942, b: 0.93333334, a: 1}
+  fightingColor: {r: 0.6280323, g: 0, b: 0, a: 1}
+  deadColor: {r: 0, g: 0, b: 0, a: 1}
+  warriorColor: {r: 1, g: 0.34067315, b: 0, a: 1}
+  archerColor: {r: 0, g: 0.79514813, b: 0.33617485, a: 1}
+  mageColor: {r: 0.8584407, g: 0.3274932, b: 1, a: 1}
 --- !u!114 &1735817986
 MonoBehaviour:
   m_ObjectHideFlags: 0
