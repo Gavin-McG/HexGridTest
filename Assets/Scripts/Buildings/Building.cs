@@ -27,7 +27,7 @@ public struct Upgrade
 
 public abstract class Building : MonoBehaviour
 {
-    private ResourceManager rm;
+    private ResourceManager rm; //Checks if an upgrade can be bought
 
     void Start()
     {
@@ -47,6 +47,7 @@ public abstract class Building : MonoBehaviour
     [HideInInspector] public Vector3Int offsetCoord = Vector3Int.zero;
     
     
+    //UI will call this for each building, checks if the player can purchase it
     public virtual void UpgradeBuilding()
     {
         if (level < upgrades.Length)
