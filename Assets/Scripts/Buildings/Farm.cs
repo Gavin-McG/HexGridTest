@@ -5,14 +5,7 @@ using UnityEngine;
 public class Farm : Building
 {
     private float multiplier = 1.5f;
-
-    public override string buildingName
-    {
-        get
-        {
-            return "Farm";
-        }
-    }
+    private float range = 1.5f;
 
     public override BuildingType type 
     { 
@@ -21,6 +14,4 @@ public class Farm : Building
             return BuildingType.Farm;
         }
     }
-    
-    
 }

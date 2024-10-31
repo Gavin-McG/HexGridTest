@@ -44,12 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c051879153d3840458d1ef64cd412d14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingName: Smithy
   canDestroy: 1
   buildCost:
     Magic: 25
     Wood: 50
     Stone: 100
-  level: 0
   upgrades: []
   currentStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
   descriptionText: Arm your adventurers and produce gold!
+  offsetCoord: {x: 0, y: 0, z: 0}

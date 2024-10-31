@@ -44,12 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93cc94ffbedc91469d8d8c9ac0bdad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingName: Farm
   canDestroy: 1
   buildCost:
     Magic: 100
     Wood: 150
     Stone: 120
-  level: 0
   upgrades: []
   currentStructure: {fileID: 11400000, guid: 7a175668101914c46b422712b683fe50, type: 2}
   descriptionText: Increase production rate for structures in range
+  offsetCoord: {x: 0, y: 0, z: 0}

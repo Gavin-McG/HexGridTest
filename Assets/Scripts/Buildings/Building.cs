@@ -23,17 +23,44 @@ public struct Upgrade
     public Resources upgradeCost;
 }
 
+
+
 public abstract class Building : MonoBehaviour
 {
+    private ResourceManager rm;
+
+    void Start()
+    {
+        rm = FindObjectOfType<ResourceManager>();
+    }
+
     public abstract BuildingType type { get; }
 
     public string buildingName;
     public bool canDestroy = true; 
     public Resources buildCost;
-    public int level = 0;
+    protected int level = 0;
     public Upgrade[] upgrades = new Upgrade[0];
     public Structure currentStructure;
     public string descriptionText;
-    public UnityEvent<Upgrade> UpgradeEvent = new UnityEvent<Upgrade>();
+    protected UnityEvent<Upgrade, int> UpgradeEvent = new UnityEvent<Upgrade, int>();
     [HideInInspector] public Vector3Int offsetCoord = Vector3Int.zero;
+    
+    
+    public virtual void UpgradeBuilding()
+    {
+        if (level < upgrades.Length)
+        {
+            Upgrade upgrade = upgrades[level];
+
+            if (rm.CanAfford(upgrade.upgradeCost))
+            {
+                rm.Charge(upgrade.upgradeCost);
+                UpgradeEvent.Invoke(upgrade, level);
+
+                currentStructure = upgrade.newStructure;
+                level++;
+            }
+        }
+    }
 }

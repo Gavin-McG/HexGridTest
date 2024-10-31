@@ -4,14 +4,6 @@ using UnityEngine;
 
 public class WizardTower : Building
 {
-    public override string buildingName
-    {
-        get
-        {
-            return "Wizard Tower";
-        }
-    }
-
     public override BuildingType type 
     { 
         get
