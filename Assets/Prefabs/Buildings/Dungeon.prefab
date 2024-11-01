@@ -58,3 +58,4 @@ MonoBehaviour:
   _entrance:
     cubicCoord: {x: 2, y: -3, z: 1}
     isTop: 1
+  difficulty: 20

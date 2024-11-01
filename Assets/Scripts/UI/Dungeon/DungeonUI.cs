@@ -9,6 +9,7 @@ public class DungeonUI : MonoBehaviour
     [Space(10)]
 
     [SerializeField] GameObject[] fighterPanels;
+    [SerializeField] GameObject startButton;
 
     [Space(10)]
 
@@ -51,7 +52,12 @@ public class DungeonUI : MonoBehaviour
 
     public void UpdateUI()
     {
+        //update time
+        lastUpdate = Time.time;
+
         Debug.Assert(panelInfo.Length == 4);
+
+        bool canStart = !pm.fighting;
 
         for (int i=0; i<4; ++i)
         {
@@ -76,6 +82,7 @@ public class DungeonUI : MonoBehaviour
                 {
                     //not ready if at another dungeon
                     panelInfo[i].SetNotReady();
+                    canStart = false;
                 }
                 else if (adventurer.state == AdventurerState.Fighting)
                 {
@@ -89,6 +96,7 @@ public class DungeonUI : MonoBehaviour
                 else
                 {
                     panelInfo[i].SetNotReady();
+                    canStart = false;
                 }
 
                 //update class image
@@ -111,6 +119,15 @@ public class DungeonUI : MonoBehaviour
                 fighterPanels[i].SetActive(false);
             }
         }
+
+        //startButton
+        startButton.SetActive(canStart);
+    }
+
+    public void StartFight()
+    {
+        pm.StartFight(dungeon.difficulty);
+        UpdateUI();
     }
 
     public void CloseUI()

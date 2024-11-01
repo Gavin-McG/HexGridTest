@@ -17,6 +17,7 @@ public class PartyManager : MonoBehaviour
     //delay between dispatch of each adventurer
     [SerializeField] float dispatchDelay = 0.2f;
     [SerializeField] float statRounding = 0.1f;
+    [SerializeField] float fightDelay = 2.0f;
 
     [Space(10)]
 
@@ -37,6 +38,7 @@ public class PartyManager : MonoBehaviour
     Adventurer[] adventurers = {null,null,null,null};
 
     public string dungeonName = "";
+    public bool fighting = false;
 
     //events
     public static UnityEvent adventurerHired = new UnityEvent();
@@ -132,8 +134,6 @@ public class PartyManager : MonoBehaviour
 
         //get path
         List<Vector3> path = HexAStar.FindPath(tavern.exit, dungeon.entrance, bm);
-        Debug.Log(tavern.exit);
-        Debug.Log(dungeon.entrance);
         if (path.Count == 0)
         {
             Debug.LogWarning("Could not find valid path between Tavern and selected Dungeon");
@@ -157,7 +157,6 @@ public class PartyManager : MonoBehaviour
                 yield return new WaitForSeconds(dispatchDelay);
 
                 //create walking adventurer character
-                Debug.Log("Spawn Adventurer");
                 GameObject newAdventurer = Instantiate(adventurerPrefab, path[0], Quaternion.identity);
                 WalkingAdventurer walker = newAdventurer.GetComponent<WalkingAdventurer>();
                 walker.StartPath(adventurers[i], path);
@@ -180,18 +179,23 @@ public class PartyManager : MonoBehaviour
         return new Adventurer(GetRandomSkills(tavern.averageSkill, 0.1f), GetRandomInfo(), "New Adventurer");
     }
 
+    float NormalDistribution(float mean, float std)
+    {
+        // Generate a standard normal distribution with mean 0 and standard deviation 1
+        float u1 = 1.0f - Random.value; // uniform(0,1] random values
+        float u2 = 1.0f - Random.value;
+        float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2);
+
+        // Scale to our desired spread and center around the target
+        return mean + randStdNormal * std;
+    }
+
     float GetRandomValue(float mean, float std)
     {
         float value = -1;
         while (value < 0 || value > 1)
         {
-            // Generate a standard normal distribution with mean 0 and standard deviation 1
-            float u1 = 1.0f - Random.value; // uniform(0,1] random values
-            float u2 = 1.0f - Random.value;
-            float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2);
-
-            // Scale to our desired spread and center around the target
-            value = mean + randStdNormal * std;
+            value = NormalDistribution(mean, std);
         }
 
         value = Mathf.Ceil(value/statRounding) * statRounding;
@@ -259,11 +263,165 @@ public class PartyManager : MonoBehaviour
         adventurers[index] = adventurer;
 
         adventurerHired.Invoke();
+        Debug.Log(GetPartyStrength());
         return true;
     }
 
     public Adventurer GetAdventurer(int index)
     {
         return adventurers[index];
+    }
+
+    //caluclate numerical strength of party
+    public float GetPartyStrength()
+    {
+        float warriorMultiplier = 1;
+        float archerMultiplier = 1;
+        float mageMultiplier = 1;
+
+        float skillScore = 1;
+        float strengthScore = 1;
+        float teamworkScore = 1;
+
+        int adventurerCount = 0;
+
+        for (int i=0; i<4; ++i)
+        {
+            if (adventurers[i] != null && adventurers[i].state != AdventurerState.Dead)
+            {
+                //class add
+                switch (adventurers[i].info.classType)
+                {
+                    case ClassType.Warrior: 
+                        warriorMultiplier += 1;
+                        break;
+                    case ClassType.Archer:
+                        archerMultiplier += 1;
+                        break;
+                    case ClassType.Mage:
+                        mageMultiplier += 1;
+                        break;
+                }
+
+                //stats
+                skillScore += adventurers[i].skills.skill;
+                strengthScore += adventurers[i].skills.strength;
+                teamworkScore += adventurers[i].skills.teamwork;
+
+                //adventurer count
+                ++adventurerCount;
+            }
+        }
+
+        //zero party
+        if (adventurerCount == 0)
+        {
+            return 0;
+        }
+
+        //calculate averages
+        float divisor = Mathf.Sqrt(adventurerCount);
+        skillScore /= divisor;
+        strengthScore /= divisor;
+        teamworkScore /= divisor;
+
+        return warriorMultiplier * archerMultiplier * mageMultiplier * skillScore * strengthScore * teamworkScore;
+    }
+
+
+    //begin fight
+    public void StartFight(float difficulty)
+    {
+        //set adventurers to fighting
+        for (int i=0; i<4; ++i)
+        {
+            if (adventurers[i] != null)
+            {
+                adventurers[i].state = AdventurerState.Fighting;
+            }
+        }
+
+        StartCoroutine(FightRoutine(difficulty));
+    }
+
+    bool IsSuccess(float strength, float difficulty, float sensitivity)
+    {
+        float offset = strength - difficulty;
+        float score = offset * sensitivity;
+        float requirement = NormalDistribution(0, 1);
+
+        return score > requirement;
+    }
+
+    //
+    IEnumerator FightRoutine(float difficulty)
+    {
+        Debug.Log("starting fight");
+        fighting = true;
+
+        //count living adventurers
+        int living = 0;
+        for (int i=0; i<4; ++i)
+        {
+            if (adventurers[i] != null && adventurers[i].state != AdventurerState.Dead) ++living;
+        }
+
+        //run fight loop
+        float progress = 0;
+        while (progress < 1 && living > 0)
+        {
+            yield return new WaitForSeconds(fightDelay);
+
+            if (IsSuccess(GetPartyStrength(), difficulty, 0.03f))
+            {
+                //party succeeded test
+                progress += 0.05f;
+                Debug.Log("success " + progress);
+            }
+            else
+            {
+                //choose random adventurer to hurt
+                List<int> alive = new List<int>();
+                for (int i=0; i<4; ++i)
+                {
+                    if (adventurers[i] != null && adventurers[i].state == AdventurerState.Fighting)
+                    {
+                        alive.Add(i);
+                    }
+                }
+                int randomIndex = alive[Random.Range(0, alive.Count)];
+
+                //hurt random adventurer
+                float randomDamage = Random.Range(8, 21);
+                adventurers[randomIndex].health -= randomDamage;
+                if (adventurers[randomIndex].health < 0)
+                {
+                    adventurers[randomIndex].health = 0;
+                    adventurers[randomIndex].state = AdventurerState.Dead;
+                    living--;
+                }
+
+                Debug.Log("Adventurer " + randomIndex + " Hurt for " + (randomDamage * 100));
+            }
+        }
+
+        //clear dead adventurers and regen
+        for (int i=0; i<4; ++i)
+        {
+            if (adventurers[i] != null)
+            {
+                if (adventurers[i].state == AdventurerState.Dead)
+                {
+                    adventurers[i] = null;
+                }
+                else
+                {
+                    adventurers[i].health = 100;
+                }
+            }
+        }
+
+        fighting = false;
+        Debug.Log("ending fight");
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Dungeon : Building
 {
@@ -10,6 +11,7 @@ public class Dungeon : Building
     }
 
     [SerializeField] HexPoint _entrance;
+    [SerializeField] public float difficulty;
 
     [HideInInspector]
     public HexPoint entrance
