@@ -59,6 +59,7 @@ public class DungeonUI : MonoBehaviour
 
         bool canStart = !pm.fighting;
 
+        int adventurerCount = 0;
         for (int i=0; i<4; ++i)
         {
             Adventurer adventurer = pm.GetAdventurer(i);
@@ -113,6 +114,8 @@ public class DungeonUI : MonoBehaviour
                         break;
                 }
 
+                adventurerCount++;
+
             }
             else
             {
@@ -121,6 +124,7 @@ public class DungeonUI : MonoBehaviour
         }
 
         //startButton
+        canStart = canStart && adventurerCount > 0;
         startButton.SetActive(canStart);
     }
 

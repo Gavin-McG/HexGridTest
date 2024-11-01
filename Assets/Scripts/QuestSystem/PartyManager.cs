@@ -45,6 +45,11 @@ public class PartyManager : MonoBehaviour
     public static UnityEvent adventurerFired = new UnityEvent();
 
     public static UnityEvent<Adventurer> adventurerArrived = new UnityEvent<Adventurer>();
+    public static UnityEvent<Adventurer> adventurerReturned = new UnityEvent<Adventurer>();
+    public static UnityEvent<Adventurer> adventurerKilled = new UnityEvent<Adventurer>();
+
+    public static UnityEvent battleWon = new UnityEvent();
+    public static UnityEvent battleLost = new UnityEvent();
 
 
     private void Start()
@@ -357,6 +362,7 @@ public class PartyManager : MonoBehaviour
         StartCoroutine(FightRoutine(difficulty));
     }
 
+    //randomly determine whether a given check is succeeded by the party
     bool IsSuccess(float strength, float difficulty, float sensitivity)
     {
         float offset = strength - difficulty;
@@ -366,7 +372,10 @@ public class PartyManager : MonoBehaviour
         return score > requirement;
     }
 
-    //
+
+
+
+    //Run the dungeon fight
     IEnumerator FightRoutine(float difficulty)
     {
         Debug.Log("starting fight");
@@ -407,11 +416,14 @@ public class PartyManager : MonoBehaviour
                 //hurt random adventurer
                 float randomDamage = Random.Range(8, 21);
                 adventurers[randomIndex].health -= randomDamage;
+
+                //test for killed adventurer
                 if (adventurers[randomIndex].health < 0)
                 {
                     adventurers[randomIndex].health = 0;
                     adventurers[randomIndex].state = AdventurerState.Dead;
                     living--;
+                    adventurerKilled.Invoke(adventurers[randomIndex]);
                 }
 
                 Debug.Log("Adventurer " + randomIndex + " Hurt for " + (randomDamage * 100));
@@ -446,10 +458,19 @@ public class PartyManager : MonoBehaviour
             }
         }
 
-        ReturnParty(dungeon);
+        //win/loss
+        if (living>0)
+        {
+            battleWon.Invoke();
+            ReturnParty(dungeon);
+        }
+        else
+        {
+            battleLost.Invoke();
+            dungeon = null;
+        }
 
         fighting = false;
-        dungeon = null;
         Debug.Log("ending fight");
     }
 
@@ -484,10 +505,10 @@ public class PartyManager : MonoBehaviour
         }
 
         //set dungeonName
-        this.dungeon = dungeon;
+        this.dungeon = null;
 
         //get path
-        List<Vector3> path = HexAStar.FindPath(tavern.exit, dungeon.entrance, bm);
+        List<Vector3> path = HexAStar.FindPath(dungeon.entrance, tavern.exit, bm);
         if (path.Count == 0)
         {
             Debug.LogWarning("Could not find valid path between Tavern and selected Dungeon");
