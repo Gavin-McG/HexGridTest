@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6515044598426535074}
   - component: {fileID: -5702431817833850494}
   m_Layer: 0
-  m_Name: Dungeon
+  m_Name: Dungeon 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5908cd7d3f898dc45915bf5b72bb33bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: Dungeon 1
+  buildingName: Dungeon 2
   canDestroy: 1
   buildCost:
     Magic: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
     Stone: 0
   level: 0
   upgrades: []
-  currentStructure: {fileID: 11400000, guid: aaea69352b7dc70418c2b5e025d09ef3, type: 2}
+  currentStructure: {fileID: 11400000, guid: a9fe115ba2b1ca54da5be2957a7c047c, type: 2}
   descriptionText: 
   offsetCoord: {x: 0, y: 0, z: 0}
   _entrance:
