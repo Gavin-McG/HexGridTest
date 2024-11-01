@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -115,11 +116,17 @@ public class TavernUI : MonoBehaviour
                         break;
                 }
             }
-            else
+            else if ((i == 0 || pm.GetAdventurer(i-1)!=null) && pm.CanHire())
             {
                 //enable correct panel
                 adventurerPanels[i].SetActive(false);
                 hirePanels[i].SetActive(true);
+            }
+            else
+            {
+                //enable correct panel
+                adventurerPanels[i].SetActive(false);
+                hirePanels[i].SetActive(false);
             }
         }
     }

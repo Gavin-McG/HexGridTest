@@ -37,7 +37,7 @@ public class PartyManager : MonoBehaviour
     //party
     Adventurer[] adventurers = {null,null,null,null};
 
-    public string dungeonName = "";
+    public Dungeon dungeon = null;
     public bool fighting = false;
 
     //events
@@ -130,7 +130,7 @@ public class PartyManager : MonoBehaviour
         }
 
         //set dungeonName
-        dungeonName = dungeon.buildingName;
+        this.dungeon = dungeon;
 
         //get path
         List<Vector3> path = HexAStar.FindPath(tavern.exit, dungeon.entrance, bm);
@@ -215,6 +215,19 @@ public class PartyManager : MonoBehaviour
     {
         int index = Random.Range(0, collection.data.Length);
         return collection.data[index];
+    }
+
+    public bool CanHire()
+    {
+        bool canHire = dungeon == null;
+        for (int i=0; i<4 && canHire; ++i)
+        {
+            if (adventurers[i] != null)
+            {
+                canHire = canHire && adventurers[i].state == AdventurerState.Waiting;
+            }
+        }
+        return canHire;
     }
 
 
@@ -421,7 +434,87 @@ public class PartyManager : MonoBehaviour
             }
         }
 
+        //sort adventurers
+        int count = 0;
+        for (int i=0; i<4; ++i)
+        {
+            if (adventurers[i] != null)
+            {
+                Adventurer temp = adventurers[i];
+                adventurers[i] = null;
+                adventurers[count++] = temp;
+            }
+        }
+
+        ReturnParty(dungeon);
+
         fighting = false;
+        dungeon = null;
         Debug.Log("ending fight");
+    }
+
+    //dispatch party towards dungeon
+    public void ReturnParty(Dungeon dungeon)
+    {
+        Tavern tavern = GetTavern();
+
+        //check buildings
+        if (tavern == null || dungeon == null)
+        {
+            Debug.LogError("Could not retrieve valid buildings");
+            return;
+        };
+
+        //check that alladventurers are ready or fighting
+        for (int i = 0; i < 4; ++i)
+        {
+            if (adventurers[i] != null && adventurers[i].state != AdventurerState.Ready && adventurers[i].state != AdventurerState.Fighting)
+            {
+                return;
+            }
+        }
+
+        //set all adventurers to returning
+        for (int i = 0; i < 4; ++i)
+        {
+            if (adventurers[i] != null)
+            {
+                adventurers[i].state = AdventurerState.Returning;
+            }
+        }
+
+        //set dungeonName
+        this.dungeon = dungeon;
+
+        //get path
+        List<Vector3> path = HexAStar.FindPath(tavern.exit, dungeon.entrance, bm);
+        if (path.Count == 0)
+        {
+            Debug.LogWarning("Could not find valid path between Tavern and selected Dungeon");
+            return;
+        }
+
+        //start dispatch
+        StartCoroutine(ReturnRoutine(path));
+    }
+
+
+
+    //dispatch adventurers 1 by 1
+    IEnumerator ReturnRoutine(List<Vector3> path)
+    {
+        for (int i = 0; i < adventurers.Length; ++i)
+        {
+            if (adventurers[i] != null)
+            {
+                //wait for next adventurer
+                yield return new WaitForSeconds(dispatchDelay);
+
+                //create walking adventurer character
+                GameObject newAdventurer = Instantiate(adventurerPrefab, path[0], Quaternion.identity);
+                WalkingAdventurer walker = newAdventurer.GetComponent<WalkingAdventurer>();
+                walker.StartPath(adventurers[i], path);
+            }
+        }
     }
 }

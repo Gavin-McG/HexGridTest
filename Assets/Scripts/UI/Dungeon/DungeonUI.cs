@@ -78,7 +78,7 @@ public class DungeonUI : MonoBehaviour
                     panelInfo[i].SetDead();
 
                 }
-                else if (pm.dungeonName != dungeon.buildingName)
+                else if (pm.dungeon != dungeon)
                 {
                     //not ready if at another dungeon
                     panelInfo[i].SetNotReady();

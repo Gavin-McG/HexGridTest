@@ -58,4 +58,4 @@ MonoBehaviour:
   _exit:
     cubicCoord: {x: 1, y: -1, z: 0}
     isTop: 1
-  averageSkill: 1
+  averageSkill: 0.2
