@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d93bb690d6ac9498668695e161929b, type: 3}
   m_Name: Dungeon 2
   m_EditorClassIdentifier: 
-  buildingObject: {fileID: 3162296105702691095, guid: 91e97d5371e96d348981610730abe9d4, type: 3}
+  buildingObject: {fileID: 3162296105702691095, guid: 9104245d85324b34898acfbd84da5978, type: 3}
   pieces:
   - tile: {fileID: 11400000, guid: adbf388c2b7a7ca46b8f6dae5fc67b90, type: 2}
     cubicCoord: {x: 0, y: 0, z: 0}
