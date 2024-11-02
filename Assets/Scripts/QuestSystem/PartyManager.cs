@@ -9,6 +9,7 @@ using UnityEngine.Tilemaps;
 public class PartyManager : MonoBehaviour
 {
     [SerializeField] BuildingManager bm;
+    [SerializeField] ResourceManager rm;
     [SerializeField] GameObject adventurerPrefab;
     [SerializeField] AdventurerCollection collection;
 
@@ -478,6 +479,7 @@ public class PartyManager : MonoBehaviour
         if (living>0)
         {
             battleWon.Invoke();
+            rm.fossilCount++;
             ReturnParty(dungeon);
         }
         else
