@@ -50,7 +50,32 @@ MonoBehaviour:
     Magic: 120
     Wood: 80
     Stone: 80
-  upgrades: []
+  upgrades:
+  - newStructure: {fileID: 11400000, guid: e733b625285748042a2838f36aec1f19, type: 2}
+    upgradeCost:
+      Magic: 120
+      Wood: 80
+      Stone: 80
+  - newStructure: {fileID: 11400000, guid: e733b625285748042a2838f36aec1f19, type: 2}
+    upgradeCost:
+      Magic: 340
+      Wood: 120
+      Stone: 120
+  - newStructure: {fileID: 11400000, guid: e733b625285748042a2838f36aec1f19, type: 2}
+    upgradeCost:
+      Magic: 750
+      Wood: 300
+      Stone: 300
+  - newStructure: {fileID: 11400000, guid: e733b625285748042a2838f36aec1f19, type: 2}
+    upgradeCost:
+      Magic: 1700
+      Wood: 700
+      Stone: 700
+  - newStructure: {fileID: 11400000, guid: e733b625285748042a2838f36aec1f19, type: 2}
+    upgradeCost:
+      Magic: 3800
+      Wood: 1500
+      Stone: 1500
   currentStructure: {fileID: 11400000, guid: e733b625285748042a2838f36aec1f19, type: 2}
   descriptionText: Power your town with magic!
   offsetCoord: {x: 0, y: 0, z: 0}

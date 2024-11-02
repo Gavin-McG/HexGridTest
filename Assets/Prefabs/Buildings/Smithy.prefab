@@ -50,7 +50,32 @@ MonoBehaviour:
     Magic: 25
     Wood: 50
     Stone: 100
-  upgrades: []
+  upgrades:
+  - newStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
+    upgradeCost:
+      Magic: 25
+      Wood: 50
+      Stone: 100
+  - newStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
+    upgradeCost:
+      Magic: 55
+      Wood: 85
+      Stone: 300
+  - newStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
+    upgradeCost:
+      Magic: 125
+      Wood: 200
+      Stone: 650
+  - newStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
+    upgradeCost:
+      Magic: 275
+      Wood: 450
+      Stone: 1400
+  - newStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
+    upgradeCost:
+      Magic: 650
+      Wood: 1000
+      Stone: 3200
   currentStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
   descriptionText: Arm your adventurers and produce gold!
   offsetCoord: {x: 0, y: 0, z: 0}

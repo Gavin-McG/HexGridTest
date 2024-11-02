@@ -27,9 +27,9 @@ public struct Upgrade
 
 public abstract class Building : MonoBehaviour
 {
-    private ResourceManager rm; //Checks if an upgrade can be bought
+    protected ResourceManager rm; //Checks if an upgrade can be bought
 
-    void Start()
+    void Awake()
     {
         rm = FindObjectOfType<ResourceManager>();
     }

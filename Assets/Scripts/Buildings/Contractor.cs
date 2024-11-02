@@ -22,9 +22,10 @@ public class Contractor : Building
     private int stoneProduction = 1;
     private List<float> buildingLevelCosts = new List<float>{ -1f, -1f, -1f, -1f, -1f };
 
-    void Awake()
+    void Start()
     {
         UpgradeEvent.AddListener(OnUpgrade);
+        rm.RegisterBuilding(this, new Resources(0,0, stoneProduction));
     }
 
     /* Holds all the data for each upgrade(-1 means that level is not unlocked yet)
