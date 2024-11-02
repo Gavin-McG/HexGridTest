@@ -480,6 +480,7 @@ public class PartyManager : MonoBehaviour
         {
             battleWon.Invoke();
             rm.fossilCount++;
+            rm.currentResource.Gold += Random.Range(200, 400);
             ReturnParty(dungeon);
         }
         else
