@@ -11,6 +11,7 @@ public class Smithy : Building
     private void Start()
     {
         UpgradeEvent.AddListener(OnUpgrade);
+        rm.RegisterBuilding(this, new Resources(0, 0, 0, goldProduction));
     }
 
     public override BuildingType type => BuildingType.Smithy;

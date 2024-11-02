@@ -23,6 +23,7 @@ public class ResourceManager : MonoBehaviour
         currentResource += cost * refundRate;
     }
 
+    //I might need an UpdateBuilding for when the buildings are upgraded - CS
     public void RegisterBuilding(Building building, Resources productionAmount)
     {
         StartCoroutine(ProduceResources(building, productionAmount));
