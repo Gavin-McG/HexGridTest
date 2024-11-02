@@ -12,6 +12,7 @@ public class ResourceUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI MagicText;
     [SerializeField] TextMeshProUGUI WoodText;
     [SerializeField] TextMeshProUGUI StoneText;
+    [SerializeField] TextMeshProUGUI fossilText;
 
     // Update is called once per frame
     void Update()
@@ -19,5 +20,6 @@ public class ResourceUI : MonoBehaviour
         MagicText.text = rm.currentResource.Magic.ToString();
         WoodText.text = rm.currentResource.Wood.ToString();
         StoneText.text = rm.currentResource.Stone.ToString();
+        fossilText.text = rm.fossilCount.ToString();
     }
 }
