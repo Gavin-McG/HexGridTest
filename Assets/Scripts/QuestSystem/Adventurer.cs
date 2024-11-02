@@ -28,10 +28,11 @@ public enum ClassType
 public enum AdventurerState
 {
     Waiting,
-    Dispatching,
+    Travelling,
     Ready,
+    Returning,
     Fighting,
-    Returning
+    Dead
 }
 
 [System.Serializable]
@@ -41,6 +42,7 @@ public class Adventurer
     public AdventurerInfo info;
     public AdventurerState state;
     public string name;
+    public float health;
 
     public Adventurer(Skills skills, AdventurerInfo info, string name)
     {
@@ -48,5 +50,6 @@ public class Adventurer
         this.info = info;
         this.state = AdventurerState.Waiting;
         this.name = name;
+        this.health = 100;
     }
 }

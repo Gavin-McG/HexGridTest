@@ -18,7 +18,6 @@ public class HireUI : MonoBehaviour
 
     private void Awake()
     {
-        UIManager.closeAllUI.AddListener(CloseUI);
         adventurers = new Adventurer[hirePanels.Length];
         UpdateSelections();
     }
@@ -26,9 +25,15 @@ public class HireUI : MonoBehaviour
 
     private void OnEnable()
     {
+        UIManager.closeAllUI.AddListener(CloseUI);
+
         UpdateUI();
     }
 
+    private void OnDisable()
+    {
+        UIManager.closeAllUI.RemoveListener(CloseUI);
+    }
 
     private void UpdateUI()
     {
@@ -38,6 +43,20 @@ public class HireUI : MonoBehaviour
             hirePanels[i].SetHead(adventurers[i].info.headSprite);
             hirePanels[i].SetName(adventurers[i].name);
             hirePanels[i].SetSkills(adventurers[i].skills);
+
+            //update class image
+            switch (adventurers[i].info.classType)
+            {
+                case ClassType.Warrior:
+                    hirePanels[i].SetClass("Warrior", pm.warriorColor);
+                    break;
+                case ClassType.Archer:
+                    hirePanels[i].SetClass("Archer", pm.archerColor);
+                    break;
+                case ClassType.Mage:
+                    hirePanels[i].SetClass("Mage", pm.mageColor);
+                    break;
+            }
         }
     }
 

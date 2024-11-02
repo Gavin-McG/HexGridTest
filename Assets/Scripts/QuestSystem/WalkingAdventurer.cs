@@ -65,6 +65,7 @@ public class WalkingAdventurer : MonoBehaviour
 
     private void EndRoute()
     {
+        PartyManager.adventurerArrived.Invoke(adventurer);
         Destroy(gameObject);
     }
 

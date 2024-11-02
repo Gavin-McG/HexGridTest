@@ -15,4 +15,10 @@ MonoBehaviour:
   data:
   - headSprite: {fileID: 21300000, guid: 5a77322b25f82c445a4ba3faec3fd6f8, type: 3}
     bodySprite: {fileID: 21300000, guid: c69600d86cfaabd45aa8ce2a9bfdb004, type: 3}
+    classType: 2
+  - headSprite: {fileID: 21300000, guid: 59b4ca90f70e62c4eb4eb8749572caef, type: 3}
+    bodySprite: {fileID: 21300000, guid: 337b8ea6884b9a24f8b46f50b167b502, type: 3}
+    classType: 1
+  - headSprite: {fileID: 21300000, guid: d26a4e3f11cfec744b54bd0c9e34da37, type: 3}
+    bodySprite: {fileID: 21300000, guid: 568d1ec8235df5c40a85ce552a81247a, type: 3}
     classType: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,16 +19,18 @@ public class TavernUI : MonoBehaviour
     [SerializeField] GameObject[] adventurerPanels;
     [SerializeField] GameObject[] hirePanels;
 
+    [Space(10)]
+
+    [SerializeField] float updateRate = 0.5f;
 
     AdventurerPanel[] panelInfo;
+    float lastUpdate = 0;
 
-    private void Start()
-    {
-        UIManager.closeAllUI.AddListener(CloseUI);
-    }
 
     private void OnEnable()
     {
+        UIManager.closeAllUI.AddListener(CloseUI);
+
         //check UI sizes
         Debug.Assert(adventurerPanels.Length == 4);
         Debug.Assert(hirePanels.Length == 4);
@@ -43,8 +46,25 @@ public class TavernUI : MonoBehaviour
         UpdateUI();
     }
 
+    private void OnDisable()
+    {
+        UIManager.closeAllUI.RemoveListener(CloseUI);
+    }
+
+    private void Update()
+    {
+        if (Time.time >= lastUpdate + updateRate) 
+        {
+            UpdateUI();
+        }
+    }
+
     void UpdateUI()
     {
+        //update time
+        lastUpdate = Time.time;
+
+        //update ui elements
         for (int i=0; i<4; ++i)
         {
             Adventurer adventurer = pm.GetAdventurer(i);
@@ -58,12 +78,55 @@ public class TavernUI : MonoBehaviour
                 panelInfo[i].SetHead(adventurer.info.headSprite);
                 panelInfo[i].SetName(adventurer.name);
                 panelInfo[i].SetSkills(adventurer.skills);
+
+                //update class image
+                switch (adventurer.info.classType)
+                {
+                    case ClassType.Warrior:
+                        panelInfo[i].SetClass("Warrior", pm.warriorColor);
+                        break;
+                    case ClassType.Archer:
+                        panelInfo[i].SetClass("Archer", pm.archerColor);
+                        break;
+                    case ClassType.Mage:
+                        panelInfo[i].SetClass("Mage", pm.mageColor);
+                        break;
+                }
+
+                //update state image
+                switch (adventurer.state)
+                {
+                    case AdventurerState.Waiting:
+                        panelInfo[i].SetState("Waiting", pm.waitingColor);
+                        break;
+                    case AdventurerState.Travelling:
+                        panelInfo[i].SetState("Travelling", pm.travellingColor);
+                        break;
+                    case AdventurerState.Ready:
+                        panelInfo[i].SetState("Ready", pm.readyColor);
+                        break;
+                    case AdventurerState.Returning:
+                        panelInfo[i].SetState("Returning", pm.returningColor);
+                        break;
+                    case AdventurerState.Fighting:
+                        panelInfo[i].SetState("Fighting", pm.fightingColor);
+                        break;
+                    case AdventurerState.Dead:
+                        panelInfo[i].SetState("Dead", pm.deadColor);
+                        break;
+                }
+            }
+            else if ((i == 0 || pm.GetAdventurer(i-1)!=null) && pm.CanHire())
+            {
+                //enable correct panel
+                adventurerPanels[i].SetActive(false);
+                hirePanels[i].SetActive(true);
             }
             else
             {
                 //enable correct panel
                 adventurerPanels[i].SetActive(false);
-                hirePanels[i].SetActive(true);
+                hirePanels[i].SetActive(false);
             }
         }
     }
@@ -71,6 +134,7 @@ public class TavernUI : MonoBehaviour
 
     public void startDispatch(string dungeonName)
     {
+        //find correcct dungeon
         List<Building> buildings = bm.GetBuildingsOfType(BuildingType.Dungeon);
         foreach (Building building in buildings)
         {
