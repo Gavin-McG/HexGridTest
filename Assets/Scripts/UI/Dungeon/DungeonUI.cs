@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DungeonUI : MonoBehaviour
@@ -10,6 +11,10 @@ public class DungeonUI : MonoBehaviour
 
     [SerializeField] GameObject[] fighterPanels;
     [SerializeField] GameObject startButton;
+    [SerializeField] RectTransform progressBackground;
+    [SerializeField] RectTransform progressBar;
+    [SerializeField] RectTransform eventPanel;
+    [SerializeField] RectTransform[] textPositions;
 
     [Space(10)]
 
@@ -18,10 +23,22 @@ public class DungeonUI : MonoBehaviour
     [HideInInspector] public Dungeon dungeon;
     FighterPanel[] panelInfo;
     float lastUpdate = 0;
+    TextPanel[] textPanels;
+
+    private void Awake()
+    {
+        textPanels = new TextPanel[textPositions.Length];
+        for (int i=0; i<textPositions.Length; i++)
+        {
+            textPanels[i] = textPositions[i].GetComponent<TextPanel>();
+        }
+    }
 
     private void OnEnable()
     {
         UIManager.closeAllUI.AddListener(CloseUI);
+        PartyManager.fightEvent.AddListener(newTextEvent);
+        PartyManager.battleFinished.AddListener(ClearText);
 
         //check UI sizes
         Debug.Assert(fighterPanels.Length == 4);
@@ -34,12 +51,15 @@ public class DungeonUI : MonoBehaviour
         }
 
         //initial UI state
+        ClearText();
         UpdateUI();
     }
 
     private void OnDisable()
     {
         UIManager.closeAllUI.RemoveListener(CloseUI);
+        PartyManager.fightEvent.RemoveListener(newTextEvent);
+        PartyManager.battleFinished.RemoveListener(ClearText);
     }
 
     private void Update()
@@ -126,12 +146,47 @@ public class DungeonUI : MonoBehaviour
         //startButton
         canStart = canStart && adventurerCount > 0;
         startButton.SetActive(canStart);
+
+        //progress bar
+        if (dungeon == pm.dungeon)
+        {
+            progressBar.sizeDelta = new Vector2(progressBackground.sizeDelta.x * pm.progress, progressBackground.sizeDelta.y);
+        }
+        else
+        {
+            progressBar.sizeDelta = Vector2.zero;
+        }
+        
     }
 
     public void StartFight()
     {
         pm.StartFight(dungeon.difficulty);
         UpdateUI();
+    }
+
+    void newTextEvent(string text)
+    {
+        if (pm.dungeon != dungeon) return;
+
+        for (int i=textPanels.Length-1; i>0; i--)
+        {
+            if (textPanels[i-1].gameObject.activeSelf)
+            {
+                textPanels[i].gameObject.SetActive(true);
+            }
+            textPanels[i].text.text = textPanels[i - 1].text.text;
+        }
+        textPanels[0].text.text = text;
+        textPanels[0].gameObject.SetActive(true);
+    }
+
+    public void ClearText()
+    {
+        for (int i=0; i<textPanels.Length; i++)
+        {
+            textPanels[i].gameObject.SetActive(false);
+        }
     }
 
     public void CloseUI()

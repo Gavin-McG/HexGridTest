@@ -21,6 +21,7 @@ public class PartyManager : MonoBehaviour
 
     [Space(10)]
 
+    //adventurer state colors
     [SerializeField] public Color waitingColor = Color.yellow;
     [SerializeField] public Color travellingColor = Color.blue;
     [SerializeField] public Color readyColor = Color.green;
@@ -30,15 +31,18 @@ public class PartyManager : MonoBehaviour
 
     [Space(10)]
 
+    //adventurer class colors
     [SerializeField] public Color warriorColor = Color.red;
     [SerializeField] public Color archerColor = Color.green;
     [SerializeField] public Color mageColor = Color.magenta;
 
     //party
     Adventurer[] adventurers = {null,null,null,null};
-
-    public Dungeon dungeon = null;
-    public bool fighting = false;
+    
+    //fighting variables
+    [HideInInspector] public Dungeon dungeon = null;
+    [HideInInspector] public bool fighting = false;
+    [HideInInspector] public float progress = 0;
 
     //events
     public static UnityEvent adventurerHired = new UnityEvent();
@@ -46,10 +50,13 @@ public class PartyManager : MonoBehaviour
 
     public static UnityEvent<Adventurer> adventurerArrived = new UnityEvent<Adventurer>();
     public static UnityEvent<Adventurer> adventurerReturned = new UnityEvent<Adventurer>();
+
+    public static UnityEvent<string> fightEvent = new UnityEvent<string>();
     public static UnityEvent<Adventurer> adventurerKilled = new UnityEvent<Adventurer>();
 
     public static UnityEvent battleWon = new UnityEvent();
     public static UnityEvent battleLost = new UnityEvent();
+    public static UnityEvent battleFinished = new UnityEvent();
 
 
     private void Start()
@@ -389,16 +396,19 @@ public class PartyManager : MonoBehaviour
         }
 
         //run fight loop
-        float progress = 0;
+        progress = 0;
         while (progress < 1 && living > 0)
         {
             yield return new WaitForSeconds(fightDelay);
 
+            string eventText = null;
             if (IsSuccess(GetPartyStrength(), difficulty, 0.03f))
             {
                 //party succeeded test
                 progress += 0.05f;
-                Debug.Log("success " + progress);
+
+                //TODO random output text
+                eventText = "success " + Mathf.Round(progress*100)/100;
             }
             else
             {
@@ -426,8 +436,13 @@ public class PartyManager : MonoBehaviour
                     adventurerKilled.Invoke(adventurers[randomIndex]);
                 }
 
-                Debug.Log("Adventurer " + randomIndex + " Hurt for " + (randomDamage * 100));
+                //TODO random output text
+                eventText = "Adventurer " + randomIndex + " Hurt for " + randomDamage;
             }
+
+            //new fight event
+            fightEvent.Invoke(eventText);
+            Debug.Log(eventText);
         }
 
         //clear dead adventurers and regen
@@ -459,6 +474,7 @@ public class PartyManager : MonoBehaviour
         }
 
         //win/loss
+        battleFinished.Invoke();
         if (living>0)
         {
             battleWon.Invoke();
@@ -470,6 +486,7 @@ public class PartyManager : MonoBehaviour
             dungeon = null;
         }
 
+        progress = 0;
         fighting = false;
         Debug.Log("ending fight");
     }
