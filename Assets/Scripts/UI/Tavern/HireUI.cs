@@ -5,11 +5,13 @@ using UnityEngine;
 public class HireUI : MonoBehaviour
 {
     [SerializeField] PartyManager pm;
+    [SerializeField] ResourceManager rm;
     [SerializeField] TavernUI tavernUI;
 
     [Space(10)]
 
     [SerializeField] AdventurerHirePanel[] hirePanels;
+    [SerializeField] Resources hireCost;
 
 
     [HideInInspector] public int currentHireSlot = 0;
@@ -72,6 +74,10 @@ public class HireUI : MonoBehaviour
 
     public void HireAdventurer(int adventurerNum)
     {
+        //check cost
+        if (!rm.CanAfford(hireCost)) return;
+        rm.Charge(hireCost);
+
         //hire adventurer
         pm.HireAdventurer(currentHireSlot,adventurers[adventurerNum]);
 
