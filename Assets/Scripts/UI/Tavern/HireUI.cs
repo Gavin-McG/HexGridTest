@@ -5,11 +5,13 @@ using UnityEngine;
 public class HireUI : MonoBehaviour
 {
     [SerializeField] PartyManager pm;
+    [SerializeField] ResourceManager rm;
     [SerializeField] TavernUI tavernUI;
 
     [Space(10)]
 
     [SerializeField] AdventurerHirePanel[] hirePanels;
+    [SerializeField] Resources hireCost;
 
 
     [HideInInspector] public int currentHireSlot = 0;
@@ -18,7 +20,6 @@ public class HireUI : MonoBehaviour
 
     private void Awake()
     {
-        UIManager.closeAllUI.AddListener(CloseUI);
         adventurers = new Adventurer[hirePanels.Length];
         UpdateSelections();
     }
@@ -26,9 +27,15 @@ public class HireUI : MonoBehaviour
 
     private void OnEnable()
     {
+        UIManager.closeAllUI.AddListener(CloseUI);
+
         UpdateUI();
     }
 
+    private void OnDisable()
+    {
+        UIManager.closeAllUI.RemoveListener(CloseUI);
+    }
 
     private void UpdateUI()
     {
@@ -38,6 +45,20 @@ public class HireUI : MonoBehaviour
             hirePanels[i].SetHead(adventurers[i].info.headSprite);
             hirePanels[i].SetName(adventurers[i].name);
             hirePanels[i].SetSkills(adventurers[i].skills);
+
+            //update class image
+            switch (adventurers[i].info.classType)
+            {
+                case ClassType.Warrior:
+                    hirePanels[i].SetClass("Warrior", pm.warriorColor);
+                    break;
+                case ClassType.Archer:
+                    hirePanels[i].SetClass("Archer", pm.archerColor);
+                    break;
+                case ClassType.Mage:
+                    hirePanels[i].SetClass("Mage", pm.mageColor);
+                    break;
+            }
         }
     }
 
@@ -53,6 +74,10 @@ public class HireUI : MonoBehaviour
 
     public void HireAdventurer(int adventurerNum)
     {
+        //check cost
+        if (!rm.CanAfford(hireCost)) return;
+        rm.Charge(hireCost);
+
         //hire adventurer
         pm.HireAdventurer(currentHireSlot,adventurers[adventurerNum]);
 

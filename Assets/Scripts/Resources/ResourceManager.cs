@@ -1,14 +1,9 @@
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
-
 
 public class ResourceManager : MonoBehaviour
 {
     public Resources currentResource;
+    public int fossilCount = 0;
     public float refundRate = 1f;
     [SerializeField] float productionRate = 5f;
     
