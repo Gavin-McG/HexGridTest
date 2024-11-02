@@ -11,7 +11,7 @@ public class WizardTower : Building
     private void Start()
     {
         UpgradeEvent.AddListener(OnUpgrade);
-        rm.RegisterBuilding(this, new Resources(magicProduction, 0, 0));
+        rm.RegisterBuilding(this, new Resources(magicProduction, 0, 0, 0));
     }
 
     public override BuildingType type => BuildingType.WizardTower;

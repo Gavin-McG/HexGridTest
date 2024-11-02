@@ -25,7 +25,7 @@ public class Contractor : Building
     void Start()
     {
         UpgradeEvent.AddListener(OnUpgrade);
-        rm.RegisterBuilding(this, new Resources(0,0, stoneProduction));
+        rm.RegisterBuilding(this, new Resources(0,0, stoneProduction, 0));
     }
 
     /* Holds all the data for each upgrade(-1 means that level is not unlocked yet)
