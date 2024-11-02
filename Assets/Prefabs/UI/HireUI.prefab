@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7358188519236459143
 RectTransform:
   m_ObjectHideFlags: 0
@@ -100,12 +100,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pm: {fileID: 0}
+  rm: {fileID: 0}
   tavernUI: {fileID: 0}
   hirePanels:
   - {fileID: 4025754260424106529}
   - {fileID: 445672688480582988}
   - {fileID: 8217686543767285734}
   - {fileID: 8498008966979189054}
+  hireCost:
+    Magic: 0
+    Wood: 0
+    Stone: 0
+    Gold: 50
   currentHireSlot: 0
 --- !u!1 &5620512283874052857
 GameObject:
