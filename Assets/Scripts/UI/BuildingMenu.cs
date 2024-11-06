@@ -28,6 +28,16 @@ public class BuildingMenu : MonoBehaviour
         buildButton.onClick.AddListener(OnBuildButtonClick);
     }
 
+    private void OnEnable()
+    {
+        UIManager.UIOpened.Invoke();
+    }
+
+    private void OnDisable()
+    {
+        UIManager.UIClosed.Invoke();
+    }
+
     public void OnClick(Building building)
     {
         curBuilding = building;

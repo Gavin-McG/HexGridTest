@@ -45,12 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingName: Dungeon 2
-  canDestroy: 1
+  canDestroy: 0
   buildCost:
     Magic: 0
     Wood: 0
     Stone: 0
-  level: 0
+    Gold: 0
   upgrades: []
   currentStructure: {fileID: 11400000, guid: a9fe115ba2b1ca54da5be2957a7c047c, type: 2}
   descriptionText: 
