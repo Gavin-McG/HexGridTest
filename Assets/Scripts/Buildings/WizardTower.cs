@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class WizardTower : Building
 {
+    [SerializeField] public int buildRange = 4;
     private float radius = 1f;
     private int magicProduction = 1;
 

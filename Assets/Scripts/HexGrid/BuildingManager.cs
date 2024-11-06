@@ -473,7 +473,7 @@ public class BuildingManager : MonoBehaviour
                 if (tile is BuildingSpawnTile spawnTile)
                 {
                     objectMap.SetTile(tileOffset, null);
-                    if (!PlaceBuilding(tileOffset, spawnTile.building.currentStructure, false, false))
+                    if (!PlaceBuilding(tileOffset, spawnTile.building.currentStructure, true, false))
                     {
                         Debug.LogError("Could not place " + spawnTile.building.name + " at offset coordinate " + tileOffset);
                     }
