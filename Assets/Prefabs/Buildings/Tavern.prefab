@@ -50,10 +50,10 @@ MonoBehaviour:
     Magic: 20
     Wood: 300
     Stone: 300
-  level: 0
+    Gold: 0
   upgrades: []
   currentStructure: {fileID: 11400000, guid: de16714221b76b64ba1deac48aff55d9, type: 2}
-  descriptionText: This is the Main Tower!
+  descriptionText: Form a Team of adventurers to conquer dungeons
   offsetCoord: {x: 0, y: 0, z: 0}
   _exit:
     cubicCoord: {x: 1, y: -1, z: 0}
