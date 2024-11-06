@@ -11,6 +11,7 @@ public class DungeonUI : MonoBehaviour
 
     [SerializeField] GameObject[] fighterPanels;
     [SerializeField] GameObject startButton;
+    [SerializeField] GameObject returnButton;
     [SerializeField] RectTransform progressBackground;
     [SerializeField] RectTransform progressBar;
     [SerializeField] RectTransform eventPanel;
@@ -148,13 +149,25 @@ public class DungeonUI : MonoBehaviour
         }
 
         //start Button
-        startButton.SetActive(pm.CanFight(dungeon));
+        bool canFight = pm.CanFight(dungeon);
+        startButton.SetActive(canFight);
+        returnButton.SetActive(canFight);
     }
 
     public void StartFight()
     {
         pm.StartFight(dungeon.difficulty);
         UpdateUI();
+    }
+
+    public void ReturnAdventurers()
+    {
+        //check that adventurers can fight
+        if (!pm.CanFight(dungeon)) return;
+
+        pm.ReturnParty(dungeon);
+
+        CloseUI();
     }
 
     void newTextEvent(string text)
