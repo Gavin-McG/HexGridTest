@@ -39,6 +39,8 @@ public class CameraManager : MonoBehaviour
     private InputAction clickAction;
     private InputAction zoomAction;
 
+    bool operateCamera = true;
+
     private void Awake()
     {
         cam = Camera.main;
@@ -54,6 +56,9 @@ public class CameraManager : MonoBehaviour
         clickAction = playerInput.actions["Select"];
         zoomAction = playerInput.actions["Zoom"];
 
+        UIManager.UIOpened.AddListener(DisableCamera);
+        UIManager.UIClosed.AddListener(EnableCamera);
+
         //Define functions for when each action is taken
         clickAction.started += _ => OnClickPerformed();
         clickAction.canceled += _ => OnClickReleased();
@@ -62,6 +67,9 @@ public class CameraManager : MonoBehaviour
 
     private void OnDisable()
     {
+        UIManager.UIOpened.RemoveListener(DisableCamera);
+        UIManager.UIClosed.RemoveListener(EnableCamera);
+
         //remove functions for when each action is taken
         clickAction.started -= _ => OnClickPerformed();
         clickAction.canceled -= _ => OnClickReleased();
@@ -70,7 +78,7 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        if (Application.isFocused)
+        if (Application.isFocused && operateCamera)
         {
             //Changed from Input.MousePosition and calculate every frame since it's used a lot
             mousePos = Mouse.current.position.ReadValue();
@@ -128,9 +136,12 @@ public class CameraManager : MonoBehaviour
     //Callback function for the zoom input
     void HandleScrollInput(float scrollDelta)
     {
-        //calculate new size
-        float newCamSize = goalCamSize - scrollDelta;
-        goalCamSize = Mathf.Clamp(newCamSize, camSizeBounds.x, camSizeBounds.y);
+        if (operateCamera)
+        {
+            //calculate new size
+            float newCamSize = goalCamSize - scrollDelta;
+            goalCamSize = Mathf.Clamp(newCamSize, camSizeBounds.x, camSizeBounds.y);
+        }
     }
 
 
@@ -158,5 +169,19 @@ public class CameraManager : MonoBehaviour
         float y = Mathf.Clamp(camObject.transform.position.y, camBoundsY.x, camBoundsY.y);
         float z = camObject.transform.position.z;
         camObject.transform.position = new Vector3(x, y, z);
+    }
+
+
+
+    //enable camera controls
+    void EnableCamera()
+    {
+        operateCamera = true;
+    }
+
+    //disable camera controls
+    void DisableCamera()
+    {
+        operateCamera = false;
     }
 }

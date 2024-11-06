@@ -40,6 +40,8 @@ public class DungeonUI : MonoBehaviour
         PartyManager.fightEvent.AddListener(newTextEvent);
         PartyManager.battleFinished.AddListener(ClearText);
 
+        UIManager.UIOpened.Invoke();
+
         //check UI sizes
         Debug.Assert(fighterPanels.Length == 4);
 
@@ -60,6 +62,8 @@ public class DungeonUI : MonoBehaviour
         UIManager.closeAllUI.RemoveListener(CloseUI);
         PartyManager.fightEvent.RemoveListener(newTextEvent);
         PartyManager.battleFinished.RemoveListener(ClearText);
+
+        UIManager.UIClosed.Invoke();
     }
 
     private void Update()

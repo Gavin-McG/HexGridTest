@@ -29,12 +29,16 @@ public class HireUI : MonoBehaviour
     {
         UIManager.closeAllUI.AddListener(CloseUI);
 
+        UIManager.UIOpened.Invoke();
+
         UpdateUI();
     }
 
     private void OnDisable()
     {
         UIManager.closeAllUI.RemoveListener(CloseUI);
+
+        UIManager.UIClosed.Invoke();
     }
 
     private void UpdateUI()

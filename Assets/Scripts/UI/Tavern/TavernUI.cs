@@ -31,6 +31,8 @@ public class TavernUI : MonoBehaviour
     {
         UIManager.closeAllUI.AddListener(CloseUI);
 
+        UIManager.UIOpened.Invoke();
+
         //check UI sizes
         Debug.Assert(adventurerPanels.Length == 4);
         Debug.Assert(hirePanels.Length == 4);
@@ -49,6 +51,8 @@ public class TavernUI : MonoBehaviour
     private void OnDisable()
     {
         UIManager.closeAllUI.RemoveListener(CloseUI);
+
+        UIManager.UIClosed.Invoke();
     }
 
     private void Update()

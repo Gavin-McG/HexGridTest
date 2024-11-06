@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
 
     //events
     public static UnityEvent UIOpened = new UnityEvent();
+    public static UnityEvent UIClosed = new UnityEvent();
 
     private void OnEnable()
     {
@@ -28,7 +29,6 @@ public class UIManager : MonoBehaviour
     {
         //event calls
         closeAllUI.Invoke();
-        UIOpened.Invoke();
 
         //open correct UI
         switch (building.type) 
