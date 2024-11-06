@@ -43,7 +43,7 @@ public class HireUI : MonoBehaviour
 
     private void UpdateUI()
     {
-        for (int i = 0; i < adventurers.Length; ++i)
+        for (int i=0; i<adventurers.Length; ++i)
         {
             //update panel data
             hirePanels[i].SetHead(adventurers[i].info.headSprite);
@@ -69,7 +69,7 @@ public class HireUI : MonoBehaviour
 
     private void UpdateSelections()
     {
-        for (int i = 0; i<adventurers.Length; ++i)
+        for (int i=0; i<adventurers.Length; ++i)
         {
             adventurers[i] = pm.GenerateAdevnturer();
         }

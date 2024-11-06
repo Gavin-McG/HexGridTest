@@ -34,11 +34,11 @@ public class TavernUI : MonoBehaviour
         UIManager.UIOpened.Invoke();
 
         //check UI sizes
-        Debug.Assert(adventurerPanels.Length == 4);
-        Debug.Assert(hirePanels.Length == 4);
+        Debug.Assert(adventurerPanels.Length == pm.adventurers.Length);
+        Debug.Assert(hirePanels.Length == pm.adventurers.Length);
 
-        panelInfo = new AdventurerPanel[4];
-        for (int i=0; i<4; i++)
+        panelInfo = new AdventurerPanel[pm.adventurers.Length];
+        for (int i=0; i<pm.adventurers.Length; i++)
         {
             //get adventurer panels
             panelInfo[i] = adventurerPanels[i].GetComponent<AdventurerPanel>();
@@ -69,9 +69,9 @@ public class TavernUI : MonoBehaviour
         lastUpdate = Time.time;
 
         //update ui elements
-        for (int i=0; i<4; ++i)
+        for (int i=0; i<pm.adventurers.Length; ++i)
         {
-            Adventurer adventurer = pm.GetAdventurer(i);
+            Adventurer adventurer = pm.adventurers[i];
             if (adventurer != null)
             {
                 //enable correct panel
@@ -120,7 +120,7 @@ public class TavernUI : MonoBehaviour
                         break;
                 }
             }
-            else if ((i == 0 || pm.GetAdventurer(i-1)!=null) && pm.CanHire())
+            else if ((i == 0 || pm.adventurers[i-1]!=null) && pm.CanHire())
             {
                 //enable correct panel
                 adventurerPanels[i].SetActive(false);
@@ -138,6 +138,9 @@ public class TavernUI : MonoBehaviour
 
     public void startDispatch(string dungeonName)
     {
+        //check validity
+        if (!pm.CanDispatch()) return;
+
         //find correcct dungeon
         List<Building> buildings = bm.GetBuildingsOfType(BuildingType.Dungeon);
         foreach (Building building in buildings)

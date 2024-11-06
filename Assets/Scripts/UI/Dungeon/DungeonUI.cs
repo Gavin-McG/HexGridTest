@@ -43,10 +43,10 @@ public class DungeonUI : MonoBehaviour
         UIManager.UIOpened.Invoke();
 
         //check UI sizes
-        Debug.Assert(fighterPanels.Length == 4);
+        Debug.Assert(fighterPanels.Length == pm.adventurers.Length);
 
-        panelInfo = new FighterPanel[4];
-        for (int i = 0; i < 4; i++)
+        panelInfo = new FighterPanel[pm.adventurers.Length];
+        for (int i=0; i<pm.adventurers.Length; i++)
         {
             //get adventurer panels
             panelInfo[i] = fighterPanels[i].GetComponent<FighterPanel>();
@@ -79,14 +79,9 @@ public class DungeonUI : MonoBehaviour
         //update time
         lastUpdate = Time.time;
 
-        Debug.Assert(panelInfo.Length == 4);
-
-        bool canStart = !pm.fighting;
-
-        int adventurerCount = 0;
-        for (int i=0; i<4; ++i)
+        for (int i=0; i<pm.adventurers.Length; ++i)
         {
-            Adventurer adventurer = pm.GetAdventurer(i);
+            Adventurer adventurer = pm.adventurers[i];
             if (adventurer != null)
             {
                 fighterPanels[i].SetActive(true);
@@ -107,7 +102,6 @@ public class DungeonUI : MonoBehaviour
                 {
                     //not ready if at another dungeon
                     panelInfo[i].SetNotReady();
-                    canStart = false;
                 }
                 else if (adventurer.state == AdventurerState.Fighting)
                 {
@@ -121,7 +115,6 @@ public class DungeonUI : MonoBehaviour
                 else
                 {
                     panelInfo[i].SetNotReady();
-                    canStart = false;
                 }
 
                 //update class image
@@ -137,19 +130,12 @@ public class DungeonUI : MonoBehaviour
                         panelInfo[i].SetClass("Mage", pm.mageColor);
                         break;
                 }
-
-                adventurerCount++;
-
             }
             else
             {
                 fighterPanels[i].SetActive(false);
             }
         }
-
-        //startButton
-        canStart = canStart && adventurerCount > 0;
-        startButton.SetActive(canStart);
 
         //progress bar
         if (dungeon == pm.dungeon)
@@ -160,7 +146,9 @@ public class DungeonUI : MonoBehaviour
         {
             progressBar.sizeDelta = Vector2.zero;
         }
-        
+
+        //start Button
+        startButton.SetActive(pm.CanFight(dungeon));
     }
 
     public void StartFight()

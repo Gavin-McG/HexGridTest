@@ -1,10 +1,10 @@
-using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Tilemaps;
+
+using Random = UnityEngine.Random;
 
 public class PartyManager : MonoBehaviour
 {
@@ -38,7 +38,7 @@ public class PartyManager : MonoBehaviour
     [SerializeField] public Color mageColor = Color.magenta;
 
     //party
-    Adventurer[] adventurers = {null,null,null,null};
+    [NonSerialized] public Adventurer[] adventurers = {null,null,null,null};
     
     //fighting variables
     [HideInInspector] public Dungeon dungeon = null;
@@ -58,16 +58,6 @@ public class PartyManager : MonoBehaviour
     public static UnityEvent battleWon = new UnityEvent();
     public static UnityEvent battleLost = new UnityEvent();
     public static UnityEvent battleFinished = new UnityEvent();
-
-
-    private void Start()
-    {
-        adventurers = new Adventurer[4];
-        for (int i=0; i<4; ++i)
-        {
-            adventurers[i] = null;
-        }
-    }
 
     private void OnEnable()
     {
@@ -124,17 +114,11 @@ public class PartyManager : MonoBehaviour
             return;
         };
 
-        //check that alladventurers are waiting
-        for (int i = 0; i < 4; ++i)
-        {
-            if (adventurers[i] != null && adventurers[i].state != AdventurerState.Waiting)
-            {
-                return;
-            }
-        }
+        //check that adventurers canbe dispatched
+        if (!CanDispatch()) return;
 
         //set all adventurers to travelling
-        for (int i = 0; i < 4; ++i)
+        for (int i = 0; i < adventurers.Length; ++i)
         {
             if (adventurers[i] != null) 
             {
@@ -230,10 +214,23 @@ public class PartyManager : MonoBehaviour
         return collection.data[index];
     }
 
+    public int AdventurerCount()
+    {
+        int adventurerCount = 0;
+        for (int i=0; i<adventurers.Length; ++i)
+        {
+            if (adventurers[i] != null && adventurers[i].state != AdventurerState.Dead)
+            {
+                ++adventurerCount;
+            }
+        }
+        return adventurerCount;
+    }
+
     public bool CanHire()
     {
         bool canHire = dungeon == null;
-        for (int i=0; i<4 && canHire; ++i)
+        for (int i=0; i<adventurers.Length && canHire; ++i)
         {
             if (adventurers[i] != null)
             {
@@ -243,10 +240,51 @@ public class PartyManager : MonoBehaviour
         return canHire;
     }
 
+    public bool CanDispatch()
+    {
+        bool canDispatch = true;
+        for (int i=0; i<adventurers.Length && canDispatch; ++i)
+        {
+            if (adventurers[i] != null)
+            {
+                canDispatch = adventurers[i].state == AdventurerState.Waiting;
+            }
+        }
+        return canDispatch && AdventurerCount() > 0;
+    }
+
+    public bool CanFight(Dungeon dungeon)
+    {
+        if (dungeon != this.dungeon) return false;
+
+        bool canFight = true;
+        for (int i = 0; i < adventurers.Length && canFight; ++i)
+        {
+            if (adventurers[i] != null)
+            {
+                canFight = adventurers[i].state == AdventurerState.Ready;
+            }
+        }
+        return canFight && AdventurerCount() > 0;
+    }
+
+    public bool CanReturn()
+    {
+        bool canReturn = true;
+        for (int i = 0; i < adventurers.Length && canReturn; ++i)
+        {
+            if (adventurers[i] != null)
+            {
+                canReturn = adventurers[i].state == AdventurerState.Ready || adventurers[i].state == AdventurerState.Fighting;
+            }
+        }
+        return canReturn && AdventurerCount() > 0;
+    }
+
 
     void FinishedPath(Adventurer adventurer)
     {
-        for (int i=0; i<4; i++)
+        for (int i=0; i<adventurers.Length; i++)
         {
             if (adventurer == adventurers[i])
             {
@@ -293,11 +331,6 @@ public class PartyManager : MonoBehaviour
         return true;
     }
 
-    public Adventurer GetAdventurer(int index)
-    {
-        return adventurers[index];
-    }
-
     //caluclate numerical strength of party
     public float GetPartyStrength()
     {
@@ -311,7 +344,7 @@ public class PartyManager : MonoBehaviour
 
         int adventurerCount = 0;
 
-        for (int i=0; i<4; ++i)
+        for (int i=0; i<adventurers.Length; ++i)
         {
             if (adventurers[i] != null && adventurers[i].state != AdventurerState.Dead)
             {
@@ -359,7 +392,7 @@ public class PartyManager : MonoBehaviour
     public void StartFight(float difficulty)
     {
         //set adventurers to fighting
-        for (int i=0; i<4; ++i)
+        for (int i=0; i<adventurers.Length; ++i)
         {
             if (adventurers[i] != null)
             {
@@ -390,11 +423,7 @@ public class PartyManager : MonoBehaviour
         fighting = true;
 
         //count living adventurers
-        int living = 0;
-        for (int i=0; i<4; ++i)
-        {
-            if (adventurers[i] != null && adventurers[i].state != AdventurerState.Dead) ++living;
-        }
+        int living = AdventurerCount();
 
         //run fight loop
         progress = 0;
@@ -415,7 +444,7 @@ public class PartyManager : MonoBehaviour
             {
                 //choose random adventurer to hurt
                 List<int> alive = new List<int>();
-                for (int i=0; i<4; ++i)
+                for (int i=0; i<adventurers.Length; ++i)
                 {
                     if (adventurers[i] != null && adventurers[i].state == AdventurerState.Fighting)
                     {
@@ -443,11 +472,10 @@ public class PartyManager : MonoBehaviour
 
             //new fight event
             fightEvent.Invoke(eventText);
-            Debug.Log(eventText);
         }
 
         //clear dead adventurers and regen
-        for (int i=0; i<4; ++i)
+        for (int i=0; i<adventurers.Length; ++i)
         {
             if (adventurers[i] != null)
             {
@@ -464,7 +492,7 @@ public class PartyManager : MonoBehaviour
 
         //sort adventurers
         int count = 0;
-        for (int i=0; i<4; ++i)
+        for (int i=0; i<adventurers.Length; ++i)
         {
             if (adventurers[i] != null)
             {
@@ -479,19 +507,20 @@ public class PartyManager : MonoBehaviour
         if (living>0)
         {
             battleWon.Invoke();
+            ReturnParty(dungeon);
+
+            //TODO grant custom rewards
             rm.fossilCount++;
             rm.currentResource.Gold += Random.Range(200, 400);
-            ReturnParty(dungeon);
         }
         else
         {
             battleLost.Invoke();
-            dungeon = null;
         }
 
+        dungeon = null;
         progress = 0;
         fighting = false;
-        Debug.Log("ending fight");
     }
 
     //dispatch party towards dungeon
@@ -506,26 +535,17 @@ public class PartyManager : MonoBehaviour
             return;
         };
 
-        //check that alladventurers are ready or fighting
-        for (int i = 0; i < 4; ++i)
-        {
-            if (adventurers[i] != null && adventurers[i].state != AdventurerState.Ready && adventurers[i].state != AdventurerState.Fighting)
-            {
-                return;
-            }
-        }
+        //check that adventurers can return
+        if (!CanReturn()) return;
 
         //set all adventurers to returning
-        for (int i = 0; i < 4; ++i)
+        for (int i=0; i<adventurers.Length; ++i)
         {
             if (adventurers[i] != null)
             {
                 adventurers[i].state = AdventurerState.Returning;
             }
         }
-
-        //set dungeonName
-        this.dungeon = null;
 
         //get path
         List<Vector3> path = HexAStar.FindPath(dungeon.entrance, tavern.exit, bm);
@@ -544,7 +564,7 @@ public class PartyManager : MonoBehaviour
     //dispatch adventurers 1 by 1
     IEnumerator ReturnRoutine(List<Vector3> path)
     {
-        for (int i = 0; i < adventurers.Length; ++i)
+        for (int i=0; i<adventurers.Length; ++i)
         {
             if (adventurers[i] != null)
             {
