@@ -30,4 +30,17 @@ public class HexUtils
         int x = coords.x + (coords.y - (coords.y & 1)) / 2;
         return new Vector3Int(x,coords.y,0);
     }
+
+
+
+    //caluclate the distance between two cubic coordinates
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int CubicDIstance(in Vector3Int lhs, in Vector3Int rhs)
+    {
+        Vector3Int diff = rhs - lhs;
+        int x = Mathf.Abs(diff.x);
+        int y = Mathf.Abs(diff.y);
+        int z = Mathf.Abs(diff.z);
+        return Mathf.Max(x, Mathf.Max(y, z));
+    }
 }

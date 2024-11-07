@@ -22,6 +22,7 @@ public class BuildingManager : MonoBehaviour
 {
     //tilemaps used for building processes
     [SerializeField] public Tilemap groundMap;
+    [SerializeField] public Tilemap rangeMap;
     [SerializeField] public Tilemap objectMap;
 
     [Space(10)]
@@ -187,8 +188,11 @@ public class BuildingManager : MonoBehaviour
 
 
     //check whether a given offset position is a valid place for a tile to be set
-    public bool IsValidPlacement(Vector3Int offsetCoord)
+    public bool IsValidPlacement(Vector3Int offsetCoord, bool respectRange=true)
     {
+        //check town range limits
+        if (respectRange && !IsWithingRange(offsetCoord)) return false;
+
         //get tiles in the offset position
         BasicTile groundTile = groundMap.GetTile<BasicTile>(offsetCoord);
         BasicTile objectTile = objectMap.GetTile<BasicTile>(offsetCoord);
@@ -202,7 +206,7 @@ public class BuildingManager : MonoBehaviour
     } 
 
     //check whether a given offset position is a valid place for a structure to be set
-    public bool IsValidStructure(Vector3Int offsetCoord, Structure structure)
+    public bool IsValidStructure(Vector3Int offsetCoord, Structure structure, bool respectRange=true)
     {
         if (structure == null) return false;
 
@@ -214,10 +218,16 @@ public class BuildingManager : MonoBehaviour
             Vector3Int newOffsetCoord = HexUtils.CubicToOffset(newCubicCoord);
 
             //check piece's valid placement
-            if (!IsValidPlacement(newOffsetCoord)) return false;
+            if (!IsValidPlacement(newOffsetCoord, respectRange)) return false;
         }
 
         return true;
+    }
+
+    //check whether a tile is in range of the town by looking at rangeMap
+    public bool IsWithingRange(Vector3Int offsetCoord)
+    {
+        return rangeMap.GetTile(offsetCoord) != null;
     }
 
 
@@ -268,10 +278,10 @@ public class BuildingManager : MonoBehaviour
 
     //place a structure at given offsetCoords
     //return true is placement is successful
-    public bool PlaceBuilding(Vector3Int offsetCoord, Structure structure, bool placeEvent = true, bool charge = true)
+    public bool PlaceBuilding(Vector3Int offsetCoord, Structure structure, bool respectRange = true, bool charge = true)
     {
         //check if structure placement isn't valid
-        if (!IsValidStructure(offsetCoord, structure))
+        if (!IsValidStructure(offsetCoord, structure, respectRange))
         {
             //could not place building
             FailedPlacement.Invoke();
@@ -331,17 +341,14 @@ public class BuildingManager : MonoBehaviour
         }
 
         //run building place event
-        if (placeEvent)
-        {
-            BuildingPlaced.Invoke(newBuilding, offsetCoord);
-        }
+        BuildingPlaced.Invoke(newBuilding, offsetCoord);
 
         return true;
     }
 
     //delete a structure at given offsetCoords
     //return true is deletion is successful
-    public bool DeleteBuilding(Vector3Int offsetCoord, bool deleteEvent = true, bool refund = true)
+    public bool DeleteBuilding(Vector3Int offsetCoord, bool refund = true)
     {
         //get building from tile
         Building building = GetBuilding(offsetCoord);
@@ -382,10 +389,7 @@ public class BuildingManager : MonoBehaviour
         Destroy(building.gameObject);
 
         //run building delete event
-        if (deleteEvent)
-        {
-            BuildingDeleted.Invoke(building, offsetCoord);
-        }
+        BuildingDeleted.Invoke(building, offsetCoord);
 
         return true;
     }
