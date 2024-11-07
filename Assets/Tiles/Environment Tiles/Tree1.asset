@@ -35,4 +35,5 @@ MonoBehaviour:
   m_Flags: 1
   m_ColliderType: 1
   type: 1
+  envType: 0
   tileName: Large Tree
