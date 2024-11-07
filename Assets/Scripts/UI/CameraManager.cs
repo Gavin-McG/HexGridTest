@@ -21,6 +21,7 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] float smoothFactor = 0.95f;
     [SerializeField] private float zoomScale = 0.01f;
+    [SerializeField] private float moveSpeed = 10f;
 
     public static UnityEvent mouseClick = new UnityEvent();
 
@@ -38,6 +39,7 @@ public class CameraManager : MonoBehaviour
     
     private InputAction clickAction;
     private InputAction zoomAction;
+    private InputAction moveAction;
 
     bool operateCamera = true;
 
@@ -55,6 +57,7 @@ public class CameraManager : MonoBehaviour
 
         clickAction = playerInput.actions["Select"];
         zoomAction = playerInput.actions["Zoom"];
+        moveAction = playerInput.actions["MoveCamera"];
 
         UIManager.UIOpened.AddListener(DisableCamera);
         UIManager.UIClosed.AddListener(EnableCamera);
@@ -95,7 +98,20 @@ public class CameraManager : MonoBehaviour
             SmoothZoom();
             BoundCamera();
 
+            if (state == MouseState.None)
+            {
+                ProcessMoveInput();
+            }
         }
+    }
+
+    void ProcessMoveInput()
+    {
+        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+       
+        Vector3 movement = new Vector3(moveInput.x, moveInput.y, 0) * (moveSpeed * Time.deltaTime);
+        
+        camObject.transform.Translate(movement);
     }
 
     //Sets waiting when user clicks
