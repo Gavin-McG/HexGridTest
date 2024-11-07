@@ -37,7 +37,6 @@ public class DungeonUI : MonoBehaviour
 
     private void OnEnable()
     {
-        UIManager.closeAllUI.AddListener(CloseUI);
         PartyManager.fightEvent.AddListener(newTextEvent);
         PartyManager.battleFinished.AddListener(ClearText);
 
@@ -60,7 +59,6 @@ public class DungeonUI : MonoBehaviour
 
     private void OnDisable()
     {
-        UIManager.closeAllUI.RemoveListener(CloseUI);
         PartyManager.fightEvent.RemoveListener(newTextEvent);
         PartyManager.battleFinished.RemoveListener(ClearText);
 

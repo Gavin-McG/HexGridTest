@@ -8,4 +8,5 @@ public class EnvironmentTile : BasicTile
 {
     [Space(10)]
     [SerializeField] public string tileName;
+    [SerializeField] public bool isTree;
 }

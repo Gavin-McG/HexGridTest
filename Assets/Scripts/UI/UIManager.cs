@@ -1,12 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] GameObject tavernUI;
-    [SerializeField] GameObject dungeonUI;
+    private Dictionary<String, GameObject> uiDictionary;
 
     //tell all UI to close
     public static UnityEvent closeAllUI = new UnityEvent();
@@ -14,6 +16,26 @@ public class UIManager : MonoBehaviour
     //events
     public static UnityEvent UIOpened = new UnityEvent();
     public static UnityEvent UIClosed = new UnityEvent();
+
+    private InputAction closeAction;
+
+    private void Awake()
+    {
+        closeAllUI.AddListener(OnCloseAllUI);
+        
+        closeAction = GetComponent<PlayerInput>().actions["CloseMenus"];
+        closeAction.performed += _ => closeAllUI.Invoke();
+
+        uiDictionary = UIDictionaryManager.uiDictionary;
+    }
+
+    void OnCloseAllUI()
+    {
+        foreach (GameObject uiObject in uiDictionary.Values)
+        {
+            uiObject.SetActive(false);
+        }
+    }
 
     private void OnEnable()
     {
@@ -34,19 +56,46 @@ public class UIManager : MonoBehaviour
         switch (building.type) 
         {
             case BuildingType.Tavern:
-                tavernUI.SetActive(true);
+                GameObject tavernUI;
+                if (uiDictionary.TryGetValue("Tavern", out tavernUI))
+                {
+                    tavernUI.SetActive(true);
+                }
+                else
+                {
+                    Debug.LogError("Tavern UI could not be found!");
+                }
                 break;
             case BuildingType.Dungeon:
                 if (building is Dungeon dungeon)
                 {
-                    dungeonUI.GetComponent<DungeonUI>().dungeon = dungeon;
-                    dungeonUI.SetActive(true);
+                    GameObject dungeonUI;
+                    if (uiDictionary.TryGetValue("Dungeon", out dungeonUI))
+                    {
+                        dungeonUI.GetComponent<DungeonUI>().dungeon = dungeon;
+                        dungeonUI.SetActive(true);
+                    }
+                    else
+                    {
+                        Debug.LogError("Dungeon UI could not be found!");
+                    }
                 }
                 else
                 {
                     Debug.LogError("Dungeon '" + building.buildingName + "' BuildingType does not derive from Dungeon Script");
                 }
-                
+                break;
+            case BuildingType.Contractor:
+                GameObject purchaseUI;
+                if (uiDictionary.TryGetValue("Contractor", out purchaseUI))
+                {
+                    purchaseUI.SetActive(true);
+                    BuildingManager.EnableBuilding.Invoke(building.currentStructure);
+                }
+                else
+                {
+                    Debug.LogError("Tavern UI could not be found!");
+                }
                 break;
             default:
                 break;
