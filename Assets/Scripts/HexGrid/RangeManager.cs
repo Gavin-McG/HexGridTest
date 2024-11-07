@@ -187,7 +187,17 @@ public class RangeManager : MonoBehaviour
         {
             if (HexUtils.CubicDIstance(tileCoord, cubicCoords[i]) <= radii[i]) return;
         }
-        rangeMap.SetTile(HexUtils.CubicToOffset(tileCoord), null);
+        
+        //remove tile from range
+        Vector3Int offsetCoord = HexUtils.CubicToOffset(tileCoord);
+        rangeMap.SetTile(offsetCoord, null);
+
+        //remove building at tile
+        Building building = bm.GetBuilding(offsetCoord);
+        if (building != null)
+        {
+            bm.DeleteBuilding(offsetCoord, true);
+        }
     }
 
 
