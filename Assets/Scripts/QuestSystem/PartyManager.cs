@@ -79,7 +79,7 @@ public class PartyManager : MonoBehaviour
         //check tavern count
         if (taverns.Count == 0)
         {
-            Debug.LogWarning("Attempting to look for tavern without tavern");
+            //found no taverns
             return null;
         }
         if (taverns.Count > 1)
@@ -527,16 +527,20 @@ public class PartyManager : MonoBehaviour
     public void ReturnParty(Dungeon dungeon)
     {
         Tavern tavern = GetTavern();
-
-        //check buildings
-        if (tavern == null || dungeon == null)
-        {
-            Debug.LogError("Could not retrieve valid buildings");
-            return;
-        };
-
+        
         //check that adventurers can return
         if (!CanReturn()) return;
+
+        //get destination for adventurers
+        HexPoint destination = new HexPoint(Vector3Int.zero, false);
+        if (tavern != null)
+        {
+            destination = tavern.exit;
+        }
+        else if (bm.GetBuildingsOfType(BuildingType.MainTower)[0] is MainTower tower)
+        {
+            destination = tower.entrance;
+        }
 
         //set all adventurers to returning
         for (int i=0; i<adventurers.Length; ++i)
@@ -548,7 +552,7 @@ public class PartyManager : MonoBehaviour
         }
 
         //get path
-        List<Vector3> path = HexAStar.FindPath(dungeon.entrance, tavern.exit, bm);
+        List<Vector3> path = HexAStar.FindPath(dungeon.entrance, destination, bm);
         if (path.Count == 0)
         {
             Debug.LogWarning("Could not find valid path between Tavern and selected Dungeon");

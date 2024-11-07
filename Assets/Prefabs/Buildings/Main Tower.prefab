@@ -50,8 +50,12 @@ MonoBehaviour:
     Magic: 30
     Wood: 800
     Stone: 800
-  level: 0
+    Gold: 0
   upgrades: []
   currentStructure: {fileID: 11400000, guid: 8e46cb7cb0ece8e4984ed5d80bdb1b7d, type: 2}
   descriptionText: This is the Main Tower!
   offsetCoord: {x: 0, y: 0, z: 0}
+  buildRange: 5
+  _entrance:
+    cubicCoord: {x: -1, y: 0, z: 1}
+    isTop: 0
