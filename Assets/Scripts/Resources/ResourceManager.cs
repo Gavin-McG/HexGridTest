@@ -3,6 +3,21 @@ using System.Collections;
 
 public class ResourceManager : MonoBehaviour
 {
+    public static ResourceManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
     public Resources currentResource;
     public int fossilCount = 0;
     public float refundRate = 1f;
