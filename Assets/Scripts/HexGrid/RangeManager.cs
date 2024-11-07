@@ -6,17 +6,27 @@ using UnityEngine.WSA;
 
 public class RangeManager : MonoBehaviour
 {
+    [SerializeField] BuildingManager bm;
     [SerializeField] Tilemap rangeMap;
     [SerializeField] TileBase highlightTile;
 
     private void OnEnable()
     {
         BuildingManager.BuildingPlaced.AddListener(PlaceRange);
+
+        //listen for editMode updates
+        BuildingManager.EnableBuilding.AddListener(EnableRange);
+        BuildingManager.EnableDeleting.AddListener(DisableRange);
+        BuildingManager.DisableEditing.AddListener(DisableRange);
     }
 
     private void OnDisable()
     {
         BuildingManager.BuildingPlaced.RemoveListener(PlaceRange);
+
+        BuildingManager.EnableBuilding.RemoveListener(EnableRange);
+        BuildingManager.EnableDeleting.RemoveListener(DisableRange);
+        BuildingManager.DisableEditing.RemoveListener(DisableRange);
     }
 
 
@@ -73,11 +83,23 @@ public class RangeManager : MonoBehaviour
                 Vector3Int offsetPosition = HexUtils.CubicToOffset(currentCubic + centerCubic);
 
                 // Place the tile at the calculated offset position
-                rangeMap.SetTile(offsetPosition, highlightTile);
+                if (bm.IsGroundTile(offsetPosition)) {
+                    rangeMap.SetTile(offsetPosition, highlightTile);
+                }
 
                 // Move to the next position in the current direction
                 currentCubic += directions[i];
             }
         }
+    }
+
+    void EnableRange(Structure structure)
+    {
+        rangeMap.gameObject.SetActive(true);
+    }
+
+    void DisableRange()
+    {
+        rangeMap.gameObject.SetActive(false);
     }
 }
