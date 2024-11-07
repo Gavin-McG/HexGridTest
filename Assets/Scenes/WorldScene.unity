@@ -3915,6 +3915,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TavernUI
       objectReference: {fileID: 0}
+    - target: {fileID: 2350139638713139751, guid: 9d55a64548d7f264b9637242f6484326, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6811318398550323894, guid: 9d55a64548d7f264b9637242f6484326, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4262,7 +4266,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000019073486}
+  m_AnchoredPosition: {x: 0, y: -0.000015258789}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &899441697
@@ -11871,6 +11875,7 @@ GameObject:
   - component: {fileID: 1735817981}
   - component: {fileID: 1735817983}
   - component: {fileID: 1735817986}
+  - component: {fileID: 1735817988}
   - component: {fileID: 1735817985}
   - component: {fileID: 1735817987}
   - component: {fileID: 1735817982}
@@ -12108,8 +12113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fc4e6a11363db74aa3c80e8b9543589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tavernUI: {fileID: 566335346}
-  dungeonUI: {fileID: 739282027}
 --- !u!114 &1735817987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12125,6 +12128,25 @@ MonoBehaviour:
   bm: {fileID: 1735817980}
   rangeMap: {fileID: 1632726384}
   highlightTile: {fileID: 11400000, guid: 280bccb97a30e7642bf17a95d8a89a42, type: 2}
+--- !u!114 &1735817988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735817977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8134dbbce488d4489e61bf742c03562, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiKeyValuePairs:
+  - key: Tavern
+    value: {fileID: 566335346}
+  - key: Dungeon
+    value: {fileID: 739282027}
+  - key: Contractor
+    value: {fileID: 22122044}
 --- !u!1 &1978613020
 GameObject:
   m_ObjectHideFlags: 0
@@ -12286,7 +12308,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1128116540}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.8133335
+  m_Size: 0.81333345
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
