@@ -15,9 +15,8 @@ public class EnvironmentTile : BasicTile
     [Space(10)]
     [SerializeField] EnvironmentType envType;
     [SerializeField] public string tileName;
-    [SerializeField] private ResourceManager rm;
 
-    void Awake()
+    void OnEnable()
     {
         BuildingManager.EnvironmentDeleted.AddListener(OnDestroyTile);
     }
@@ -28,8 +27,8 @@ public class EnvironmentTile : BasicTile
         {
             case EnvironmentType.Tree:
                 //Set refund rate to 1 to ensure that you get the same amount of wood every time
-                int woodAmount = (int)Math.Round(20 / rm.refundRate);
-                rm.Refund(new Resources(0, woodAmount, 0, 0));
+                int woodAmount = (int)Math.Round(20 / ResourceManager.Instance.refundRate);
+                ResourceManager.Instance.Refund(new Resources(0, woodAmount, 0, 0));
                 break;
             default:
                 Debug.LogError("envType: " + environmentTile.envType + " does not exist!");

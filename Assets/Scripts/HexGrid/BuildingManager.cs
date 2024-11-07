@@ -72,9 +72,8 @@ public class BuildingManager : MonoBehaviour
 
     private void Start()
     {
-        rm = GetComponent<ResourceManager>();
+        rm = ResourceManager.Instance;
         pm = GetComponent<PreviewManager>();
-
         RunBuildingSpawning();
     }
 
@@ -406,8 +405,8 @@ public class BuildingManager : MonoBehaviour
     {
         if (IsWithingRange(offsetCoord) && objectMap.GetTile(offsetCoord) is EnvironmentTile envTile)
         {
-            objectMap.SetTile(offsetCoord, null);
             EnvironmentDeleted.Invoke(envTile, offsetCoord);
+            objectMap.SetTile(offsetCoord, null);
             return true;
         }
 
