@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6070171546442668169}
   - component: {fileID: 5081791033364416857}
   - component: {fileID: 1067458935411020604}
+  - component: {fileID: 1545740348627314813}
   m_Layer: 5
   m_Name: DungeonLevelsUI
   m_TagString: Untagged
@@ -81,6 +82,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1545740348627314813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2313478294211936830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ea4764edfaec3e47a29a64b5ec2368f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pm: {fileID: 0}
+  dungeonUI: {fileID: 0}
+  levelPanels:
+  - {fileID: 2366347791954643781}
+  - {fileID: 8026039632098404703}
+  - {fileID: 3920216591634137642}
+  - {fileID: 5042902784157834570}
+  updateRate: 0.5
+  dungeon: {fileID: 0}
 --- !u!1 &3450350382661166354
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,8 +223,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DungeonUI, Assembly-CSharp
+      - m_Target: {fileID: 1545740348627314813}
+        m_TargetAssemblyTypeName: DungeonLevelsUI, Assembly-CSharp
         m_MethodName: CloseUI
         m_Mode: 1
         m_Arguments:
@@ -435,9 +457,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545740348627314813}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EnterLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DungeonLevelsUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5370631535263839267, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
       propertyPath: m_Name
       value: LevelPanel (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5836287091954431544, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_text
+      value: Level 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -447,6 +505,11 @@ PrefabInstance:
 --- !u!224 &1022921750656790823 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 90503386252449870, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+  m_PrefabInstance: {fileID: 1113424505128561001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5042902784157834570 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5370631535263839267, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
   m_PrefabInstance: {fileID: 1113424505128561001}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2732110922633436540
@@ -537,9 +600,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545740348627314813}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EnterLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DungeonLevelsUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5370631535263839267, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
       propertyPath: m_Name
       value: LevelPanel (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5836287091954431544, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_text
+      value: Level 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -549,6 +648,11 @@ PrefabInstance:
 --- !u!224 &2642452107609490738 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 90503386252449870, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+  m_PrefabInstance: {fileID: 2732110922633436540}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8026039632098404703 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5370631535263839267, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
   m_PrefabInstance: {fileID: 2732110922633436540}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7664744119022255974
@@ -639,6 +743,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545740348627314813}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EnterLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DungeonLevelsUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5370631535263839267, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
       propertyPath: m_Name
       value: LevelPanel
@@ -648,6 +780,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+--- !u!1 &2366347791954643781 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5370631535263839267, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+  m_PrefabInstance: {fileID: 7664744119022255974}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7718937158770878248 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 90503386252449870, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
@@ -741,15 +878,56 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545740348627314813}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EnterLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DungeonLevelsUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313682218400947916, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5370631535263839267, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
       propertyPath: m_Name
       value: LevelPanel (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5836287091954431544, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+      propertyPath: m_text
+      value: Level 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+--- !u!1 &3920216591634137642 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5370631535263839267, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}
+  m_PrefabInstance: {fileID: 9002476669295621641}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &9056370019395923527 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 90503386252449870, guid: ab996b4c7f25f764f97ce8b4b74a5889, type: 3}

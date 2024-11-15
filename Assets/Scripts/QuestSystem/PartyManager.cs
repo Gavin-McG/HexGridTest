@@ -42,6 +42,7 @@ public class PartyManager : MonoBehaviour
     
     //fighting variables
     [HideInInspector] public Dungeon dungeon = null;
+    [HideInInspector] public int level = 0;
     [HideInInspector] public bool fighting = false;
     [HideInInspector] public float progress = 0;
 
@@ -509,9 +510,14 @@ public class PartyManager : MonoBehaviour
             battleWon.Invoke();
             ReturnParty(dungeon);
 
-            //TODO grant custom rewards
-            rm.fossilCount++;
-            rm.currentResource.Gold += Random.Range(200, 400);
+            //grant custom rewards
+            rm.currentResource.Gold += Random.Range(dungeon.levels[level].GoldRange.x, dungeon.levels[level].GoldRange.y);
+            if (dungeon.collected[level] < dungeon.levels[level].fossilTotal)
+            {
+                rm.fossilCount++;
+                dungeon.collected[level]++;
+            }
+            dungeon.completed[level] = true;
         }
         else
         {
@@ -519,6 +525,7 @@ public class PartyManager : MonoBehaviour
         }
 
         dungeon = null;
+        level = 0;
         progress = 0;
         fighting = false;
     }
