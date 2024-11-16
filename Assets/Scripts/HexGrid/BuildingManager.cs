@@ -20,6 +20,21 @@ public enum EditMode
 
 public class BuildingManager : MonoBehaviour
 {
+    public static BuildingManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+    
     //tilemaps used for building processes
     [SerializeField] public Tilemap groundMap;
     [SerializeField] public Tilemap rangeMap;
@@ -32,6 +47,9 @@ public class BuildingManager : MonoBehaviour
     [HideInInspector] public EditMode editMode { get { return _editMode; } }
 
     [SerializeField] public Structure activeStructure;
+    
+    //UI Reference for delete confirmation
+    [SerializeField] private DeleteConfirmation deleteConf;
 
     //other managers
     ResourceManager rm;
@@ -49,7 +67,6 @@ public class BuildingManager : MonoBehaviour
     Dictionary<Building, List<Vector3Int>> buildingDictionary = new Dictionary<Building, List<Vector3Int>>();
     //typeDictionary manages a list of all buildings of each type
     Dictionary<BuildingType, List<Building>> typeDictionary = new Dictionary<BuildingType, List<Building>>();
-
 
     //store whether the mouse is on a UI element
     bool isOverUI = false;
@@ -250,7 +267,8 @@ public class BuildingManager : MonoBehaviour
             case EditMode.Delete:
                 if (!DestroyEnvironment(offsetCoord))
                 {
-                    DeleteBuilding(offsetCoord);
+                    Building building = GetBuilding(offsetCoord);
+                    deleteConf.SetDeleteUI(building, offsetCoord);
                 }
                 break;
         }
