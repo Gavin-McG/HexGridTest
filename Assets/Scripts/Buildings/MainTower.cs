@@ -6,19 +6,22 @@ public class MainTower : Building
 {
     [SerializeField] public int buildRange = 5;
     
-    public override BuildingType type 
-    { 
-        get { return BuildingType.MainTower; }
+    void Start()
+    {
+        UpgradeEvent.AddListener(OnUpgrade);
+        rm.RegisterBuilding(this, new Resources(1,0, 0, 0));
     }
+
+    public override BuildingType type => BuildingType.MainTower;
 
     [SerializeField] HexPoint _entrance;
 
     [HideInInspector]
-    public HexPoint entrance
+    public HexPoint entrance => new HexPoint(_entrance.cubicCoord + HexUtils.OffsetToCubic(offsetCoord), _entrance.isTop);
+
+    //TODO: Implement main tower upgrades
+    void OnUpgrade(Upgrade upgrade, int newLevel)
     {
-        get
-        {
-            return new HexPoint(_entrance.cubicCoord + HexUtils.OffsetToCubic(offsetCoord), _entrance.isTop);
-        }
+        Debug.LogWarning("Upgrade for Main Tower not Implemented!");
     }
 }

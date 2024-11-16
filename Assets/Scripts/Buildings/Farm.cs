@@ -5,7 +5,6 @@ using UnityEngine;
 public class Farm : Building
 {
     private float multiplier = 1.5f;
-    private float range = 1.5f;
 
     void Start()
     {

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ResourceManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class ResourceManager : MonoBehaviour
     public int fossilCount = 0;
     public float refundRate = 1f;
     [SerializeField] float productionRate = 5f;
+    public List<Building> productionList = new List<Building>();
     
     public bool CanAfford(Resources cost)
     {
@@ -41,6 +43,7 @@ public class ResourceManager : MonoBehaviour
     //I might need an UpdateBuilding for when the buildings are upgraded - CS
     public void RegisterBuilding(Building building, Resources productionAmount)
     {
+        productionList.Add(building);
         StartCoroutine(ProduceResources(building, productionAmount));
     }
 
