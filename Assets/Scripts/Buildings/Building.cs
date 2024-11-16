@@ -29,7 +29,7 @@ public abstract class Building : MonoBehaviour
 {
     protected ResourceManager rm; //Checks if an upgrade can be bought
 
-    void Awake()
+    public virtual void Awake()
     {
         rm = FindObjectOfType<ResourceManager>();
     }

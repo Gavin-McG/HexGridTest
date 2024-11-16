@@ -58,4 +58,11 @@ MonoBehaviour:
   _entrance:
     cubicCoord: {x: 2, y: -3, z: 1}
     isTop: 1
-  difficulty: 20
+  levels:
+  - GoldRange: {x: 200, y: 400}
+    fossilTotal: 2
+    difficulty: 12
+  - GoldRange: {x: 300, y: 600}
+    fossilTotal: 1
+    difficulty: 24
+  collected: 

@@ -22,6 +22,7 @@ public class DungeonUI : MonoBehaviour
     [SerializeField] float updateRate = 0.5f;
 
     [HideInInspector] public Dungeon dungeon;
+    [HideInInspector] public int level;
     FighterPanel[] panelInfo;
     float lastUpdate = 0;
     TextPanel[] textPanels;
@@ -40,6 +41,7 @@ public class DungeonUI : MonoBehaviour
         PartyManager.fightEvent.AddListener(newTextEvent);
         PartyManager.battleFinished.AddListener(ClearText);
 
+        UIManager.closeAllUI.AddListener(CloseUI);
         UIManager.UIOpened.Invoke();
 
         //check UI sizes
@@ -62,6 +64,7 @@ public class DungeonUI : MonoBehaviour
         PartyManager.fightEvent.RemoveListener(newTextEvent);
         PartyManager.battleFinished.RemoveListener(ClearText);
 
+        UIManager.closeAllUI.RemoveListener(CloseUI);
         UIManager.UIClosed.Invoke();
     }
 
@@ -96,11 +99,6 @@ public class DungeonUI : MonoBehaviour
                     //adventurer is dead
                     panelInfo[i].SetDead();
 
-                }
-                else if (pm.dungeon != dungeon)
-                {
-                    //not ready if at another dungeon
-                    panelInfo[i].SetNotReady();
                 }
                 else if (adventurer.state == AdventurerState.Fighting)
                 {
@@ -154,7 +152,8 @@ public class DungeonUI : MonoBehaviour
 
     public void StartFight()
     {
-        pm.StartFight(dungeon.difficulty);
+        pm.StartFight(dungeon.levels[level].difficulty);
+        pm.level = level;
         UpdateUI();
     }
 
