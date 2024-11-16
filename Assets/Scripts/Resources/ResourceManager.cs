@@ -47,24 +47,12 @@ public class ResourceManager : MonoBehaviour
         StartCoroutine(ProduceResources(building, productionAmount));
     }
 
-    private void Produce(Resources production)
-    {
-        currentResource += production;
-    }
-
     private IEnumerator ProduceResources(Building building, Resources productionAmount)
     {
-        while (true)
+        while (productionList.Contains(building))
         {
             yield return new WaitForSeconds(productionRate);
-            if (building && building.isActiveAndEnabled)
-            {
-                Produce(productionAmount);
-            }
-            else
-            {
-                yield break; //Stop this coroutine when the building is destroyed or no longer active
-            }
+            currentResource += productionAmount;
         }
     }
 }
