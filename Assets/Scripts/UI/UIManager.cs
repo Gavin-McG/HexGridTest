@@ -8,6 +8,8 @@ using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] PartyManager pm;
+
     private Dictionary<String, GameObject> uiDictionary;
 
     //tell all UI to close
@@ -69,15 +71,33 @@ public class UIManager : MonoBehaviour
             case BuildingType.Dungeon:
                 if (building is Dungeon dungeon)
                 {
-                    GameObject dungeonUI;
-                    if (uiDictionary.TryGetValue("Dungeon", out dungeonUI))
+                    if (pm.fighting && dungeon == pm.dungeon)
                     {
-                        dungeonUI.GetComponent<DungeonUI>().dungeon = dungeon;
-                        dungeonUI.SetActive(true);
+                        //open dungeon UI directly
+                        GameObject dungeonUI;
+                        if (uiDictionary.TryGetValue("Dungeon", out dungeonUI))
+                        {
+                            dungeonUI.GetComponent<DungeonUI>().dungeon = dungeon;
+                            dungeonUI.SetActive(true);
+                        }
+                        else
+                        {
+                            Debug.LogError("Dungeon UI could not be found!");
+                        }
                     }
                     else
                     {
-                        Debug.LogError("Dungeon UI could not be found!");
+                        //open levels UI
+                        GameObject dungeonLevelsUI;
+                        if (uiDictionary.TryGetValue("DungeonLevels", out dungeonLevelsUI))
+                        {
+                            dungeonLevelsUI.GetComponent<DungeonLevelsUI>().dungeon = dungeon;
+                            dungeonLevelsUI.SetActive(true);
+                        }
+                        else
+                        {
+                            Debug.LogError("Dungeon Levels UI could not be found!");
+                        }
                     }
                 }
                 else
