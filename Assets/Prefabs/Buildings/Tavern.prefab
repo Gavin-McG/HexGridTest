@@ -56,6 +56,6 @@ MonoBehaviour:
   descriptionText: Form a Team of adventurers to conquer dungeons
   offsetCoord: {x: 0, y: 0, z: 0}
   _exit:
-    cubicCoord: {x: 1, y: -1, z: 0}
-    isTop: 1
+    cubicCoord: {x: -1, y: 0, z: 1}
+    isTop: 0
   averageSkill: 0.2
