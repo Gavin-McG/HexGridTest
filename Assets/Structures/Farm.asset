@@ -14,5 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingObject: {fileID: 7552399030763804918, guid: d76c5feeb1669984d859a3b1a7522ff0, type: 3}
   pieces:
-  - tile: {fileID: 11400000, guid: 4427cf8beb9101c4fa986ded6c5e17db, type: 2}
+  - tile: {fileID: 11400000, guid: 91fa02ada7ef6e34ca71b4b8503e27ed, type: 2}
     cubicCoord: {x: 0, y: 0, z: 0}
+  - tile: {fileID: 11400000, guid: 77d71160adc13f447badd9d2bee03856, type: 2}
+    cubicCoord: {x: 1, y: 0, z: -1}
+  - tile: {fileID: 11400000, guid: 77d71160adc13f447badd9d2bee03856, type: 2}
+    cubicCoord: {x: -1, y: 0, z: 1}
+  - tile: {fileID: 11400000, guid: 77d71160adc13f447badd9d2bee03856, type: 2}
+    cubicCoord: {x: 1, y: -1, z: 0}
+  - tile: {fileID: 11400000, guid: 77d71160adc13f447badd9d2bee03856, type: 2}
+    cubicCoord: {x: -1, y: 1, z: 0}
+  - tile: {fileID: 11400000, guid: 77d71160adc13f447badd9d2bee03856, type: 2}
+    cubicCoord: {x: 0, y: 1, z: -1}
+  - tile: {fileID: 11400000, guid: 77d71160adc13f447badd9d2bee03856, type: 2}
+    cubicCoord: {x: 0, y: -1, z: 1}

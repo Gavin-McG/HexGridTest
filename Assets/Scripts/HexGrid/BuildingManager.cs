@@ -248,6 +248,11 @@ public class BuildingManager : MonoBehaviour
         return rangeMap.GetTile(offsetCoord) != null;
     }
 
+    public bool IsEnvironmentalTile(Vector3Int offsetCoord)
+    {
+        return objectMap.GetTile(offsetCoord) is EnvironmentTile;
+    }
+
 
 
     void Interract()
@@ -268,7 +273,14 @@ public class BuildingManager : MonoBehaviour
                 if (!DestroyEnvironment(offsetCoord))
                 {
                     Building building = GetBuilding(offsetCoord);
-                    deleteConf.SetDeleteUI(building, offsetCoord);
+                    if (building != null && building.canDestroy)
+                    {
+                        deleteConf.SetDeleteUI(building, offsetCoord);
+                    }
+                    else
+                    {
+                        FailedDestroy.Invoke();
+                    }
                 }
                 break;
         }
