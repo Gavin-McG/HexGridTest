@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingName: Tavern
   canDestroy: 1
+  canProduce: 1
   buildCost:
     Magic: 20
     Wood: 300
@@ -53,7 +54,7 @@ MonoBehaviour:
     Gold: 0
   upgrades: []
   currentStructure: {fileID: 11400000, guid: de16714221b76b64ba1deac48aff55d9, type: 2}
-  descriptionText: Form a Team of adventurers to conquer dungeons
+  descriptionText: Gather adventurers to conquer dungeons!
   offsetCoord: {x: 0, y: 0, z: 0}
   _exit:
     cubicCoord: {x: -1, y: 0, z: 1}

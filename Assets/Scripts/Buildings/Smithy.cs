@@ -6,12 +6,13 @@ using UnityEngine;
 public class Smithy : Building
 {
     private int armLevel = 1;
-    private int goldProduction = 0;
+    private Resources goldProduction = new Resources(0, 0, 0, 0);
+    private float productionMultiplier = 1f;
 
     private void Start()
     {
         UpgradeEvent.AddListener(OnUpgrade);
-        rm.RegisterBuilding(this, new Resources(0, 0, 0, goldProduction));
+        rm.RegisterBuilding(this);
     }
 
     public override BuildingType type => BuildingType.Smithy;
@@ -30,12 +31,29 @@ public class Smithy : Building
         if (upgradeData.TryGetValue(newLevel, out var upgradeValues))
         {
             armLevel = upgradeValues.armLevel;
-            goldProduction = upgradeValues.goldProduction;
+            goldProduction.Gold = upgradeValues.goldProduction;
             Debug.Log($"Smithy upgraded to level {level}: armLevel = {armLevel}, goldProduction = {goldProduction}");
         }
         else
         {
             Debug.LogError($"Invalid upgrade level {newLevel} for Smithy");
         }
+    }
+    
+    public override void RevertProduction()
+    {
+        Debug.Log("Smithy production is being reverted!");
+        productionMultiplier = 1f;
+    }
+
+    public override void IncreaseProduction()
+    {
+        Debug.Log("Smithyr production is being increased");
+        productionMultiplier = 4f;
+    }
+
+    public override Resources GetCurrentProduction()
+    {
+        return goldProduction * productionMultiplier;
     }
 }
