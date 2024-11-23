@@ -86,4 +86,6 @@ MonoBehaviour:
   currentStructure: {fileID: 11400000, guid: 7a175668101914c46b422712b683fe50, type: 2}
   descriptionText: Boost production and grow trees
   offsetCoord: {x: 0, y: 0, z: 0}
+  treePrefab: {fileID: 11400000, guid: 4fee3509673ea2949b6b7c2e64a0c1d5, type: 2}
+  treeSpawnRate: 45
   range: 5

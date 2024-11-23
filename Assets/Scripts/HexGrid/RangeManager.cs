@@ -1,11 +1,21 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using System.Linq;
+using System.Security.Cryptography;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class RangeManager : MonoBehaviour
 {
+    public static RangeManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
+
     [SerializeField] BuildingManager bm;
     [SerializeField] Tilemap rangeMap;
     [SerializeField] Tilemap farmRangeMap;
@@ -371,7 +381,43 @@ public class RangeManager : MonoBehaviour
         checking = false;
     }
 
+    public List<Vector3Int> GetFarmRangeTiles(Farm farm)
+    {
+        List<Vector3Int> rangeTiles = new List<Vector3Int>();
+        int range = farm.range;
 
+        Vector3Int centerCubic = HexUtils.OffsetToCubic(farm.offsetCoord);
+
+        for (int radius = 0; radius <= range; radius++)
+        {
+            Vector3Int[] directions = new Vector3Int[]
+            {
+                new Vector3Int(0, 1, -1),   // Top-right
+                new Vector3Int(-1, 1, 0),   // Top-left
+                new Vector3Int(-1, 0, 1),   // Left
+                new Vector3Int(0, -1, 1),   // Bottom-left
+                new Vector3Int(1, -1, 0),   // Bottom-right
+                new Vector3Int(1, 0, -1)    // Right
+            };
+            Vector3Int currentCubic = new Vector3Int(radius, -radius, 0);
+
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < radius; j++)
+                {
+                    Vector3Int offsetCoord = HexUtils.CubicToOffset(centerCubic + currentCubic);
+                    if (farmRangeMap.HasTile(offsetCoord))
+                    {
+                        rangeTiles.Add(offsetCoord);
+                    }
+
+                    currentCubic += directions[i];
+                }
+            }
+        }
+
+        return rangeTiles;
+    }
 
     void EnableRange()
     {
