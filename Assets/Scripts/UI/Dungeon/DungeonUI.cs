@@ -6,6 +6,7 @@ using UnityEngine;
 public class DungeonUI : MonoBehaviour
 {
     [SerializeField] PartyManager pm;
+    [SerializeField] GameObject DungeonMiniUI;
 
     [Space(10)]
 
@@ -44,6 +45,8 @@ public class DungeonUI : MonoBehaviour
         UIManager.closeAllUI.AddListener(CloseUI);
         UIManager.UIOpened.Invoke();
 
+        DungeonMiniUI.SetActive(false);
+
         //check UI sizes
         Debug.Assert(fighterPanels.Length == pm.adventurers.Length);
 
@@ -66,6 +69,8 @@ public class DungeonUI : MonoBehaviour
 
         UIManager.closeAllUI.RemoveListener(CloseUI);
         UIManager.UIClosed.Invoke();
+
+        DungeonMiniUI.SetActive(true);
     }
 
     private void Update()
