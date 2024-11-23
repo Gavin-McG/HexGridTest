@@ -41,18 +41,20 @@ public class ResourceManager : MonoBehaviour
     }
 
     //I might need an UpdateBuilding for when the buildings are upgraded - CS
-    public void RegisterBuilding(Building building, Resources productionAmount)
+    public void RegisterBuilding(Building building)
     {
         productionList.Add(building);
-        StartCoroutine(ProduceResources(building, productionAmount));
+        StartCoroutine(ProduceResources(building));
     }
 
-    private IEnumerator ProduceResources(Building building, Resources productionAmount)
+    private IEnumerator ProduceResources(Building building)
     {
         while (productionList.Contains(building))
         {
             yield return new WaitForSeconds(productionRate);
-            currentResource += productionAmount;
+
+            Resources currentProduction = building.GetCurrentProduction();
+            currentResource += currentProduction;
         }
     }
 }

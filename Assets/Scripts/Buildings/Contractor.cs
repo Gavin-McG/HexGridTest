@@ -1,16 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
-
-//Can be used as read parameters for other buildings
-public class ContractorUpgradeData
-{
-    public int stoneProduction;
-    public List<float> buildingLevelCosts;
-}
 
 /* Author: Connor Spears
  * Date: 10/31/2024
@@ -19,13 +8,14 @@ public class ContractorUpgradeData
 */ 
 public class Contractor : Building
 {
-    private int stoneProduction = 1;
+    private Resources stoneProduction = new Resources(0, 0, 1, 0);
+    private float productionMultiplier = 1f;
     private List<float> buildingLevelCosts = new List<float>{ -1f, -1f, -1f, -1f, -1f };
 
     void Start()
     {
         UpgradeEvent.AddListener(OnUpgrade);
-        rm.RegisterBuilding(this, new Resources(0,0, stoneProduction, 0));
+        rm.RegisterBuilding(this);
     }
 
     /* Holds all the data for each upgrade(-1 means that level is not unlocked yet)
@@ -47,7 +37,7 @@ public class Contractor : Building
     {
         if (upgradeData.TryGetValue(newLevel, out var upgradeValues))
         {
-            stoneProduction = upgradeValues.stoneProduction;
+            stoneProduction.Stone = upgradeValues.stoneProduction;
             buildingLevelCosts = upgradeValues.buildingLevelCosts;
             Debug.Log($"Contractor upgraded to level {level}: stoneProduction = {stoneProduction}");
         }
@@ -60,11 +50,18 @@ public class Contractor : Building
     public override void RevertProduction()
     {
         Debug.Log("Contractor production is being reverted!");
+        productionMultiplier = 1f;
     }
 
     public override void IncreaseProduction()
     {
         Debug.Log("Contractor production is being increased");
+        productionMultiplier = 4f;
+    }
+
+    public override Resources GetCurrentProduction()
+    {
+        return stoneProduction * productionMultiplier;
     }
 }
 

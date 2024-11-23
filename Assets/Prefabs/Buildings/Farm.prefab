@@ -46,36 +46,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingName: Farm
   canDestroy: 1
+  canProduce: 1
   buildCost:
     Magic: 100
     Wood: 150
     Stone: 120
+    Gold: 0
   upgrades:
   - newStructure: {fileID: 11400000, guid: 7a175668101914c46b422712b683fe50, type: 2}
     upgradeCost:
       Magic: 100
       Wood: 150
       Stone: 120
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: 7a175668101914c46b422712b683fe50, type: 2}
     upgradeCost:
       Magic: 300
       Wood: 350
       Stone: 275
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: 7a175668101914c46b422712b683fe50, type: 2}
     upgradeCost:
       Magic: 650
       Wood: 750
       Stone: 600
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: 7a175668101914c46b422712b683fe50, type: 2}
     upgradeCost:
       Magic: 1450
       Wood: 1700
       Stone: 1400
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: 7a175668101914c46b422712b683fe50, type: 2}
     upgradeCost:
       Magic: 3200
       Wood: 3800
       Stone: 3000
+      Gold: 0
   currentStructure: {fileID: 11400000, guid: 7a175668101914c46b422712b683fe50, type: 2}
-  descriptionText: Increase production rate for structures in range
+  descriptionText: Boost production and grow trees
   offsetCoord: {x: 0, y: 0, z: 0}
+  range: 5

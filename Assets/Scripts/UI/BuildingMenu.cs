@@ -18,8 +18,7 @@ public class BuildingMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI curBuildingCostWood;
     [SerializeField] private TextMeshProUGUI curBuildingCostStone;
     
-    //This needs some more looking at since the structures are created dynamically right now
-    //[SerializeField] private Image curBuildingImage;
+    [SerializeField] private Image curBuildingImage;
 
     [SerializeField] private Button buildButton;
 
@@ -49,6 +48,9 @@ public class BuildingMenu : MonoBehaviour
         curBuildingCostMagic.text = building.buildCost.Magic.ToString();
         curBuildingCostWood.text = building.buildCost.Wood.ToString();
         curBuildingCostStone.text = building.buildCost.Stone.ToString();
+
+        //Get the selected building's first structure piece and the associated sprite's image
+        curBuildingImage.sprite = building.currentStructure.pieces[0].tile.sprite;
         
         curBuildingText.transform.parent.gameObject.SetActive(true);
     }
@@ -61,10 +63,5 @@ public class BuildingMenu : MonoBehaviour
             gameObject.SetActive(false);
             curBuildingText.transform.parent.gameObject.SetActive(false);
         }
-    }
-
-    public void DebugMessage()
-    {
-        Debug.LogError("This building has not be implemented yet!");
     }
 }

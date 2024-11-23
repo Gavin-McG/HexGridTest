@@ -46,36 +46,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingName: Smithy
   canDestroy: 1
+  canProduce: 1
   buildCost:
     Magic: 25
     Wood: 50
     Stone: 100
+    Gold: 0
   upgrades:
   - newStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
     upgradeCost:
       Magic: 25
       Wood: 50
       Stone: 100
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
     upgradeCost:
       Magic: 55
       Wood: 85
       Stone: 300
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
     upgradeCost:
       Magic: 125
       Wood: 200
       Stone: 650
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
     upgradeCost:
       Magic: 275
       Wood: 450
       Stone: 1400
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
     upgradeCost:
       Magic: 650
       Wood: 1000
       Stone: 3200
+      Gold: 0
   currentStructure: {fileID: 11400000, guid: d94ee47912f4bfd498cf39f7726dde83, type: 2}
-  descriptionText: Arm your adventurers and produce gold!
+  descriptionText: Arm adventurers and mine gold!
   offsetCoord: {x: 0, y: 0, z: 0}
