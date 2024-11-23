@@ -24,4 +24,14 @@ public class MainTower : Building
     {
         Debug.LogWarning("Upgrade for Main Tower not Implemented!");
     }
+
+    public override void RevertProduction()
+    {
+        Debug.Log("Main Tower production is being reverted!");
+    }
+    
+    public override void IncreaseProduction()
+    {
+        Debug.Log("Main Tower production is being increased!");
+    }
 }

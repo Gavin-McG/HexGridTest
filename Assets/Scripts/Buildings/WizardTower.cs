@@ -39,4 +39,14 @@ public class WizardTower : Building
             Debug.LogError($"Invalid upgrade level {newLevel} for Wizard Tower.");
         }
     }
+
+    public override void RevertProduction()
+    {
+        Debug.Log("Wizard Tower production is being reverted!");
+    }
+    
+    public override void IncreaseProduction()
+    {
+        Debug.Log("Wizard Tower production is being increased!");
+    }
 }

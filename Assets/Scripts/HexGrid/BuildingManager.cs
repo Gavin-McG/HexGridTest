@@ -39,6 +39,7 @@ public class BuildingManager : MonoBehaviour
     [SerializeField] public Tilemap groundMap;
     [SerializeField] public Tilemap rangeMap;
     [SerializeField] public Tilemap objectMap;
+    [SerializeField] public Tilemap farmRangeMap;
 
     [Space(10)]
 
@@ -360,6 +361,11 @@ public class BuildingManager : MonoBehaviour
 
             //put tile in buildingDictionary
             buildingDictionary[newBuilding].Add(newOffsetCoord);
+        }
+
+        if (farmRangeMap.GetTile(offsetCoord) != null && newBuilding.canProduce)
+        {
+            newBuilding.IncreaseProduction();
         }
 
         //run building place event

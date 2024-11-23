@@ -5,7 +5,7 @@ using UnityEngine;
 public class Farm : Building
 {
     private float multiplier = 1.5f;
-
+    public int range = 3;
     void Start()
     {
         UpgradeEvent.AddListener(OnUpgrade);

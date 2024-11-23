@@ -56,5 +56,15 @@ public class Contractor : Building
             Debug.LogError($"Invalid upgrade level {newLevel} for Contractor.");
         }
     }
+
+    public override void RevertProduction()
+    {
+        Debug.Log("Contractor production is being reverted!");
+    }
+
+    public override void IncreaseProduction()
+    {
+        Debug.Log("Contractor production is being increased");
+    }
 }
 
