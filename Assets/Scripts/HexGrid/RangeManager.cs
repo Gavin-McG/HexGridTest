@@ -75,7 +75,7 @@ public class RangeManager : MonoBehaviour
         //place tiles
         for (int i=0; i<=range; i++)
         {
-            PlaceRing(i, HexUtils.OffsetToCubic(offsetCoord), isFarm);
+            PlaceRing(i, HexUtils.OffsetToCubic(building.offsetCoord), isFarm);
         }
     }
 
@@ -156,40 +156,53 @@ public class RangeManager : MonoBehaviour
 
         if (building is Farm)
         {
+            //get coords and radii of other towers
+            List<Vector3Int> cubicCoords = new List<Vector3Int>();
+            List<int> radii = new List<int>();
+
+            List<Farm> farms = bm.GetBuildingsOfType(BuildingType.Farm).Cast<Farm>().ToList();
+            for (int i = 0; i < farms.Count; i++)
+            {
+                cubicCoords.Add(HexUtils.OffsetToCubic(farms[i].offsetCoord));
+                radii.Add(farms[i].range);
+            }
+
             for (int i = 0; i <= range; i++)
             {
-                RemoveFarmRing(i, HexUtils.OffsetToCubic(offsetCoord));
+                RemoveFarmRing(i, HexUtils.OffsetToCubic(building.offsetCoord), cubicCoords, radii);
             }
         }
-
-        //get coords and radii of other towers
-        List<Vector3Int> cubicCoords = new List<Vector3Int>();
-        List<int> radii = new List<int>();
-
-        List<MainTower> mainTowers = bm.GetBuildingsOfType(BuildingType.MainTower).Cast<MainTower>().ToList();
-        for (int i=0; i<mainTowers.Count; i++)
+        else
         {
-            cubicCoords.Add(HexUtils.OffsetToCubic(mainTowers[i].offsetCoord));
-            radii.Add(mainTowers[i].buildRange);
-        }
+            //get coords and radii of other towers
+            List<Vector3Int> cubicCoords = new List<Vector3Int>();
+            List<int> radii = new List<int>();
 
-        List<WizardTower> wizardTowers = bm.GetBuildingsOfType(BuildingType.WizardTower).Cast<WizardTower>().ToList();
-        for (int i = 0; i < wizardTowers.Count; i++)
-        {
-            cubicCoords.Add(HexUtils.OffsetToCubic(wizardTowers[i].offsetCoord));
-            radii.Add(wizardTowers[i].buildRange);
-        }
+            List<MainTower> mainTowers = bm.GetBuildingsOfType(BuildingType.MainTower).Cast<MainTower>().ToList();
+            for (int i = 0; i < mainTowers.Count; i++)
+            {
+                cubicCoords.Add(HexUtils.OffsetToCubic(mainTowers[i].offsetCoord));
+                radii.Add(mainTowers[i].buildRange);
+            }
 
-        //place tiles
-        for (int i = 0; i <= range; i++)
-        {
-            RemoveRing(i, HexUtils.OffsetToCubic(offsetCoord), cubicCoords, radii);
-        }
+            List<WizardTower> wizardTowers = bm.GetBuildingsOfType(BuildingType.WizardTower).Cast<WizardTower>().ToList();
+            for (int i = 0; i < wizardTowers.Count; i++)
+            {
+                cubicCoords.Add(HexUtils.OffsetToCubic(wizardTowers[i].offsetCoord));
+                radii.Add(wizardTowers[i].buildRange);
+            }
 
-        //update ranges
-        if (!checking)
-        {
-            CleanTowers();
+            //remove tiles
+            for (int i = 0; i <= range; i++)
+            {
+                RemoveRing(i, HexUtils.OffsetToCubic(offsetCoord), cubicCoords, radii);
+            }
+
+            //update ranges
+            if (!checking)
+            {
+                CleanTowers();
+            }
         }
     }
 
@@ -235,13 +248,13 @@ public class RangeManager : MonoBehaviour
         }
     }
 
-    void RemoveFarmRing(int radius, Vector3Int centerCubic)
+    void RemoveFarmRing(int radius, Vector3Int centerCubic, List<Vector3Int> cubicCoords, List<int> radii)
     {
         if (radius < 0) return;
 
         if (radius == 0)
         {
-            RemoveFarmTile(centerCubic);
+            RemoveFarmTile(centerCubic, cubicCoords, radii);
             return;
         }
 
@@ -262,7 +275,7 @@ public class RangeManager : MonoBehaviour
             for (int j = 0; j < radius; j++)
             {
                 Vector3Int cubicPosition = currentCubic + centerCubic;
-                RemoveFarmTile(cubicPosition);
+                RemoveFarmTile(cubicPosition, cubicCoords, radii);
                 currentCubic += directions[i];
             }
         }
@@ -287,8 +300,13 @@ public class RangeManager : MonoBehaviour
         }
     }
 
-    void RemoveFarmTile(Vector3Int cubicCoord)
+    void RemoveFarmTile(Vector3Int cubicCoord, List<Vector3Int> cubicCoords, List<int> radii)
     {
+        for (int i = 0; i < cubicCoords.Count; i++)
+        {
+            if (HexUtils.CubicDIstance(cubicCoord, cubicCoords[i]) <= radii[i]) return;
+        }
+
         Vector3Int offsetCoord = HexUtils.CubicToOffset(cubicCoord);
         farmRangeMap.SetTile(offsetCoord, null);
         AdjustBuildingProduction(offsetCoord, increase: false);
