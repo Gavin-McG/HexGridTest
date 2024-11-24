@@ -37,7 +37,8 @@ public abstract class Building : MonoBehaviour
     public abstract BuildingType type { get; }
 
     public string buildingName;
-    public bool canDestroy = true; 
+    public bool canDestroy = true;
+    public bool canProduce = true;
     public Resources buildCost;
     protected int level = 0;
     public Upgrade[] upgrades = new Upgrade[0];
@@ -63,5 +64,20 @@ public abstract class Building : MonoBehaviour
                 level++;
             }
         }
+    }
+
+    public virtual void RevertProduction()
+    {
+        Debug.Log(buildingName + " does not override RevertProduction()!");
+    }
+
+    public virtual void IncreaseProduction()
+    {
+        Debug.Log(buildingName + " does not override IncreaseProduction()!");
+    }
+
+    public virtual Resources GetCurrentProduction()
+    {
+        return new Resources(0, 0,0,0 );
     }
 }

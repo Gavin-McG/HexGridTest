@@ -46,36 +46,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingName: Contractor
   canDestroy: 1
+  canProduce: 1
   buildCost:
     Magic: 10
     Wood: 50
     Stone: 0
+    Gold: 0
   upgrades:
   - newStructure: {fileID: 11400000, guid: a8da1b94e27b0db46acb956e0a0d41cc, type: 2}
     upgradeCost:
       Magic: 10
       Wood: 50
       Stone: 0
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: a8da1b94e27b0db46acb956e0a0d41cc, type: 2}
     upgradeCost:
       Magic: 150
       Wood: 225
       Stone: 175
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: a8da1b94e27b0db46acb956e0a0d41cc, type: 2}
     upgradeCost:
       Magic: 350
       Wood: 500
       Stone: 380
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: a8da1b94e27b0db46acb956e0a0d41cc, type: 2}
     upgradeCost:
       Magic: 800
       Wood: 1150
       Stone: 850
+      Gold: 0
   - newStructure: {fileID: 11400000, guid: a8da1b94e27b0db46acb956e0a0d41cc, type: 2}
     upgradeCost:
       Magic: 1800
       Wood: 2600
       Stone: 1900
+      Gold: 0
   currentStructure: {fileID: 11400000, guid: a8da1b94e27b0db46acb956e0a0d41cc, type: 2}
-  descriptionText: Used to build structures and mine stone
+  descriptionText: Used to build structures and mine stone!
   offsetCoord: {x: 0, y: 0, z: 0}
