@@ -56,7 +56,7 @@ public class PartyManager : MonoBehaviour
     public static UnityEvent<string> fightEvent = new UnityEvent<string>();
     public static UnityEvent<Adventurer> adventurerKilled = new UnityEvent<Adventurer>();
 
-    public static UnityEvent battleWon = new UnityEvent();
+    public static UnityEvent<int, int> battleWon = new UnityEvent<int, int>();
     public static UnityEvent battleLost = new UnityEvent();
     public static UnityEvent battleFinished = new UnityEvent();
 
@@ -507,17 +507,23 @@ public class PartyManager : MonoBehaviour
         battleFinished.Invoke();
         if (living>0)
         {
-            battleWon.Invoke();
             ReturnParty(dungeon);
 
             //grant custom rewards
-            rm.currentResource.Gold += Random.Range(dungeon.levels[level].GoldRange.x, dungeon.levels[level].GoldRange.y);
+            int goldReward = Random.Range(dungeon.levels[level].GoldRange.x, dungeon.levels[level].GoldRange.y);
+
+            int fossilReward = 0;
             if (dungeon.collected[level] < dungeon.levels[level].fossilTotal)
             {
-                rm.fossilCount++;
-                dungeon.collected[level]++;
+                fossilReward = 1;
             }
+
+            rm.fossilCount += fossilReward;
+            rm.currentResource.Gold += goldReward;
+            dungeon.collected[level] += fossilReward;
             dungeon.completed[level] = true;
+
+            battleWon.Invoke(goldReward, fossilReward);
         }
         else
         {
