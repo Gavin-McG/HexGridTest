@@ -75,7 +75,7 @@ public class RangeManager : MonoBehaviour
         //place tiles
         for (int i=0; i<=range; i++)
         {
-            PlaceRing(i, HexUtils.OffsetToCubic(offsetCoord), isFarm);
+            PlaceRing(i, HexUtils.OffsetToCubic(building.offsetCoord), isFarm);
         }
     }
 
@@ -158,7 +158,7 @@ public class RangeManager : MonoBehaviour
         {
             for (int i = 0; i <= range; i++)
             {
-                RemoveFarmRing(i, HexUtils.OffsetToCubic(offsetCoord));
+                RemoveFarmRing(i, HexUtils.OffsetToCubic(building.offsetCoord));
             }
         }
 
