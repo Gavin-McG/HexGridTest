@@ -302,9 +302,13 @@ public class RangeManager : MonoBehaviour
 
     void RemoveFarmTile(Vector3Int cubicCoord, List<Vector3Int> cubicCoords, List<int> radii)
     {
-        for (int i = 0; i < cubicCoords.Count; i++)
+        foreach (var (farmCubicCoord, range) in cubicCoords.Zip(radii, (coord, range) => (coord, range)))
         {
-            if (HexUtils.CubicDIstance(cubicCoord, cubicCoords[i]) <= radii[i]) return;
+            if (HexUtils.CubicDIstance(cubicCoord, farmCubicCoord) <= range)
+            {
+                //The respective tile is still within range of another farm, do not remove it
+                return;
+            }
         }
 
         Vector3Int offsetCoord = HexUtils.CubicToOffset(cubicCoord);
