@@ -67,11 +67,14 @@ Material:
     - _DetailNormalMapScale: 1
     - _Distortion: 0
     - _DstBlend: 0
-    - _Factor1: 0.61
+    - _Factor1: 0.63
     - _Factor2: -0.19
+    - _FadeScale: 0.1
+    - _FadeThreshold: 16
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _Intensity: 0.7
     - _Metallic: 0
     - _Mode: 0
     - _NoiseScale: 3.22
@@ -79,14 +82,14 @@ Material:
     - _Parallax: 0.02
     - _Roughness: 0
     - _Scale: 18.14
-    - _Scale1: 0.09
-    - _Scale2: 0.3
+    - _Scale1: 0.1
+    - _Scale2: 0.56
     - _ScaleY: 2.2
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _Speed: 0.49
     - _SrcBlend: 1
-    - _Threshold: 0.01
+    - _Threshold: 0.14
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
