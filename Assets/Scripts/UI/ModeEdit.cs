@@ -36,7 +36,6 @@ public class ModeEdit : MonoBehaviour
                 typeList.SetActive(false);
                 break;
             case 1:
-                BuildingManager.EnableBuilding.Invoke(defaultBuilding);
                 typeList.SetActive(true);
                 break;
             case 2:

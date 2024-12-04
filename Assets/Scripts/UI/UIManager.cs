@@ -110,7 +110,6 @@ public class UIManager : MonoBehaviour
                 if (uiDictionary.TryGetValue("Contractor", out purchaseUI))
                 {
                     purchaseUI.SetActive(true);
-                    BuildingManager.EnableBuilding.Invoke(building.currentStructure);
                 }
                 else
                 {
