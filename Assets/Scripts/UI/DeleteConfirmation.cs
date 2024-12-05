@@ -51,12 +51,14 @@ public class DeleteConfirmation : MonoBehaviour
 
     public void ConfirmButtonClick()
     {
+        UIManager.UIAction.Invoke();
         gameObject.SetActive(false);
         bm.DeleteBuilding(curBuildingOffset);
     }
 
     public void CancelButtonClick()
     {
+        UIManager.UIAction.Invoke();
         UIManager.closeAllUI.Invoke();
         BuildingManager.FailedDestroy.Invoke();
     }

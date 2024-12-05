@@ -29,6 +29,7 @@ public class ModeEdit : MonoBehaviour
     public void ChangeMode(int modeIndex)
     {
         dropdown.value = modeIndex;
+        UIManager.UIAction.Invoke();
         switch (modeIndex)
         {
             case 0:
