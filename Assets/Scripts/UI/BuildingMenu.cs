@@ -39,6 +39,8 @@ public class BuildingMenu : MonoBehaviour
 
     public void OnClick(Building building)
     {
+        UIManager.UIAction.Invoke();
+
         curBuilding = building;
         
         curBuildingText.text = building.buildingName;
@@ -57,6 +59,8 @@ public class BuildingMenu : MonoBehaviour
 
     public void OnBuildButtonClick()
     {
+        UIManager.UIAction.Invoke();
+
         if (curBuilding != null)
         {
             BuildingManager.EnableBuilding.Invoke(curBuilding.currentStructure);
