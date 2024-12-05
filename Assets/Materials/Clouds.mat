@@ -85,6 +85,7 @@ Material:
     - _Scale1: 0.1
     - _Scale2: 0.56
     - _ScaleY: 2.2
+    - _ScrollRate: -1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _Speed: 0.49

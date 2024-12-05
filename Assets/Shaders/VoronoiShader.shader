@@ -9,6 +9,7 @@ Shader "Custom/VoronoiShader"
         _Smoothness("Smoothness", Float) = 1.0
         _Color1("Color 1", Color) = (0,0,0,1)
         _Color2("Color 2", Color) = (1,1,1,1)
+        _ScrollRate("Scroll rate", Float) = 1
     }
     SubShader{
         Tags { "RenderType" = "Opaque" }
@@ -26,6 +27,7 @@ Shader "Custom/VoronoiShader"
             float _Smoothness;
             float4 _Color1;
             float4 _Color2;
+            float _ScrollRate;
 
             float3 hash3(float3 p) {
                 const float3 scale1 = float3(127.1, 311.7, 74.7);    // Prime constants
@@ -108,6 +110,7 @@ Shader "Custom/VoronoiShader"
             }
 
             fixed4 frag(v2f i) : SV_Target{
+                i.uv.x += _ScrollRate * _Time.y;
                 float3 pos = float3(i.uv * float2(_XScale,_YScale), _Time.y * _TimeScale);
 
                 float2 f1 = voronoi_smooth_f1(pos, _Smoothness);
