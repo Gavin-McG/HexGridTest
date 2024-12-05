@@ -50,12 +50,15 @@ public class PartyManager : MonoBehaviour
     public static UnityEvent adventurerHired = new UnityEvent();
     public static UnityEvent adventurerFired = new UnityEvent();
 
+    public static UnityEvent partyDispatched = new UnityEvent();
+    public static UnityEvent partyReturning = new UnityEvent();
     public static UnityEvent<Adventurer> adventurerArrived = new UnityEvent<Adventurer>();
     public static UnityEvent<Adventurer> adventurerReturned = new UnityEvent<Adventurer>();
 
     public static UnityEvent<string> fightEvent = new UnityEvent<string>();
     public static UnityEvent<Adventurer> adventurerKilled = new UnityEvent<Adventurer>();
 
+    public static UnityEvent battleBegun = new UnityEvent();
     public static UnityEvent<int, int> battleWon = new UnityEvent<int, int>();
     public static UnityEvent battleLost = new UnityEvent();
     public static UnityEvent battleFinished = new UnityEvent();
@@ -139,6 +142,7 @@ public class PartyManager : MonoBehaviour
         }
 
         //start dispatch
+        partyDispatched.Invoke();
         StartCoroutine(DispatchRoutine(path));
     }
 
@@ -401,6 +405,7 @@ public class PartyManager : MonoBehaviour
             }
         }
 
+        battleBegun.Invoke();
         StartCoroutine(FightRoutine(difficulty));
     }
 
@@ -572,7 +577,8 @@ public class PartyManager : MonoBehaviour
             return;
         }
 
-        //start dispatch
+        //start return
+        partyReturning.Invoke();
         StartCoroutine(ReturnRoutine(path));
     }
 

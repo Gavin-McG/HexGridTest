@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     //events
     public static UnityEvent UIOpened = new UnityEvent();
     public static UnityEvent UIClosed = new UnityEvent();
+    public static UnityEvent UIAction = new UnityEvent();
 
     private InputAction closeAction;
 
