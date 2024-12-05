@@ -157,6 +157,7 @@ public class DungeonUI : MonoBehaviour
 
     public void StartFight()
     {
+        UIManager.UIAction.Invoke();
         pm.StartFight(dungeon.levels[level].difficulty);
         pm.level = level;
         UpdateUI();
@@ -198,6 +199,7 @@ public class DungeonUI : MonoBehaviour
 
     public void CloseUI()
     {
+        UIManager.UIAction.Invoke();
         gameObject.SetActive(false);
     }
 }
