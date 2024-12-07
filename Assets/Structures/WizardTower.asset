@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingObject: {fileID: 4398452261949887242, guid: 8946f355bc2deff4f8359fee11908462, type: 3}
   pieces:
-  - tile: {fileID: 11400000, guid: adbf388c2b7a7ca46b8f6dae5fc67b90, type: 2}
+  - tile: {fileID: 11400000, guid: af8a6712519e5ab45a6379e84ae50cca, type: 2}
     cubicCoord: {x: 0, y: 0, z: 0}
