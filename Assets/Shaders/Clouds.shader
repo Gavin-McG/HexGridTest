@@ -12,6 +12,7 @@ Shader "Custom/Clouds"
         _Intensity("Intensity", Float) = 1
         _FadeThreshold("Fade Threshold", Float) = 20
         _FadeScale("Fade Scale", Float) = 0.1
+        _ScrollRate("Scroll Rate", Float) = 1
     }
         SubShader
     {
@@ -50,12 +51,13 @@ Shader "Custom/Clouds"
             float _ScreenWidth;
             float _ScreenHeight;
 
-
+            //misc parameters
             float _ScaleY;
             float _Threshold;
             float _Intensity;
             float _FadeThreshold;
             float _FadeScale;
+            float _ScrollRate;
 
             v2f vert(appdata_t v) {
                 v2f o;
@@ -107,6 +109,7 @@ Shader "Custom/Clouds"
                 float2 cloudUV = i.uv - 0.5;
                 cloudUV *= float2(_ScreenWidth, _ScreenHeight) * cloudScale;
                 cloudUV += float2(_ScreenX, _ScreenY);
+                cloudUV.x += _ScrollRate * _Time.y;
 
                 //color computation
                 float4 cloud = get_cloud_color(cloudUV) * float4(1,1,1,fade);

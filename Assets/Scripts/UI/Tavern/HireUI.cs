@@ -95,6 +95,7 @@ public class HireUI : MonoBehaviour
 
     public void CloseUI()
     {
+        UIManager.UIAction.Invoke();
         gameObject.SetActive(false);
     }
 

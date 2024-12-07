@@ -75,6 +75,7 @@ Material:
     - _Parallax: 0.02
     - _Randomness: 1
     - _Scale: 71.58
+    - _ScrollRate: 0.0004
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
