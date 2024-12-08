@@ -6,7 +6,7 @@ using UnityEngine;
 public class Smithy : Building
 {
     private int armLevel = 1;
-    private Resources goldProduction = new Resources(0, 0, 0, 0);
+    private Resources goldProduction = new Resources(0, 0, 0, 1);
     private float productionMultiplier = 1f;
 
     private void Start()
